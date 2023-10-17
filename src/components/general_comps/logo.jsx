@@ -1,4 +1,4 @@
-import imgSoldier from '../../../public/images/soldier.png';
+import imgSoldier from '/images/soldier.png';
 
 
 export default function Logo() {
