@@ -1,10 +1,10 @@
-// import iconSun from '/icons/icons8-sun.svg';
+import imgSoldier from '../../../public/images/soldier.png';
 
 
 export default function Logo() {
   return (
     <div className="logo-comp">
-      {/* <img src={iconSun} alt="iconSun" /> */}
+      <img src={imgSoldier} alt="imgSoldier" width={40}/>
       <h1>ShabTsak</h1>
     </div>
   )

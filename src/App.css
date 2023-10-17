@@ -1,4 +1,4 @@
-*{
+* {
   padding: 0;
   margin: 0;
 }
@@ -15,25 +15,22 @@ body {
 
 .logo-comp {
   display: flex;
+
   align-items: center;
   text-shadow: 0 -1px 4px #c2afaf, 2px 2px 2px rgba(14, 190, 206, 0), 0px -13px 16px #0EBECE;
 }
 
 .logo-comp:hover {
-
   text-shadow: 0 -1px 4px #FFF, 0px -13px 16px rgba(215, 205, 10, 0.28), 0px -13px 16px rgba(215, 205, 10, 0.28);
 }
 
 .logo-comp img {
   transition: transform 0.5s ease;
-}
-
-.logo-comp img:hover {
-  transform: rotate(720deg);
+  margin-right: 3px;
 }
 
 .logo-comp h1 {
-  margin: 0;
+  font-weight: 400;
 }
 
 
@@ -79,6 +76,6 @@ body {
 
 @media (max-width:991px) {
   .container {
-      max-width: 700px;
+    max-width: 700px;
   }
 }
