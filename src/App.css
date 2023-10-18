@@ -1,0 +1,81 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Rubik', sans-serif;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1050px;
+}
+
+
+.logo-comp {
+  display: flex;
+
+  align-items: center;
+  text-shadow: 0 -1px 4px #c2afaf, 2px 2px 2px rgba(14, 190, 206, 0), 0px -13px 16px #0EBECE;
+}
+
+.logo-comp:hover {
+  text-shadow: 0 -1px 4px #FFF, 0px -13px 16px rgba(215, 205, 10, 0.28), 0px -13px 16px rgba(215, 205, 10, 0.28);
+}
+
+.logo-comp img {
+  transition: transform 0.5s ease;
+  margin-right: 3px;
+}
+
+.logo-comp h1 {
+  font-weight: 400;
+}
+
+
+
+/* scroller */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  background: rgb(255, 255, 255);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+  /* border: solid 1px rgb(255, 255, 255); */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8ECDDD;
+  border-radius: 10px;
+  border: solid 1px rgb(246, 231, 216);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8ECDDD;
+}
+
+
+
+/* icon nagishLi design*/
+#NagishLiTrigger {
+  bottom: 20px;
+  /* top:10px; */
+  right: none;
+  left: 5px;
+  transform: scale(0.7, 0.7);
+  filter: grayscale(100%);
+}
+
+
+
+@media (max-width:991px) {
+  .container {
+    max-width: 700px;
+  }
+}
