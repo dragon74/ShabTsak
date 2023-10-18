@@ -109,7 +109,7 @@ const Header = () => {
                                         nav("/");
                                     }}
                                 >
-                                    Home
+                                    Camps
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => {
@@ -137,7 +137,7 @@ const Header = () => {
                                     py: 3,
                                 }}
                             >
-                                Home
+                                Camps
                             </Button>
                             <Button
                                 onClick={() => {
