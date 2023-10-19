@@ -1,20 +1,34 @@
-// import { useState } from "react"
-
-
+import { useState } from "react";
+import { Box, Button, Container, CssBaseline } from "@mui/material"
+import DialogComp from "../general_comps/dialogComp";
+import CampsList from "./campsList";
 
 const CampsPage = () => {
-  // const [arrCamps, setArrCamps] = useState([]);
-
+ 
+  const [openDialog, setOpenDialog] = useState(false);
 
 
   return (
-    <div>
+    <div className="camps-page">
+      <CssBaseline />
+      <Container fixed>
 
-      campsArr
+        <Box style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
+          <Button color="success" variant="contained"
+            onClick={() => {
+              setOpenDialog(true);
+            }}
+          >
+            Add New Camp
+          </Button>
+        </Box>
+
+        <CampsList />
+
+        <DialogComp openDialog={openDialog} setOpenDialog={setOpenDialog} subject={"camp"} action="Add" />
 
 
-
-
+      </Container>
     </div>
   )
 }

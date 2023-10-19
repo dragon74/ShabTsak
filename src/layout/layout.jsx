@@ -1,4 +1,3 @@
-
 import { Outlet } from 'react-router-dom'
 import Header from './header/header'
 import { useSelector } from 'react-redux';
@@ -12,12 +11,12 @@ export default function Layout() {
 
     const modeColorText = useMemo(() => {
         if (darkMode)
-        return theme.palette.success.main
-            return theme.palette.darkMode.main
+            return theme.palette.success.main
+        return theme.palette.darkMode.main
     }, [darkMode]);
 
     return (
-        <div style={{  color: modeColorText }}>
+        <div style={{ color: modeColorText }}>
             <Header />
             <Outlet />
             {/* <Footer /> */}
