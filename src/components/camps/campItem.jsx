@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import DialogComp from "../general_comps/dialogComp";
 import { useState } from "react";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
@@ -10,7 +10,7 @@ const CampItem = () => {
     let item = props.item;
     const [openDialog, setOpenDialog] = useState(false);
     const [action, setAction] = useState("");
-    const nav = useNavigate();
+    // const nav = useNavigate();
 
 
     return (
@@ -26,7 +26,7 @@ const CampItem = () => {
                         onClick={() => {
                             setAction("Edit");
                             setOpenDialog(true);
-                            nav("editCamp/" + item.id);
+                            // nav("editCamp/" + item.id);
                         }}
                     >
                         עריכה

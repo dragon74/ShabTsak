@@ -11,11 +11,8 @@ const DialogComp = ({ openDialog, setOpenDialog, subject, action }) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     // State to store the form data, you can use React state management or a form library
-    const [formData, setFormData] = useState({ name: '' });
+    const [formData, setFormData] = useState({ name: '', owner: "Chaya" });
     const nav = useNavigate();
-
-    const url = API_URL + "/" + subject;
-
     const method = useMemo(() => {
         if (action === "Add") return "POST";
         else if (action === "Delete") return "DELETE";
@@ -39,8 +36,10 @@ const DialogComp = ({ openDialog, setOpenDialog, subject, action }) => {
     }, [subject]);
 
     const doApiCamp = async (bodyFormData) => {
+        let url = API_URL + "/" + subject;
         try {
             let resp = await doApiMethod(url, method, bodyFormData);
+            console.log(resp);
             if (resp.data) {
                 toast.success(`${subject} ${action}ed successfully`);
                 nav("/");
@@ -62,7 +61,7 @@ const DialogComp = ({ openDialog, setOpenDialog, subject, action }) => {
 
     return (
         <Dialog
-        style={{ direction: "rtl" }}
+            style={{ direction: "rtl" }}
             open={openDialog}
             onClose={() => setOpenDialog(false)}
             PaperProps={{
@@ -97,7 +96,7 @@ const DialogComp = ({ openDialog, setOpenDialog, subject, action }) => {
                         style={{ marginLeft: '8px' }}>
                         ביטול
                     </Button>
-                    <Button type="submit" >{actionHebrew}</Button>
+                    <Button type="submit" autoFocus >{actionHebrew}</Button>
                 </DialogActions>
             </form>
         </Dialog>

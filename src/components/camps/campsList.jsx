@@ -12,7 +12,7 @@ const CampsList = () => {
     }, [])
 
     const doApi = async () => {
-        let url = API_URL + "/camps"
+        let url = API_URL + "/camps/all"
         try {
             let resp = await doApiGet(url);
             setCamps(resp.data)
