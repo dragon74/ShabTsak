@@ -11,7 +11,7 @@ const DialogSure = ({ openDialog, setOpenDialog, action,OnLogOut }) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <div className='p-3'>
+                <div>
                     <DialogTitle
                         sx={{ mb: 2 }}
                         id="alert-dialog-title">
