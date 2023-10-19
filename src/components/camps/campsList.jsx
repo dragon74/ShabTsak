@@ -27,7 +27,7 @@ const CampsList = () => {
         <div>
             <CssBaseline />
             <Container maxWidth="md">
-                <h1>רשימה של קעמפים במערכת</h1>
+                <h1>רשימת בסיסים</h1>
                 <Table>
                     <TableHead>
                         <TableRow>

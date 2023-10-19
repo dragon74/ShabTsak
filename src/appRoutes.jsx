@@ -6,8 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Layout from './layout/layout';
 import NotFound from './components/general_comps/notFound';
 import CampsPage from './components/camps/campsPage';
-import AddCamp from './components/camps/addCamp/addCamp';
-import EdiCamp from './components/camps/editCamp/editCamp';
+
 
 
 
@@ -17,8 +16,7 @@ export default function AppRoutes() {
             <Routes>
                 <Route path='/' element={<Layout />} >
                     <Route index element={<CampsPage />} />
-                    <Route path="/addCamp" element={<AddCamp />} />
-                    <Route path="/editCamp/:id" element={<EdiCamp />} />
+                    
                     {/* <Route path='/schedule' element={<MyscheduleList />} /> */}
                 </Route>
                 <Route path='*' element={<NotFound />} />

@@ -6,8 +6,8 @@ export default function NotFound() {
         <div className='not-found-comp'>
             <CssBaseline />
             <Container fixed>
-                <h1>page not found 404!</h1>
-                <Link to="/"> Back to website</Link>
+                <h1>עמוד לא נמצא 404!</h1>
+                <Link to="/">חזרה לעמוד הבית</Link>
             </Container>
         </div>
 

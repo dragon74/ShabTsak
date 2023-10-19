@@ -4,7 +4,7 @@ import DialogComp from "../general_comps/dialogComp";
 import CampsList from "./campsList";
 
 const CampsPage = () => {
- 
+
   const [openDialog, setOpenDialog] = useState(false);
 
 
@@ -19,7 +19,7 @@ const CampsPage = () => {
               setOpenDialog(true);
             }}
           >
-            הוסף קעמפ חדש
+            הוסף בסיס
           </Button>
         </Box>
 

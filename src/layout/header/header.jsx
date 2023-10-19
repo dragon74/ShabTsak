@@ -109,15 +109,15 @@ const Header = () => {
                                         nav("/");
                                     }}
                                 >
-                                    Camps
+                                    בסיסים
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => {
                                         handleCloseNavMenu();
-                                        nav("/Schedule");
+                                        nav("/schedule");
                                     }}
                                 >
-                                    schedule
+                                    לוח משמרות
                                 </MenuItem>
                             </Menu>
                         </Grid>
@@ -137,7 +137,7 @@ const Header = () => {
                                     py: 3,
                                 }}
                             >
-                                Camps
+                                בסיסים
                             </Button>
                             <Button
                                 onClick={() => {
@@ -149,7 +149,7 @@ const Header = () => {
                                     py: 3,
                                 }}
                             >
-                                schedule
+                                לוח משמרות
                             </Button>
                         </Grid>
 
@@ -158,7 +158,7 @@ const Header = () => {
                             sx={{
                                 display: { xs: 'none', md: 'flex', textAlign: "center", px: 3, alignItems: 'center', color: darkMode === true ? '#8ECDDD' : 'yellow' },
                             }}>
-                            {darkMode === false ? "Light" : 'Dark'}
+                            {darkMode === false ? "אור" : 'חושך'}
                             <IconButton onClick={() => { dispatch(changeDarkMode()) }} color={darkMode === true ? "primary" : "inherit"}>
                                 {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
                             </IconButton>
@@ -191,7 +191,7 @@ const Header = () => {
                                         display: { xs: 'block', md: 'none', textAlign: "center", px: 3, alignItems: 'center' },
                                     }}
                                 >
-                                    {darkMode === false ? "Light" : 'Dark'}
+                                    {darkMode === false ? "אור" : 'חושך'}
                                     <IconButton onClick={() => { dispatch(changeDarkMode()) }} color="inherit">
                                         {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
                                     </IconButton>
