@@ -19,7 +19,7 @@ const CampsPage = () => {
               setOpenDialog(true);
             }}
           >
-            Add New Camp
+            הוסף קעמפ חדש
           </Button>
         </Box>
 
