@@ -109,15 +109,15 @@ const Header = () => {
                                         nav("/");
                                     }}
                                 >
-                                    Home
+                                    Camps
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => {
                                         handleCloseNavMenu();
-                                        nav("/favorites");
+                                        nav("/Schedule");
                                     }}
                                 >
-                                    Favorites
+                                    schedule
                                 </MenuItem>
                             </Menu>
                         </Grid>
@@ -137,11 +137,11 @@ const Header = () => {
                                     py: 3,
                                 }}
                             >
-                                Home
+                                Camps
                             </Button>
                             <Button
                                 onClick={() => {
-                                    nav("/favorites");
+                                    nav("/schedule");
                                 }}
                                 sx={{
                                     color: "white",
@@ -149,7 +149,7 @@ const Header = () => {
                                     py: 3,
                                 }}
                             >
-                                Favorites
+                                schedule
                             </Button>
                         </Grid>
 

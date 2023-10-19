@@ -6,6 +6,7 @@
 body {
   font-family: 'Rubik', sans-serif;
   overflow-x: hidden;
+  direction: rtl;
 }
 
 .container {
@@ -15,7 +16,6 @@ body {
 
 .logo-comp {
   display: flex;
-
   align-items: center;
   text-shadow: 0 -1px 4px #c2afaf, 2px 2px 2px rgba(14, 190, 206, 0), 0px -13px 16px #0EBECE;
 }
@@ -32,7 +32,6 @@ body {
 .logo-comp h1 {
   font-weight: 400;
 }
-
 
 
 /* scroller */
