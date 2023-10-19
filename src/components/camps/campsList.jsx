@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_URL, doApiGet } from "../../services/apiService";
 import { toast } from "react-toastify";
-import { Container, CssBaseline } from "@mui/material";
+import { Container, CssBaseline, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import CampItem from "./campItem";
 
 const CampsList = () => {
@@ -26,27 +26,26 @@ const CampsList = () => {
     return (
         <div>
             <CssBaseline />
-            <Container fixed>
+            <Container maxWidth="md">
                 <h1>רשימה של קעמפים במערכת</h1>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>#</TableCell>
+                            <TableCell>שם</TableCell>
+                            <TableCell>עריכה</TableCell>
+                            <TableCell>מחיקה</TableCell>
+                        </TableRow>
+                    </TableHead>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>שם</th>
-                            <th>עריכה</th>
-                            <th>מחיקה</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <TableBody>
                         {camps.map((item, i) => {
                             return (
                                 <CampItem key={item.id} doApi={doApi} index={i} item={item} />
                             )
                         })}
-                    </tbody>
-                </table>
-
+                    </TableBody>
+                </Table>
 
             </Container>
 

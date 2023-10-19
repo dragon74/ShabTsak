@@ -1,10 +1,12 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DialogComp from "../general_comps/dialogComp";
 import { useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, TableCell, TableRow } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const CampItem = (props) => {
+const CampItem = () => {
     let item = props.item;
     const [openDialog, setOpenDialog] = useState(false);
     const [action, setAction] = useState("");
@@ -12,37 +14,43 @@ const CampItem = (props) => {
 
 
     return (
-        <tr>
-            <th>{props.index + 1}</th>
-            <th>{item.name}</th>
-            <td>
+        <TableRow>
+            <TableCell>{props.index + 1}</TableCell>
+            <TableCell>{item.name}name</TableCell>
+
+            <TableCell>
                 <Box style={{ marginRight: "8px" }}>
-                    <Button color="primary" variant="contained"
+                    <Button
+                        color="primary"
+                        variant="contained"
                         onClick={() => {
-                            setAction("Edit")
+                            setAction("Edit");
                             setOpenDialog(true);
-                            nav("editCamp/" + item.id)
-                        }}>
-                        Edit
+                            nav("editCamp/" + item.id);
+                        }}
+                    >
+                        עריכה
                     </Button>
                 </Box>
-            </td>
-            <td>
+            </TableCell>
+
+            <TableCell>
                 <Button
-                    color="primary"
-                    variant="contained"
+                color="error"
+                variant="outlined" 
+                startIcon={<DeleteIcon />}
                     onClick={() => {
-                        setAction("Delete")
+                        setAction("Delete");
                         setOpenDialog(true);
                     }}>
-                    Delete
+                    מחיקה
                 </Button>
-            </td>
+            </TableCell>
 
             <DialogComp openDialog={openDialog} setOpenDialog={setOpenDialog} subject={"camp"} action={action} />
 
 
-        </tr>
+        </TableRow>
     )
 }
 

@@ -14,7 +14,7 @@ const CampsPage = () => {
       <Container fixed>
 
         <Box style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
-          <Button color="success" variant="contained"
+          <Button variant="contained"
             onClick={() => {
               setOpenDialog(true);
             }}
