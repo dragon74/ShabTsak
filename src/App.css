@@ -9,10 +9,6 @@ body {
   direction: rtl;
 }
 
-.container {
-  max-width: 1050px;
-}
-
 
 .logo-comp {
   display: flex;
