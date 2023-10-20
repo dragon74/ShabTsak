@@ -8,6 +8,7 @@ import NotFound from './components/general_comps/notFound';
 import CampsPage from './components/camps/campsPage';
 import AddCamp from './components/camps/addCamp/addCamp';
 import EdiCamp from './components/camps/editCamp/editCamp';
+import ShiftSchedule from './components/ShiftSchedule/ShiftSchedule'
 
 
 
@@ -19,7 +20,7 @@ export default function AppRoutes() {
                     <Route index element={<CampsPage />} />
                     <Route path="/addCamp" element={<AddCamp />} />
                     <Route path="/editCamp/:id" element={<EdiCamp />} />
-                    {/* <Route path='/schedule' element={<MyscheduleList />} /> */}
+                    { <Route path='/schedule' element={<ShiftSchedule />} /> }
                 </Route>
                 <Route path='*' element={<NotFound />} />
 
