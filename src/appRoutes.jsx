@@ -8,7 +8,7 @@ import Layout from './layout/layout';
 import NotFound from './components/general_comps/notFound';
 import CampsPage from './components/camps/campsPage';
 import EdiCamp from './components/camps/editCamp/editCamp';
-import ShiftSchedule from './components/ShiftSchedule/ShiftSchedule'
+// import ShiftSchedule from './components/ShiftSchedule/ShiftSchedule'
 
 
 export default function AppRoutes() {
@@ -19,7 +19,7 @@ export default function AppRoutes() {
                 <Route path='/' element={<Layout />} >
                     <Route index element={<CampsPage />} />
                     <Route path="/editCamp/:id" element={<EdiCamp />} />
-                    { <Route path='/schedule' element={<ShiftSchedule />} /> }
+                    {/* <Route path='/schedule' element={<ShiftSchedule />} />  */}
                 </Route>
                 <Route path='*' element={<NotFound />} />
 

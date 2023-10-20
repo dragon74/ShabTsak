@@ -258,7 +258,7 @@ function ShiftSchedule() {
         };
         if (isEdit) {
             // update the event in the list
-            const index = shifts.findIndex(x => x.id === tempShift.id);;
+            const index = shifts.findIndex(x => x.id === tempShift.id);
             const newEventList = [...shifts];
 
             newEventList.splice(index, 1, newEvent);
