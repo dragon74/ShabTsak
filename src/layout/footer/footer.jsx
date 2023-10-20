@@ -1,12 +1,12 @@
-
+import { Box, Container } from "@mui/material";
 
 export default function Footer() {
-    return (
-      <div className='container-fluid'>
-        <div className='container text-center s-14 py-3'>
-          <div > © 2023 Chaya Segal -  AccuWeather ,Inc.</div>
-        </div>
-      </div>
-    )
-  }
-  
+  return (
+    // Push the footer to the bottom
+    <Container style={{ marginTop: "auto" }} >
+      <Box textAlign={"center"} >
+        <p>2023 Chaya Segal & Dan & Hadas ©</p>
+      </Box>
+    </Container>
+  )
+}

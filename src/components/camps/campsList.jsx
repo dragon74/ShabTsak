@@ -8,11 +8,11 @@ const CampsList = () => {
     const [camps, setCamps] = useState([]);
 
     useEffect(() => {
-        // doApi()
+        doApiCamps()
     }, [])
 
-    const doApi = async () => {
-        let url = API_URL + "/camps"
+    const doApiCamps = async () => {
+        let url = API_URL + "/camp/all"
         try {
             let resp = await doApiGet(url);
             setCamps(resp.data)
@@ -20,14 +20,14 @@ const CampsList = () => {
         }
         catch (err) {
             console.log(err);
-            toast.error(`there problem, try later`)
+            toast.error("יש בעיה בבקשה נסה מאוחר יותר");
         }
     }
     return (
         <div>
             <CssBaseline />
             <Container maxWidth="md">
-                <h1>רשימה של קעמפים במערכת</h1>
+                <h1>רשימת בסיסים</h1>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -41,7 +41,7 @@ const CampsList = () => {
                     <TableBody>
                         {camps.map((item, i) => {
                             return (
-                                <CampItem key={item.id} doApi={doApi} index={i} item={item} />
+                                <CampItem key={item.id} doApiCamps={doApiCamps} index={i} item={item} />
                             )
                         })}
                     </TableBody>
