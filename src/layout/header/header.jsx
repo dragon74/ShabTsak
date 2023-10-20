@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { TOKEN_NAME } from '../../services/apiService';
 import DialogSure from '../../components/general_comps/dialogSure';
+import ROUTES from '../../constants/routeConstants';
 
 const Header = () => {
     const nav = useNavigate();
@@ -35,12 +36,6 @@ const Header = () => {
 
     //sure dialog
     const [openSureDialog, setOpenSureDialog] = useState(false);
-
-    // Constants
-    const ROUTES = {
-        HOME: "/",
-        SCHEDULE: "/schedule",
-    };
 
     // Navbar functions
     const handleOpenNavMenu = (event) => {
@@ -222,8 +217,8 @@ const Header = () => {
                     </Grid>
                 </Container>
             </AppBar>
-            {/* dialog log out */}
-            <DialogSure openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} action="להתנתק" OnLogOut={OnLogOut} />
+            {/*sure dialog for log out */}
+            <DialogSure openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} action="להתנתק" OnAction={OnLogOut} />
         </ThemeProvider >
     );
 };

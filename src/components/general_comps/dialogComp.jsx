@@ -44,11 +44,11 @@ const DialogComp = ({ openDialog, setOpenDialog, subject, action }) => {
                 toast.success(`${subject} ${action}ed successfully`);
                 nav("/");
             } else {
-                toast.error("There was a problem, please try again later.");
+                toast.error("יש בעיה בבקשה נסה מאוחר יותר");
             }
         } catch (err) {
             console.error(`An error occurred while ${action.toLowerCase()}ing the ${subject}:`, err);
-            toast.error("There was a problem. Please try again later.");
+            toast.error("יש בעיה בבקשה נסה מאוחר יותר");
         }
     }
 
