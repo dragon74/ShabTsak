@@ -20,7 +20,6 @@ import srcImg from '/images/man.png';
 import { changeDarkMode } from "../../features/featuresSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { TOKEN_NAME } from '../../services/apiService';
 import ROUTES from '../../constants/routeConstants';
 import DialogLogOut from '../../components/general_comps/dialogs/dialogLogOut';
 
@@ -73,16 +72,6 @@ const Header = () => {
     const ClickLogOut = () => {
         handleCloseUserMenu()
         setOpenSureDialog(true);
-    }
-
-    const OnLogOut = () => {
-        //delete token
-        localStorage.removeItem(TOKEN_NAME);
-        //delete user from redux!
-        // dispatch(resetUser())
-        toast.success("התנתקת בהצלחה")
-        setOpenSureDialog(false);
-        nav(ROUTES.HOME)
     }
 
     const ClickGoodLuck = () => {
@@ -218,7 +207,7 @@ const Header = () => {
                 </Container>
             </AppBar>
             {/*sure dialog for log out need to do */}
-            <DialogLogOut openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} onAction={OnLogOut} />
+            {openSureDialog && <DialogLogOut close={() => setOpenSureDialog(false)} />}
 
         </ThemeProvider >
     );
