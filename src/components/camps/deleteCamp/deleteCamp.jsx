@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Button, TableCell } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import DialogSureDelete from "../../general_comps/dialogSureDelete";
+import DialogSureDelete from "../../general_comps/dialogs/dialogSureDelete";
 import { useState } from "react";
 
 

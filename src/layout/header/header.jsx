@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { TOKEN_NAME } from '../../services/apiService';
 import ROUTES from '../../constants/routeConstants';
-import DialogSureDelete from '../../components/general_comps/dialogSureDelete';
+import DialogLogOut from '../../components/general_comps/dialogs/dialogLogOut';
 
 const Header = () => {
     const nav = useNavigate();
@@ -80,7 +80,7 @@ const Header = () => {
         localStorage.removeItem(TOKEN_NAME);
         //delete user from redux!
         // dispatch(resetUser())
-        toast.success("התנתקת בהצלחה")
+        toast.success("!התנתקת בהצלחה")
         setOpenSureDialog(false);
         nav(ROUTES.HOME)
     }
@@ -218,6 +218,7 @@ const Header = () => {
                 </Container>
             </AppBar>
             {/*sure dialog for log out need to do */}
+            <DialogLogOut openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} onAction={OnLogOut} />
 
         </ThemeProvider >
     );

@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import { useState } from "react";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
-import DialogCamp from "../general_comps/dialogCamp";
+import DialogCamp from "../general_comps/dialogs/dialogCamp";
 import DeleteCamp from "./deleteCamp/deleteCamp";
 
 const CampItem = ({ item, index, doApiCamps }) => {

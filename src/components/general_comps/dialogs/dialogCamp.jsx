@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
-import { theme } from "../../services/theme";
-import { API_URL, doApiMethod } from "../../services/apiService";
+import { theme } from "../../../services/theme";
+import { API_URL, doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
