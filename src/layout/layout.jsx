@@ -4,8 +4,9 @@ import Footer from './footer/footer';
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import { theme } from '../services/theme';
+import { theme, cacheRtl } from '../services/theme';
 import { Box, CssBaseline } from '@mui/material';
+import { CacheProvider } from '@emotion/react';
 
 export default function Layout() {
 
@@ -25,18 +26,20 @@ export default function Layout() {
     }, [darkMode]);
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box style={{
-                background: modeBackground, color: modeColorText,
-                display: 'flex',
-                // Use flex-direction to make the children stack vertically
-                flexDirection: 'column', minHeight: '100vh',
-            }}>
-                <Header />
-                <Outlet />
-                <Footer />
-            </Box>
-        </ThemeProvider>
+        <CacheProvider value={cacheRtl}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Box style={{
+                    background: modeBackground, color: modeColorText,
+                    display: 'flex',
+                    // Use flex-direction to make the children stack vertically
+                    flexDirection: 'column', minHeight: '100vh',
+                }}>
+                    <Header />
+                    <Outlet />
+                    <Footer />
+                </Box>
+            </ThemeProvider>
+        </CacheProvider>
     )
 }

@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 
-const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps }) => {
+const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, nameItem = "" }) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
-            name: ''
+            name: action == "Edit" ? nameItem : ""
         },
     });
 
@@ -38,21 +38,28 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps }) => {
                 toast.success(`בסיס התעדכן בהצלחה`);
             else if (resp.status == "200" && action === "Delete")
                 toast.success(`בסיס נמחק בהצלחה`);
-            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+            else {
+                toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+                return;
+            }
             doApiCamps();
+            setOpenDialog(false);
+            reset();
         } catch (err) {
             console.error(`An error occurred while ${action.toLowerCase()}ing the בסיס:`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
-    
+
     const onSubForm = (formData) => {
         // Use the submitted form data to call your API function
         console.log(formData); // Make sure the form data is captured correctly
         doApiCamp(formData);
-        setOpenDialog(false);
-        reset();
+
     }
+
+
+
 
     return (
         <ThemeProvider theme={theme}>
