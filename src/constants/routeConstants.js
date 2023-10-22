@@ -1,6 +1,7 @@
 const ROUTES = {
-    HOME: "/",
-    SCHEDULE: "/schedule",
+  HOME: "/",
+  SCHEDULE: "/schedule",
+  GUARDS: "/guards",
 };
 
 export default ROUTES;
