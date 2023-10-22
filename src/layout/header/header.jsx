@@ -11,9 +11,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { ThemeProvider } from '@mui/material/styles';
 import { theme } from "../../services/theme";
 import Logo from '../../components/general_comps/logo';
 import srcImg from '/images/man.png';
@@ -21,8 +21,8 @@ import { changeDarkMode } from "../../features/featuresSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { TOKEN_NAME } from '../../services/apiService';
-import DialogSure from '../../components/general_comps/dialogSure';
 import ROUTES from '../../constants/routeConstants';
+import DialogSureDelete from '../../components/general_comps/dialogSureDelete';
 
 const Header = () => {
     const nav = useNavigate();
@@ -34,7 +34,7 @@ const Header = () => {
     const [displayBurger, setDisplayBurger] = useState("block");
     const [displayButtonX, setDisplayButtonX] = useState("none");
 
-    //sure dialog
+    //sure dialog for log out
     const [openSureDialog, setOpenSureDialog] = useState(false);
 
     // Navbar functions
@@ -217,8 +217,8 @@ const Header = () => {
                     </Grid>
                 </Container>
             </AppBar>
-            {/*sure dialog for log out */}
-            <DialogSure openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} action="להתנתק" OnAction={OnLogOut} />
+            {/*sure dialog for log out need to do */}
+
         </ThemeProvider >
     );
 };
