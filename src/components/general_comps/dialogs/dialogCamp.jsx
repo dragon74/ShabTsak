@@ -16,7 +16,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, nameItem = 
     const method = useMemo(() => {
         if (action === "Add") return "POST";
         else if (action === "Delete") return "DELETE";
-        else if (action === "Edit") return "EDIT";
+        else if (action === "Edit") return "PUT";
         else return action; // You can specify a default value if needed
     }, [action]);
 
@@ -57,9 +57,6 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, nameItem = 
         doApiCamp(formData);
 
     }
-
-
-
 
     return (
         <ThemeProvider theme={theme}>
