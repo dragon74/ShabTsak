@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import featuresSlice from "./features/featuresSlice"
 
+
 export const myStore = configureStore({
   reducer: {
     //  for darkMode and favorites

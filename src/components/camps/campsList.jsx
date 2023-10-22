@@ -1,33 +1,15 @@
-import { useEffect, useState } from "react";
-import { API_URL, doApiGet } from "../../services/apiService";
-import { toast } from "react-toastify";
+/* eslint-disable react/prop-types */
+
 import { Container, CssBaseline, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import CampItem from "./campItem";
 
-const CampsList = () => {
-    const [camps, setCamps] = useState([]);
+const CampsList = ({camps, doApiCamps}) => {
 
-    useEffect(() => {
-        doApiCamps()
-    }, [])
-
-    const doApiCamps = async () => {
-        let url = API_URL + "/camp/all"
-        try {
-            let resp = await doApiGet(url);
-            setCamps(resp.data)
-            console.log(resp.data);
-        }
-        catch (err) {
-            console.log(err);
-            toast.error("יש בעיה בבקשה נסה מאוחר יותר");
-        }
-    }
     return (
         <div>
             <CssBaseline />
             <Container maxWidth="md">
-                <h1>רשימת בסיסים</h1>
+                <h2>רשימת בסיסים</h2>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -46,9 +28,7 @@ const CampsList = () => {
                         })}
                     </TableBody>
                 </Table>
-
             </Container>
-
         </div>
     )
 }
