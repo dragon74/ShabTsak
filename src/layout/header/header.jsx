@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
@@ -80,7 +81,7 @@ const Header = () => {
         localStorage.removeItem(TOKEN_NAME);
         //delete user from redux!
         // dispatch(resetUser())
-        toast.success("התנתקת בהצלחה")
+        toast.success("!התנתקת בהצלחה")
         setOpenSureDialog(false);
         nav(ROUTES.HOME)
     }
@@ -145,6 +146,11 @@ const Header = () => {
                                 >
                                     לוח משמרות
                                 </MenuItem>
+                                <MenuItem
+                                    onClick={() => { nav(ROUTES.GUARDS); }}
+                                >
+                                    סד"כ
+                                </MenuItem>
                             </Menu>
                         </Grid>
 
@@ -160,10 +166,16 @@ const Header = () => {
                                 בסיסים
                             </Button>
                             <Button
-                                onClick={() => { nav("/schedule"); }}
+                                onClick={() => { nav(ROUTES.SCHEDULE); }}
                                 sx={{ color: "white", px: 3, py: 3, }}
                             >
                                 לוח משמרות
+                            </Button>
+                            <Button
+                                onClick={() => { nav(ROUTES.GUARDS); }}
+                                sx={{ color: "white", px: 3, py: 3, }}
+                            >
+                                סד"כ
                             </Button>
                         </Grid>
 
