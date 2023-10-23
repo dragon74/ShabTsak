@@ -13,7 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@material/theme": "^14.0.0",
-    "@mobiscroll/react": "npm:@mobiscroll/react-trial@^5.27.2",
+    "@mobiscroll/react": "^5.27.2",
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.14.14",
     "@mui/x-date-pickers": "^5.0.9",
