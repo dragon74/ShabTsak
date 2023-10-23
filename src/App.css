@@ -1,16 +1,12 @@
 * {
   padding: 0;
   margin: 0;
+  font-family: 'Rubik', sans-serif;
 }
 
 body {
-  font-family: 'Rubik', sans-serif;
   overflow-x: hidden;
   direction: rtl;
-}
-
-.container {
-  max-width: 1050px;
 }
 
 
@@ -26,7 +22,7 @@ body {
 
 .logo-comp img {
   transition: transform 0.5s ease;
-  margin-right: 3px;
+  margin-left: 8px;
 }
 
 .logo-comp h1 {

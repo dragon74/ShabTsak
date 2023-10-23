@@ -1,22 +1,19 @@
-/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import { useNavigate } from "react-router-dom";
-import DialogComp from "../general_comps/dialogComp";
+/* eslint-disable no-undef */
 import { useState } from "react";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DialogCamp from "../general_comps/dialogCamp";
+import DeleteCamp from "./deleteCamp/deleteCamp";
 
-const CampItem = () => {
-    let item = props.item;
+const CampItem = ({ item, index, doApiCamps }) => {
+
     const [openDialog, setOpenDialog] = useState(false);
     const [action, setAction] = useState("");
-    const nav = useNavigate();
-
-
+ 
     return (
         <TableRow>
-            <TableCell>{props.index + 1}</TableCell>
-            <TableCell>{item.name}name</TableCell>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{item.name}</TableCell>
 
             <TableCell>
                 <Box style={{ marginRight: "8px" }}>
@@ -26,7 +23,7 @@ const CampItem = () => {
                         onClick={() => {
                             setAction("Edit");
                             setOpenDialog(true);
-                            nav("editCamp/" + item.id);
+                            // nav("editCamp/" + item.id);
                         }}
                     >
                         עריכה
@@ -34,20 +31,10 @@ const CampItem = () => {
                 </Box>
             </TableCell>
 
-            <TableCell>
-                <Button
-                color="error"
-                variant="outlined" 
-                startIcon={<DeleteIcon />}
-                    onClick={() => {
-                        setAction("Delete");
-                        setOpenDialog(true);
-                    }}>
-                    מחיקה
-                </Button>
-            </TableCell>
+            {/* button delete camp */}
+            <DeleteCamp item={item} doApiCamps={doApiCamps} />
 
-            <DialogComp openDialog={openDialog} setOpenDialog={setOpenDialog} subject={"camp"} action={action} />
+            <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} action={action} doApiCamps={doApiCamps}/>
 
 
         </TableRow>

@@ -14,12 +14,14 @@ export const theme = createTheme({
         success: {
             main: "#FFFFFF"
         },
-        darkMode:{
+        darkMode: {
             main: "#4a4848"
         },
-        lightMode:{
+        lightMode: {
             main: "#FFGFFF"
-        }
-    }
+        },
+
+    },
+    direction: "rtl"
 });
 

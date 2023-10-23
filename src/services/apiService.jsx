@@ -29,9 +29,9 @@ export const doApiMethod = async (_url, _method, _body = {}) => {
       url: _url,
       method: _method,
       data: _body,
-      headers: {
-        "x-api-key": localStorage[TOKEN_NAME],
-      },
+      // headers: {
+      //   "x-api-key": localStorage[TOKEN_NAME],
+      // },
     });
     return resp;
   } catch (err) {

@@ -4,22 +4,25 @@ import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { ThemeProvider } from '@mui/material/styles';
 import { theme } from "../../services/theme";
 import Logo from '../../components/general_comps/logo';
 import srcImg from '/images/man.png';
 import { changeDarkMode } from "../../features/featuresSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { TOKEN_NAME } from '../../services/apiService';
+import ROUTES from '../../constants/routeConstants';
+import DialogLogOut from '../../components/general_comps/dialogs/dialogLogOut';
 
 const Header = () => {
     const nav = useNavigate();
@@ -30,6 +33,9 @@ const Header = () => {
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [displayBurger, setDisplayBurger] = useState("block");
     const [displayButtonX, setDisplayButtonX] = useState("none");
+
+    //sure dialog for log out
+    const [openSureDialog, setOpenSureDialog] = useState(false);
 
     // Navbar functions
     const handleOpenNavMenu = (event) => {
@@ -57,14 +63,37 @@ const Header = () => {
     // Dark Mode
     const { darkMode } = useSelector((myStore) => myStore.featuresSlice);
 
-    const ClickLogout = () => {
-        nav("/");
-        toast.success("With God's help we will fight and win!");
+    // Common navigation function
+    const handleNavigation = (path) => {
+        handleCloseNavMenu();
+        nav(path);
+    };
+
+    //open dialog LogOut
+    const ClickLogOut = () => {
+        handleCloseUserMenu()
+        setOpenSureDialog(true);
+    }
+
+    const OnLogOut = () => {
+        //delete token
+        localStorage.removeItem(TOKEN_NAME);
+        //delete user from redux!
+        // dispatch(resetUser())
+        toast.success("התנתקת בהצלחה")
+        setOpenSureDialog(false);
+        nav(ROUTES.HOME)
+    }
+
+    const ClickGoodLuck = () => {
+        handleCloseUserMenu()
+        nav(ROUTES.HOME);
+        toast.success("זכור! אלוקים איתך! יחד נלחם וננצח!");
     };
 
     return (
         <ThemeProvider theme={theme}>
-            <AppBar position="static" color={darkMode === false ? 'primary' : 'darkMode'}>
+            <AppBar position="static" color={darkMode === false ? 'primary' : 'darkMode'} >
                 <Container maxWidth="lg">
                     <Grid container justifyContent="space-between" alignItems="center">
                         {/* big screen */}
@@ -83,8 +112,7 @@ const Header = () => {
                                 color="white"
                             >
                                 <MenuIcon sx={{ display: displayBurger }} />
-                                <CloseIcon sx={{ display: displayButtonX }} />
-                            </IconButton>
+                                <CloseIcon sx={{ display: displayButtonX }} />                            </IconButton>
                             <Menu
                                 id="menu-appbar"
                                 anchorEl={anchorElNav}
@@ -105,51 +133,37 @@ const Header = () => {
                             >
                                 <MenuItem
                                     onClick={() => {
-                                        handleCloseNavMenu();
-                                        nav("/");
+                                        handleNavigation(ROUTES.HOME)
                                     }}
                                 >
-                                    Camps
+                                    בסיסים
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => {
-                                        handleCloseNavMenu();
-                                        nav("/Schedule");
+                                        handleNavigation(ROUTES.SCHEDULE)
                                     }}
                                 >
-                                    schedule
+                                    לוח משמרות
                                 </MenuItem>
                             </Menu>
                         </Grid>
 
-                        <Grid item sx={{ display: { sx: 'block', md: 'none' } }}>
+                        <Grid item sx={{ display: { sx: 'block', md: 'none' }, padding: '8px' }}>
                             <Logo />
                         </Grid>
 
                         <Grid item sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <Button
-                                onClick={() => {
-                                    nav("/");
-                                }}
-                                sx={{
-                                    color: 'white',
-                                    px: 3,
-                                    py: 3,
-                                }}
+                                onClick={() => { nav(ROUTES.HOME); }}
+                                sx={{ color: 'white', px: 3, py: 3, }}
                             >
-                                Camps
+                                בסיסים
                             </Button>
                             <Button
-                                onClick={() => {
-                                    nav("/schedule");
-                                }}
-                                sx={{
-                                    color: "white",
-                                    px: 3,
-                                    py: 3,
-                                }}
+                                onClick={() => { nav("/schedule"); }}
+                                sx={{ color: "white", px: 3, py: 3, }}
                             >
-                                schedule
+                                לוח משמרות
                             </Button>
                         </Grid>
 
@@ -158,7 +172,7 @@ const Header = () => {
                             sx={{
                                 display: { xs: 'none', md: 'flex', textAlign: "center", px: 3, alignItems: 'center', color: darkMode === true ? '#8ECDDD' : 'yellow' },
                             }}>
-                            {darkMode === false ? "Light" : 'Dark'}
+                            {darkMode === false ? "אור" : 'חושך'}
                             <IconButton onClick={() => { dispatch(changeDarkMode()) }} color={darkMode === true ? "primary" : "inherit"}>
                                 {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
                             </IconButton>
@@ -191,17 +205,21 @@ const Header = () => {
                                         display: { xs: 'block', md: 'none', textAlign: "center", px: 3, alignItems: 'center' },
                                     }}
                                 >
-                                    {darkMode === false ? "Light" : 'Dark'}
+                                    {darkMode === false ? "אור" : 'חושך'}
                                     <IconButton onClick={() => { dispatch(changeDarkMode()) }} color="inherit">
                                         {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
                                     </IconButton>
                                 </MenuItem>
-                                <MenuItem onClick={ClickLogout}>Good Day!</MenuItem>
+                                <MenuItem onClick={ClickGoodLuck}>בהצלחה</MenuItem>
+                                <MenuItem onClick={ClickLogOut}>התנתקות</MenuItem>
                             </Menu>
                         </Grid>
                     </Grid>
                 </Container>
             </AppBar>
+            {/*sure dialog for log out need to do */}
+            <DialogLogOut openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} onAction={OnLogOut} />
+
         </ThemeProvider >
     );
 };

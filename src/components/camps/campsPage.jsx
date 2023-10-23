@@ -1,32 +1,47 @@
-import { useState } from "react";
-import { Box, Button, Container, CssBaseline } from "@mui/material"
-import DialogComp from "../general_comps/dialogComp";
+import { useEffect, useState } from "react";
+import { API_URL, doApiGet } from "../../services/apiService";
+import { toast } from "react-toastify";
+import { Container } from "@mui/material"
+import DialogCamp from "../general_comps/dialogCamp";
 import CampsList from "./campsList";
+import AddCampBtn from "./addCamp/addCampBtn";
 
 const CampsPage = () => {
- 
   const [openDialog, setOpenDialog] = useState(false);
+  const [camps, setCamps] = useState([]);
+
+  useEffect(() => {
+    doApiCamps()
+  }, [])
+
+  const doApiCamps = async () => {
+    let url = API_URL + "/camp/all"
+    try {
+      let resp = await doApiGet(url);
+      setCamps(resp.data)
+      console.log(resp.data);
+    }
+    catch (err) {
+      console.log(err);
+      toast.error("יש בעיה בבקשה נסה מאוחר יותר");
+    }
+  }
 
 
   return (
     <div className="camps-page">
-      <CssBaseline />
       <Container fixed>
 
-        <Box style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
-          <Button variant="contained"
-            onClick={() => {
-              setOpenDialog(true);
-            }}
-          >
-            הוסף קעמפ חדש
-          </Button>
-        </Box>
+        {/* btn-add camp */}
+        <AddCampBtn setOpenDialog={setOpenDialog} />
 
-        <CampsList />
+        <CampsList camps={camps} doApiCamps={doApiCamps} />
 
-        <DialogComp openDialog={openDialog} setOpenDialog={setOpenDialog} subject={"camp"} action="Add" />
-
+        <DialogCamp openDialog={openDialog}
+          setOpenDialog={setOpenDialog}
+          action="Add"
+          doApiCamps={doApiCamps}
+        />
 
       </Container>
     </div>
