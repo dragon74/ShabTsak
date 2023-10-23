@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { API_URL, doApiGet } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { Container } from "@mui/material"
-import DialogCamp from "../general_comps/dialogCamp";
+import DialogCamp from "./dialogCamp";
 import CampsList from "./campsList";
 import AddCampBtn from "./addCamp/addCampBtn";
 

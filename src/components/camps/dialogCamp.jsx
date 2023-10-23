@@ -6,17 +6,17 @@ import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 
-const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps }) => {
+const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, nameItem = "" }) => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
-            name: ''
+            name: action === "Edit" ? nameItem : ""
         },
     });
 
     const method = useMemo(() => {
         if (action === "Add") return "POST";
         else if (action === "Delete") return "DELETE";
-        else if (action === "Edit") return "EDIT";
+        else if (action === "Edit") return "PUT";
         else return action; // You can specify a default value if needed
     }, [action]);
 
@@ -32,26 +32,30 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps }) => {
         try {
             let resp = await doApiMethod(url, method, bodyFormData);
             console.log(resp);
-            if (resp.status == "201" && action == "Add")
+            if (resp.status === "201" && action === "Add")
                 toast.success(`בסיס נוסף בהצלחה`);
-            else if (resp.status == "200" && action === "Edit")
+            else if (resp.status === "200" && action === "Edit")
                 toast.success(`בסיס התעדכן בהצלחה`);
-            else if (resp.status == "200" && action === "Delete")
+            else if (resp.status === "200" && action === "Delete")
                 toast.success(`בסיס נמחק בהצלחה`);
-            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+            else {
+                toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+                return;
+            }
             doApiCamps();
+            setOpenDialog(false);
+            reset();
         } catch (err) {
             console.error(`An error occurred while ${action.toLowerCase()}ing the בסיס:`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
-    
+
     const onSubForm = (formData) => {
         // Use the submitted form data to call your API function
         console.log(formData); // Make sure the form data is captured correctly
         doApiCamp(formData);
-        setOpenDialog(false);
-        reset();
+
     }
 
     return (

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useMemo } from "react";
-import { API_URL, doApiMethod } from "../../services/apiService";
+import { API_URL, doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
 
 const DialogSureDelete = ({ openDialog, setOpenDialog, subject, idItem = {}, doApiCamps = {} }) => {
@@ -20,7 +20,7 @@ const DialogSureDelete = ({ openDialog, setOpenDialog, subject, idItem = {}, doA
         try {
             let resp = await doApiMethod(url, "DELETE");
             console.log(resp);
-            if (resp.status == 200) {
+            if (resp.status === 200) {
                 toast.success(`בסיס נמחק בהצלחה`);
                 doApiCamps();
                 setOpenDialog(false);

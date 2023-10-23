@@ -5,7 +5,7 @@ export default function Footer() {
     // Push the footer to the bottom
     <Container style={{ marginTop: "auto" }} >
       <Box textAlign={"center"} >
-        <p>2023 Chaya Segal & Dan & Hadas ©</p>
+        <p>2023 Chaya & Dan & Hadas & Niv & Ofir  ©</p>
       </Box>
     </Container>
   )

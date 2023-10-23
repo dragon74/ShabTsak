@@ -1,56 +1,30 @@
-import React from 'react';
-import { ThemeProvider, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
-import { theme } from "../../../services/theme";
-import { useUserStore } from "../../../services/useUserStore";
-import PropTypes from 'prop-types';
-import { toast } from "react-toastify";
+/* eslint-disable react/prop-types */
+import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 
-export default function DialogLogOut({ close }) {
-    const logout = useUserStore((store) => store.logout);
-    const [open, setOpen] = React.useState(true)
-    const handleLogout = () => {
-        logout();
-        toast.success("התנתקת בהצלחה")
-        handleClose();
-    }
-    
-    const handleClose = () => {
-        setOpen(false);
-        const timeout = setTimeout(() => {
-            close();
-            clearTimeout(timeout);
-        }, 300);
-    }
-    
+
+const DialogLogOut= ({ openDialog,setOpenDialog,onAction}) => {
+
     return (
-        <ThemeProvider theme={theme}>
-        <Dialog
-            open={open}
-            PaperProps={{
-                style: {
-                    minWidth: '300px', // Set your minimum width here
-                    maxWidth: '90vw',  // Set a maximum width (e.g., 90% of viewport width)
-                }
-            }}
-        >
-            <DialogTitle>התנתקות</DialogTitle>
-            <DialogContent style={{ padding: '20px' }}>
-                 האם אתה בטוח שברצונך להתנתק מהמשתמש?
-            </DialogContent>
-            <DialogActions>
-                <Button 
-                    onClick={handleLogout}
-                    variant="contained"
-                    style={{ marginLeft: '8px' }}>
-                    התנתק
-                </Button>
-                <Button onClick={handleClose} autoFocus>ביטול</Button>
-            </DialogActions>
-        </Dialog>
-    </ThemeProvider>
+        <>
+            <Dialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle
+                    sx={{ mb: 2 }}
+                    id="alert-dialog-title">
+                    אתה בטוח רוצה להתנתק ?
+                </DialogTitle>
+                <DialogActions>
+                    <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
+                    <Button onClick={onAction} autoFocus>מסכים</Button>
+                </DialogActions>
+
+            </Dialog>
+        </>
     )
 }
 
-DialogLogOut.propTypes = {
-    close: PropTypes.func
-}
+export default DialogLogOut
