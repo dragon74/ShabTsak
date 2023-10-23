@@ -29,6 +29,9 @@ body {
   font-weight: 400;
 }
 
+.camps-page .camps-header {
+  margin-bottom: 20px;
+}
 
 /* scroller */
 /* width */
