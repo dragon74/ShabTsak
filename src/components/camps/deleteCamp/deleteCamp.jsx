@@ -19,7 +19,7 @@ const DeleteCamp = ({ item, doApiCamps }) => {
                 </IconButton>
             </TableCell>
 
-            <DialogSureDelete openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} subject={"camp"} idItem={item.id} doApiCamps={doApiCamps} />
+            <DialogSureDelete openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} subject={"camp"} item={item} doApi={doApiCamps} />
         </>
     )
 }
