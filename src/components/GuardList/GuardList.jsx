@@ -1,46 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { MenuItem, Grid, Button, List, ListItemText, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Typography, Avatar, Card, CardContent, CardActions, Snackbar, CircularProgress } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Snackbar, CircularProgress } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import md5 from "md5";
+import { GuardItem } from "./GuardItem.jsx";
 
 const API_URL = "https://shabtsak.onrender.com/guard";
 
-const GuardItem = ({ guard, onEdit, onDelete }) => (
-  <Card key={guard.id} variant="outlined" style={{ marginBottom: "10px" }}>
-    <CardContent>
-      <Grid container alignItems="center" spacing={2}>
-        <Grid item xs={2}>
-          <Avatar src={getGravatarUrl(guard.mail)} alt={guard.name} />
-        </Grid>
-        <Grid item xs={7}>
-          <ListItemText primary={guard.name} secondary={`Email: ${guard.mail} | Phone: ${guard.phone}`} />
-        </Grid>
-        <Grid item xs={3}>
-          <CardActions>
-            <IconButton onClick={() => onEdit(guard)}>
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => onDelete(guard)}>
-              <DeleteIcon />
-            </IconButton>
-          </CardActions>
-        </Grid>
-      </Grid>
-    </CardContent>
-  </Card>
-);
-
-function getGravatarUrl(email) {
-  const base = "https://www.gravatar.com/avatar/";
-  const formattedEmail = (email || "").trim().toLowerCase();
-  const hash = md5(formattedEmail);
-  return `${base}${hash}?d=identicon`;
-}
-
-export const GuardList = () => {
+const GuardList = () => {
   const [guards, setGuards] = useState([]);
   const [selectedGuard, setSelectedGuard] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -176,7 +142,6 @@ export const GuardList = () => {
           </Grid>
         </>
       )}
-
       <Dialog open={dialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="sm">
         <DialogTitle>{selectedGuard ? "ערוך שומר" : "הוסף שומר"}</DialogTitle>
         <DialogContent>
@@ -194,7 +159,6 @@ export const GuardList = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
       <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
     </Grid>
   );
