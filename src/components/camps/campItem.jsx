@@ -2,13 +2,12 @@
 /* eslint-disable no-undef */
 import { useState } from "react";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
-import DialogCamp from "../general_comps/dialogCamp";
+import DialogCamp from "../general_comps/dialogs/dialogCamp";
 import DeleteCamp from "./deleteCamp/deleteCamp";
 
 const CampItem = ({ item, index, doApiCamps }) => {
 
     const [openDialog, setOpenDialog] = useState(false);
-    const [action, setAction] = useState("");
  
     return (
         <TableRow>
@@ -21,7 +20,6 @@ const CampItem = ({ item, index, doApiCamps }) => {
                         color="primary"
                         variant="contained"
                         onClick={() => {
-                            setAction("Edit");
                             setOpenDialog(true);
                             // nav("editCamp/" + item.id);
                         }}
@@ -34,7 +32,7 @@ const CampItem = ({ item, index, doApiCamps }) => {
             {/* button delete camp */}
             <DeleteCamp item={item} doApiCamps={doApiCamps} />
 
-            <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} action={action} doApiCamps={doApiCamps}/>
+            <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} action={"Edit"} doApiCamps={doApiCamps} nameItem={item.name}/>
 
 
         </TableRow>
