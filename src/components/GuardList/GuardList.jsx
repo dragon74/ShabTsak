@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import md5 from "md5";
+import { Container } from "@mui/system";
 
 const API_URL = "https://shabtsak.onrender.com/guard";
 
@@ -151,52 +152,54 @@ export const GuardList = () => {
   };
 
   return (
-    <Grid container spacing={3} direction="column">
-      <Typography variant="h4" gutterBottom>
-        ניהול סד"כ
-      </Typography>
-      <Grid item xs={12}>
-        <TextField select label="בחר מחנה" value={selectedCampId || ""} onChange={(e) => setSelectedCampId(e.target.value)} fullWidth variant="outlined">
-          {camps.map((camp) => (
-            <MenuItem key={camp.id} value={camp.id}>
-              {camp.name}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Grid>
-      {selectedCampId && (
-        <>
-          <Grid item xs={12} style={{ textAlign: "right" }}>
-            <Button startIcon={<AddIcon />} variant="contained" color="primary" onClick={() => handleOpenDialog(null)}>
-              הוספה שומר
+    <Container>
+      <Grid container spacing={3} direction="column">
+        <Typography variant="h4" gutterBottom>
+          ניהול סד"כ
+        </Typography>
+        <Grid item xs={12}>
+          <TextField select label="בחר מחנה" value={selectedCampId || ""} onChange={(e) => setSelectedCampId(e.target.value)} fullWidth variant="outlined">
+            {camps.map((camp) => (
+              <MenuItem key={camp.id} value={camp.id}>
+                {camp.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        {selectedCampId && (
+          <>
+            <Grid item xs={12} style={{ textAlign: "right" }}>
+              <Button startIcon={<AddIcon />} variant="contained" color="primary" onClick={() => handleOpenDialog(null)}>
+                הוספה שומר
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              {loading ? <CircularProgress /> : <List>{guards.length ? guards.map((guard) => <GuardItem key={guard.id} guard={guard} onEdit={handleOpenDialog} onDelete={handleDelete} />) : <Typography>No guards available</Typography>}</List>}
+            </Grid>
+          </>
+        )}
+
+        <Dialog open={dialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="sm">
+          <DialogTitle>{selectedGuard ? "ערוך שומר" : "הוסף שומר"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{selectedGuard ? "ערוך את פרטי השומר :" : "הזן את פרטי השומר :"}</DialogContentText>
+            <TextField autoFocus margin="dense" name="name" label="שם" type="text" fullWidth value={formState.name || ""} onChange={handleInputChange} />
+            <TextField margin="dense" name="mail" label="אימייל" type="email" fullWidth value={formState.mail || ""} onChange={handleInputChange} />
+            <TextField margin="dense" name="phone" label="טלפון" type="text" fullWidth value={formState.phone || ""} onChange={handleInputChange} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">
+              ביטול
             </Button>
-          </Grid>
-          <Grid item xs={12}>
-            {loading ? <CircularProgress /> : <List>{guards.length ? guards.map((guard) => <GuardItem key={guard.id} guard={guard} onEdit={handleOpenDialog} onDelete={handleDelete} />) : <Typography>No guards available</Typography>}</List>}
-          </Grid>
-        </>
-      )}
+            <Button onClick={handleSave} color="primary">
+              שמירה
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-      <Dialog open={dialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="sm">
-        <DialogTitle>{selectedGuard ? "ערוך שומר" : "הוסף שומר"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{selectedGuard ? "ערוך את פרטי השומר :" : "הזן את פרטי השומר :"}</DialogContentText>
-          <TextField autoFocus margin="dense" name="name" label="שם" type="text" fullWidth value={formState.name || ""} onChange={handleInputChange} />
-          <TextField margin="dense" name="mail" label="אימייל" type="email" fullWidth value={formState.mail || ""} onChange={handleInputChange} />
-          <TextField margin="dense" name="phone" label="טלפון" type="text" fullWidth value={formState.phone || ""} onChange={handleInputChange} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            ביטול
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            שמירה
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
-    </Grid>
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
+      </Grid>
+    </Container>
   );
 };
 

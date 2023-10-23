@@ -30,8 +30,7 @@ const CampItem = ({ item, index, doApiCamps }) => {
             {/* button delete camp */}
             <DeleteCamp item={item} doApiCamps={doApiCamps} />
 
-            <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} action={"Edit"} doApiCamps={doApiCamps} nameItem={item.name}/>
-
+            <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} action={"Edit"} doApiCamps={doApiCamps} item={item} />
 
         </TableRow>
     )
