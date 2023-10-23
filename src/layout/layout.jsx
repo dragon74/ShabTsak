@@ -15,14 +15,14 @@ export default function Layout() {
 
     const modeColorText = useMemo(() => {
         if (darkMode)
-            return theme.palette.success.main
+            return theme.palette.lightMode.main
         return theme.palette.darkMode.main
     }, [darkMode]);
 
     const modeBackground = useMemo(() => {
         if (darkMode)
             return theme.palette.darkMode.main
-        return theme.palette.success.main
+        return theme.palette.lightMode.main
     }, [darkMode]);
 
     return (
