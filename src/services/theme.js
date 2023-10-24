@@ -34,6 +34,12 @@ export const theme = createTheme({
         purple: {
             main: "#800080"
         },
+        brown:{
+            main:"#964B00"
+        },
+        orange:{
+            main:"#FFA500"
+        }
     },
     direction: "rtl",
     textField: {

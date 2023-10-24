@@ -11,7 +11,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
             name: method == "PUT" ? item.name : "",
-            id: method == "PUT" ? item.id : ""
+            id: method == "PUT" ? item.id : null
         },
     });
   
