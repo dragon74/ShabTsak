@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { API_URL, doApiMethod, TOKEN_NAME } from "./apiService";
+import { doApiMethod, TOKEN_NAME } from "./apiService";
+import { API_URL } from "../constants/apiConstants.js";
 
 export const useUserStore = create((set) => ({
   user: null,
@@ -29,17 +30,17 @@ export const useUserStore = create((set) => ({
     set(() => ({ user: null }));
   },
 
-  authenticate: async (user) => {
+  authenticate: async (data) => {
     try {
       const res = await doApiMethod(API_URL + '/auth', 'POST', {
         user: {
-          email: user.email,
-          emailVerified: user.email_verified,
-          firstName: user.given_name,
-          locale: user.locale,
-          fullName: user.name,
-          avatar: user.picture,  // e.g. https:// lh3.googleusercontent.com/a/jhkaskdjfhjkahsewr71
-          sub: user.sub  // e.g. 891028308129038123021
+          email: data.email,
+          emailVerified: data.email_verified,
+          firstName: data.given_name,
+          locale: data.locale,
+          fullName: data.name,
+          avatar: data.picture,  // e.g. https:// lh3.googleusercontent.com/a/jhkaskdjfhjkahsewr71
+          sub: data.sub  // e.g. 891028308129038123021
         }
       });
 
@@ -59,9 +60,16 @@ export const useUserStore = create((set) => ({
   test: (data) => {
     console.log(data);
     const user = {
-      firstName: 'אופיר',
-      position: "WTF",
-      avatar: "https://lh3.googleusercontent.com/a/ACg8ocKAHr5c5trXvdfcB5MBzNKn6qNuKiHQFh2YzCp14rI-eCA=s96-c"
+      // firstName: 'אופיר',
+      // position: "WTF",
+      // avatar: "https://lh3.googleusercontent.com/a/ACg8ocKAHr5c5trXvdfcB5MBzNKn6qNuKiHQFh2YzCp14rI-eCA=s96-c"
+      email: data.email,
+      emailVerified: data.email_verified,
+      firstName: data.given_name,
+      locale: data.locale,
+      fullName: data.name,
+      avatar: data.picture,  // e.g. https:// lh3.googleusercontent.com/a/jhkaskdjfhjkahsewr71
+      sub: data.sub  // e.g. 891028308129038123021
     }
 
     set(() => ({ user }));

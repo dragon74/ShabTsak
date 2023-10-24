@@ -22,15 +22,15 @@ const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) =
         try {
             let resp = await doApiMethod(url, "DELETE");
             // console.log(resp);
-            if (resp.status == 200) {
+            if (resp.status === 200) {
                 toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
                 setOpenDialog(false);
                 doApi();
-            } else toast.error(resp.massege);
+            } else toast.error(resp?.message);
         }
         catch (err) {
             console.log(err);
-            toast.error(resp.massege)
+            toast.error(resp?.message)
         }
     }
     return (
