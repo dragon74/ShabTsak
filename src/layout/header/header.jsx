@@ -11,24 +11,21 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from "../../services/theme";
 import Logo from '../../components/general_comps/logo';
 import srcImg from '/images/man.png';
-import { changeDarkMode } from "../../features/featuresSlice";
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { TOKEN_NAME } from '../../services/apiService';
 import ROUTES from '../../constants/routeConstants';
 import DialogLogOut from '../../components/general_comps/dialogs/dialogLogOut';
+import {useUserStore} from "../../services/useUserStore.jsx";
+import {useDarkModeStore} from "../../services/useDarkModeStore.jsx";
+import { Link as RouterLink } from 'react-router-dom';
 
 const Header = () => {
-    const nav = useNavigate();
-    const dispatch = useDispatch();
-
+    const [user, logout] = useUserStore((store) => [store.user, store.logout]);
     // Navbar states
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -61,14 +58,7 @@ const Header = () => {
         setAnchorElUser(null);
     };
 
-    // Dark Mode
-    const { darkMode } = useSelector((myStore) => myStore.featuresSlice);
-
-    // Common navigation function
-    const handleNavigation = (path) => {
-        handleCloseNavMenu();
-        nav(path);
-    };
+    const { darkMode, toggleDarkMode } = useDarkModeStore();
 
     //open dialog LogOut
     const ClickLogOut = () => {
@@ -77,18 +67,13 @@ const Header = () => {
     }
 
     const OnLogOut = () => {
-        //delete token
-        localStorage.removeItem(TOKEN_NAME);
-        //delete user from redux!
-        // dispatch(resetUser())
+        logout()
         toast.success("!התנתקת בהצלחה")
         setOpenSureDialog(false);
-        nav(ROUTES.HOME)
     }
 
     const ClickGoodLuck = () => {
         handleCloseUserMenu()
-        nav(ROUTES.HOME);
         toast.success("זכור! אלוקים איתך! יחד נלחם וננצח!");
     };
 
@@ -103,7 +88,7 @@ const Header = () => {
                         </Grid>
 
                         {/* small screen */}
-                        <Grid item sx={{ display: { sx: 'flex', md: 'none' } }}>
+                        <Grid item sx={{ display: { sx: 'flex', md: 'none' }}}>
                             <IconButton
                                 size="small"
                                 aria-label="account of the current user"
@@ -113,7 +98,8 @@ const Header = () => {
                                 color="white"
                             >
                                 <MenuIcon sx={{ display: displayBurger }} />
-                                <CloseIcon sx={{ display: displayButtonX }} />                            </IconButton>
+                                <CloseIcon sx={{ display: displayButtonX }} />
+                            </IconButton>
                             <Menu
                                 id="menu-appbar"
                                 anchorEl={anchorElNav}
@@ -133,21 +119,23 @@ const Header = () => {
                                 }}
                             >
                                 <MenuItem
-                                    onClick={() => {
-                                        handleNavigation(ROUTES.HOME)
-                                    }}
+                                    component={RouterLink}
+                                    to={ROUTES.HOME}
+                                    disabled={!user}
                                 >
                                     בסיסים
                                 </MenuItem>
                                 <MenuItem
-                                    onClick={() => {
-                                        handleNavigation(ROUTES.SCHEDULE)
-                                    }}
+                                    component={RouterLink}
+                                    to={ROUTES.SCHEDULE}
+                                    disabled={!user}
                                 >
                                     לוח משמרות
                                 </MenuItem>
                                 <MenuItem
-                                    onClick={() => { nav(ROUTES.GUARDS); }}
+                                    component={RouterLink}
+                                    to={ROUTES.GUARDS}
+                                    disabled={!user}
                                 >
                                     סד"כ
                                 </MenuItem>
@@ -158,21 +146,24 @@ const Header = () => {
                             <Logo />
                         </Grid>
 
-                        <Grid item sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <Grid item sx={{ display: { xs: 'none', md: 'flex' }, visibility: user ?? 'hidden' }}>
                             <Button
-                                onClick={() => { nav(ROUTES.HOME); }}
+                                component={RouterLink}
+                                to={ROUTES.HOME}
                                 sx={{ color: 'white', px: 3, py: 3, }}
                             >
                                 בסיסים
                             </Button>
                             <Button
-                                onClick={() => { nav(ROUTES.SCHEDULE); }}
+                                component={RouterLink}
+                                to={ROUTES.SCHEDULE}
                                 sx={{ color: "white", px: 3, py: 3, }}
                             >
                                 לוח משמרות
                             </Button>
                             <Button
-                                onClick={() => { nav(ROUTES.GUARDS); }}
+                                component={RouterLink}
+                                to={ROUTES.GUARDS}
                                 sx={{ color: "white", px: 3, py: 3, }}
                             >
                                 סד"כ
@@ -184,47 +175,50 @@ const Header = () => {
                             sx={{
                                 display: { xs: 'none', md: 'flex', textAlign: "center", px: 3, alignItems: 'center', color: darkMode === true ? '#8ECDDD' : 'yellow' },
                             }}>
-                            {darkMode === false ? "אור" : 'חושך'}
-                            <IconButton onClick={() => { dispatch(changeDarkMode()) }} color={darkMode === true ? "primary" : "inherit"}>
-                                {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
-                            </IconButton>
+                            <Tooltip title={darkMode === false ? "אור" : 'חושך'}>
+                                <IconButton onClick={toggleDarkMode} color={darkMode ? "primary" : "inherit"}>
+                                    {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
+                                </IconButton>
+                            </Tooltip>
                         </Grid>
 
                         <Grid item>
-                            <Tooltip title="Avatar">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Avatar" src={srcImg} />
+                            <Tooltip title={user?.firstName ? `שלום ${user.firstName}` : "שלום, אנא התחבר"}>
+                                <IconButton onClick={user ? handleOpenUserMenu : undefined} sx={{ p: 0 }}>
+                                    <Avatar alt="Avatar" src={user?.avatar || srcImg} />
                                 </IconButton>
                             </Tooltip>
-                            <Menu
-                                sx={{ mt: 3 }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                <MenuItem
-                                    sx={{
-                                        display: { xs: 'block', md: 'none', textAlign: "center", px: 3, alignItems: 'center' },
+                            {user && (
+                                <Menu
+                                    sx={{ mt: 3 }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
                                     }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
                                 >
-                                    {darkMode === false ? "אור" : 'חושך'}
-                                    <IconButton onClick={() => { dispatch(changeDarkMode()) }} color="inherit">
-                                        {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
-                                    </IconButton>
-                                </MenuItem>
-                                <MenuItem onClick={ClickGoodLuck}>בהצלחה</MenuItem>
-                                <MenuItem onClick={ClickLogOut}>התנתקות</MenuItem>
-                            </Menu>
+                                    <MenuItem
+                                        sx={{
+                                            display: { xs: 'block', md: 'none', textAlign: "center", px: 3, alignItems: 'center' },
+                                        }}
+                                    >
+                                        {darkMode === false ? "אור" : 'חושך'}
+                                        <IconButton onClick={toggleDarkMode} color="inherit">
+                                            {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
+                                        </IconButton>
+                                    </MenuItem>
+                                    <MenuItem onClick={ClickGoodLuck}>בהצלחה</MenuItem>
+                                    <MenuItem onClick={ClickLogOut}>התנתקות</MenuItem>
+                                </Menu>
+                            )}
                         </Grid>
                     </Grid>
                 </Container>

@@ -26,7 +26,7 @@ export const theme = createTheme({
             main: "#FFFFFF"
         },
         darkMode: {
-            main: "#4a4848"
+            main: "#4a4848",
         },
         lightMode: {
             main: "#FFFFFF"
@@ -37,6 +37,17 @@ export const theme = createTheme({
         smallTextField: {
             width: '50%', // You can adjust the width to make it smaller
         },
-    }
+    },
+    typography: {
+        fontFamily: "inherit",
+        h1: {
+            fontSize: 32,
+            fontWeight: 400
+        },
+        h2: {
+            fontSize: 28,
+            fontWeight: 500
+        }
+    },
 });
 

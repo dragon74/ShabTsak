@@ -1,17 +1,15 @@
 import { Outlet } from 'react-router-dom';
 import Header from './header/header';
 import Footer from './footer/footer';
-import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme, cacheRtl } from '../services/theme';
 import { Box, CssBaseline } from '@mui/material';
 import { CacheProvider } from '@emotion/react';
+import {useDarkModeStore} from "../services/useDarkModeStore.jsx";
 
 export default function Layout() {
-
-    //darkMode
-    const { darkMode } = useSelector(myStore => myStore.featuresSlice);
+    const darkMode = useDarkModeStore((store) => store.darkMode);
 
     const modeColorText = useMemo(() => {
         if (darkMode)
