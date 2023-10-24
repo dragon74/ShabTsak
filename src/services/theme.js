@@ -11,11 +11,13 @@ export const cacheRtl = createCache({
 
 export const theme = createTheme({
     palette: {
+        //green
         primary: {
             main: "#355E3B",
         },
+        //blue
         secondary: {
-            main: "#C12FFF",
+            main: "#4169e1",
         },
         danger: {
             main: "purple[300]",
@@ -27,10 +29,14 @@ export const theme = createTheme({
             main: "#4a4848"
         },
         lightMode: {
-            main: "#FFGFFF"
+            main: "#FFFFFF"
         },
-
     },
-    direction: "rtl"
+    direction: "rtl",
+    textField: {
+        smallTextField: {
+            width: '50%', // You can adjust the width to make it smaller
+        },
+    }
 });
 

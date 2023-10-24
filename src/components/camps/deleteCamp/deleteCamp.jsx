@@ -1,30 +1,25 @@
 /* eslint-disable react/prop-types */
-import { Button, TableCell } from "@mui/material";
+import { IconButton, TableCell } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import DialogSureDelete from "../../general_comps/dialogs/dialogSureDelete";
 import { useState } from "react";
 
-
-const DeleteCamp = ({ item ,doApiCamps}) => {
-
     //sure dialog
+const DeleteCamp = ({ item, doApiCamps }) => {
+
     const [openSureDialog, setOpenSureDialog] = useState(false);
 
     return (
         <>
-            <TableCell>
-                <Button
-                    color="error"
-                    variant="outlined"
-                    startIcon={<DeleteIcon />}
-                    onClick={() => {
-                        setOpenSureDialog(true);
-                    }}>
-                    מחיקה
-                </Button>
+            <TableCell  align="center">
+                <IconButton aria-label="delete" color="error" onClick={() => {
+                    setOpenSureDialog(true);
+                }}>
+                    <DeleteIcon />
+                </IconButton>
             </TableCell>
 
-            <DialogSureDelete openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} subject={"camp"} idItem={item.id} doApiCamps={doApiCamps} />
+            <DialogSureDelete openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} subject={"camp"} item={item} doApi={doApiCamps} />
         </>
     )
 }

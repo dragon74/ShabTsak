@@ -11,17 +11,15 @@ const CampItem = ({ item, index, doApiCamps }) => {
  
     return (
         <TableRow>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>{item.name}</TableCell>
-
-            <TableCell>
+            <TableCell align="center">{index + 1}</TableCell>
+            <TableCell  align="center">{item.name}</TableCell>
+            <TableCell align="center">
                 <Box style={{ marginRight: "8px" }}>
                     <Button
-                        color="primary"
-                        variant="contained"
+                        color="secondary"
+                        variant="outlined"
                         onClick={() => {
                             setOpenDialog(true);
-                            // nav("editCamp/" + item.id);
                         }}
                     >
                         עריכה
@@ -32,8 +30,7 @@ const CampItem = ({ item, index, doApiCamps }) => {
             {/* button delete camp */}
             <DeleteCamp item={item} doApiCamps={doApiCamps} />
 
-            <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} action={"Edit"} doApiCamps={doApiCamps} nameItem={item.name}/>
-
+            <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} action={"Edit"} doApiCamps={doApiCamps} item={item} />
 
         </TableRow>
     )
