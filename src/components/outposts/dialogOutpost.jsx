@@ -11,7 +11,7 @@ const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId,
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
             campId: campId,
-            id: method == "PUT" ? item.id : "",
+            id: method == "PUT" ? item.id : null,
             minGuards: method == "PUT" ? item.minGuards : "",
             name: method == "PUT" ? item.name : "",
         },
