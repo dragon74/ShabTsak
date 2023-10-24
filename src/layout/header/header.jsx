@@ -88,7 +88,7 @@ const Header = () => {
                         </Grid>
 
                         {/* small screen */}
-                        <Grid item sx={{ display: { sx: 'flex', md: 'none' }}}>
+                        <Grid item sx={{ display: { sx: 'flex', md: 'none' }, ...!user ? { visibility: 'hidden'} : {} }}>
                             <IconButton
                                 size="small"
                                 aria-label="account of the current user"
@@ -185,7 +185,7 @@ const Header = () => {
                         <Grid item>
                             <Tooltip title={user?.firstName ? `שלום ${user.firstName}` : "שלום, אנא התחבר"}>
                                 <IconButton onClick={user ? handleOpenUserMenu : undefined} sx={{ p: 0 }}>
-                                    <Avatar alt="Avatar" src={user?.avatar || srcImg} />
+                                    <Avatar alt="Avatar" src={user?.avatar || srcImg} referrerPolicy="no-referrer" />
                                 </IconButton>
                             </Tooltip>
                             {user && (

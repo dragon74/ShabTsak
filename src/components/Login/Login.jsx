@@ -23,7 +23,7 @@ export default function Login() {
                     }
                 })
                 // await authenticate('testing');
-                const success = test();
+                const success = test(res.data);
                 if (success) {
                     navigate('/');
                 }
