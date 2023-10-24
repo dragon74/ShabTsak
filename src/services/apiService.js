@@ -1,8 +1,6 @@
 /* eslint-disable no-useless-catch */
 import axios from "axios";
 
-export const API_URL = "https://shabtsak.onrender.com"
-
 export const TOKEN_NAME = "FOODS_TOKEN";
 
 

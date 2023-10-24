@@ -2,10 +2,11 @@
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useMemo } from "react";
-import { API_URL, doApiMethod } from "../../../services/apiService";
+import { doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
+import { API_URL } from "../../../constants/apiConstants";
 
-const DialogSureDelete = ({ openDialog, setOpenDialog, subject, item = {}, doApi = {} }) => {
+const DialogSureDelete = ({ openDialog, setOpenDialog, subject, doApi = {} }) => {
 
     const subjectHebrew = useMemo(() => {
         if (subject === "camp") return "בסיס";
