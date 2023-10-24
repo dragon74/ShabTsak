@@ -8,7 +8,7 @@ const CampsList = ({ camps, doApiCamps }) => {
     return (
         <>
             <CssBaseline />
-            <Container maxWidth="md">
+            <Container maxWidth="md" sx={{ padding: 0 }}>
                 <h2 className="main-headline">רשימת בסיסים</h2>
                 <TableContainer component={Paper}>
                     <Table>
@@ -17,8 +17,7 @@ const CampsList = ({ camps, doApiCamps }) => {
                                 <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
                                 <TableCell align="center">רשימת עמדות</TableCell>
-                                <TableCell align="center">עריכה</TableCell>
-                                <TableCell align="center">מחיקה</TableCell>
+                                <TableCell align="center">פעולות</TableCell>
                             </TableRow>
                         </TableHead>
 
