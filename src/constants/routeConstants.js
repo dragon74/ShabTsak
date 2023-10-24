@@ -4,6 +4,7 @@ const ROUTES = {
   GUARDS: "/guards",
   OUTPOSTS: "/outposts",
   SHIFTS: "/shifts",
+  LIMITS: "/limits",
 };
 
 export default ROUTES;

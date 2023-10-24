@@ -9,6 +9,7 @@ import ShiftSchedule from "./components/ShiftSchedule/ShiftSchedule";
 import GuardList from "./components/GuardList/GuardList";
 import OutpostsPage from "./components/outposts/outPostsPage";
 import ROUTES from "./constants/routeConstants";
+import LimitsPage from "./components/limits/limitsPage";
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
           <Route path={ROUTES.SCHEDULE} element={<ShiftSchedule />} />
           <Route path={ROUTES.GUARDS} element={<GuardList />} />
           <Route path={ROUTES.OUTPOSTS} element={<OutpostsPage />} />
+          <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
