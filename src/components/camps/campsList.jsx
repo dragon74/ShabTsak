@@ -9,13 +9,14 @@ const CampsList = ({ camps, doApiCamps }) => {
         <>
             <CssBaseline />
             <Container maxWidth="md">
-                <h2 className="camps-header">רשימת בסיסים</h2>
+                <h2 className="main-headline">רשימת בסיסים</h2>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
+                                <TableCell align="center">רשימת עמדות</TableCell>
                                 <TableCell align="center">עריכה</TableCell>
                                 <TableCell align="center">מחיקה</TableCell>
                             </TableRow>

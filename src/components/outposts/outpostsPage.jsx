@@ -1,26 +1,30 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { API_URL, doApiGet } from "../../services/apiService";
+import { doApiGet } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { Container } from "@mui/material"
 import OutpostList from "./outpostList";
 import AddOutpostBtn from "./addOutPost/AddOutpostBtn";
 import DialogOutpost from "./dialogOutpost";
+import { OUTPOST_URL } from "../../constants/apiConstants";
+import { useParams } from "react-router-dom";
 
-const OutpostsPage = ({ campId}) => {
+const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [outposts, setOutposts] = useState([]);
+  let params = useParams();
 
   useEffect(() => {
     getOutpostsByCampId()
   }, [])
 
   const getOutpostsByCampId = async () => {
-    let url = API_URL + "/outpost/camp/" + campId;
+    let url = OUTPOST_URL + "/camp/" + params["id"];
     try {
       let resp = await doApiGet(url);
-      setOutposts(resp.data)
-      console.log(resp.data);
+      if (resp.status == 200)
+        setOutposts(resp.data)
+      else toast.error(resp.message);
     }
     catch (err) {
       console.log(err);
@@ -35,13 +39,13 @@ const OutpostsPage = ({ campId}) => {
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
-        <OutpostList outposts={outposts} getOutpostsByCampId={getOutpostsByCampId} campId={campId}/>
+        <OutpostList outposts={outposts} getOutpostsByCampId={getOutpostsByCampId} />
 
         <DialogOutpost openDialog={openDialog}
           setOpenDialog={setOpenDialog}
-          action="Add"
+          method="POST"
           getOutpostsByCampId={getOutpostsByCampId}
-          campId={campId}
+          campId={params["id"]}
         />
 
       </Container>

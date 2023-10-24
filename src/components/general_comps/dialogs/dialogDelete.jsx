@@ -2,10 +2,11 @@
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useMemo } from "react";
-import { API_URL, doApiMethod } from "../../../services/apiService";
+import { doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
+import { API_URL } from "../../../constants/apiConstants";
 
-const DialogSureDelete = ({ openDialog, setOpenDialog, subject, item = {}, doApi = {} }) => {
+const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) => {
 
     const subjectHebrew = useMemo(() => {
         if (subject === "camp") return "בסיס";
@@ -22,9 +23,9 @@ const DialogSureDelete = ({ openDialog, setOpenDialog, subject, item = {}, doApi
             let resp = await doApiMethod(url, "DELETE");
             // console.log(resp);
             if (resp.status == 200) {
-                toast.success(`נמחק בהצלחה ${item.name} ${subject}` );
-                doApi();
+                toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
                 setOpenDialog(false);
+                doApi();
             } else toast.error(resp.massege);
         }
         catch (err) {
@@ -49,10 +50,9 @@ const DialogSureDelete = ({ openDialog, setOpenDialog, subject, item = {}, doApi
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
                     <Button onClick={doApiDeleteCamp} autoFocus>מסכים</Button>
                 </DialogActions>
-
             </Dialog>
         </>
     )
 }
 
-export default DialogSureDelete
+export default DialogDelete

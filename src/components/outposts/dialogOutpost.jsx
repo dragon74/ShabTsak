@@ -1,53 +1,42 @@
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
-import { API_URL, doApiMethod } from "../../services/apiService";
+import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { OUTPOST_URL } from "../../constants/apiConstants";
 
-const DialogOutpost = ({ openDialog, setOpenDialog, action, getOutpostsByCampId, item = {}, campId }) => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId, item = {}, campId }) => {
+    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
             campId: campId,
-            id: action == "Edit" ? item.id : "",
-            minGuards: action == "Edit" ? item.minGuards : "",
-            name: action == "Edit" ? item.name : "",
+            id: method == "PUT" ? item.id : null,
+            minGuards: method == "PUT" ? item.minGuards : "",
+            name: method == "PUT" ? item.name : "",
         },
     });
 
-    const method = useMemo(() => {
-        if (action === "Add") return "POST";
-        else if (action === "Edit") return "PUT";
-        else return action;
-    }, [action]);
-
     const actionHebrew = useMemo(() => {
-        if (action === "Add") return "הוסף";
-        else if (action === "Edit") return "ערוך";
-        else return action;
-    }, [action]);
+        if (method === "POST") return "הוסף";
+        else if (method === "PUT") return "ערוך";
+        else return method;
+    }, [method]);
 
     const doApiOutpost = async (bodyFormData) => {
-        let url = API_URL + "/outpost";
         try {
-            let resp = await doApiMethod(url, method, bodyFormData);
+            let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
             console.log(resp);
-            if (resp.status == "201" && action == "Add") {
-                toast.success(`עמדה נוספה בהצלחה`);
-                reset();
-            }
-            else if (resp.status == "200" && action === "Edit") {
-                toast.success(`עמדה התעדכנה בהצלחה`);
-                setOpenDialog(false);
-            }
-            else {
-                toast.error(resp.message);
-                return;
-            }
+            if (resp.status == "201" && method == "POST")
+                toast.success(`עמדה ${getValues('name')} נוסף בהצלחה`);
+            else if (resp.status == "200" && method === "PUT")
+                toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
+            else toast.error(resp.message);
             getOutpostsByCampId();
+            setOpenDialog(false);
+            reset();
         } catch (err) {
-            console.error(`An error occurred while ${action.toLowerCase()}ing the עמדה:`, err);
+            console.error(`An error occurred while ${method}ing the עמדה:`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
@@ -109,7 +98,7 @@ const DialogOutpost = ({ openDialog, setOpenDialog, action, getOutpostsByCampId,
                             style={{ marginLeft: '8px' }}>
                             ביטול
                         </Button>
-                        <Button type="submit" autoFocus >{actionHebrew}</Button>
+                        <Button type="submit" autoFocus>{actionHebrew}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
