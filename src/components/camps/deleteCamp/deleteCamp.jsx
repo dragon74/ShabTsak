@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { IconButton, TableCell } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import DialogDelete from "../../general_comps/dialogs/DialogDelete";
 import { useState } from "react";
+import DialogDelete from "../../general_comps/dialogs/dialogDelete";
 
     //sure dialog
 const DeleteCamp = ({ item, doApiCamps }) => {
