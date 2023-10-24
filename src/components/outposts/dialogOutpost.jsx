@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
@@ -7,14 +8,14 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { OUTPOST_URL } from "../../constants/apiConstants";
 
-const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId, item = {}, campId }) => {
+const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId, item = {}, campId = "" }) => {
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
             campId: campId,
-            id: method == "PUT" ? item.id : null,
-            minGuards: method == "PUT" ? item.minGuards : "",
-            name: method == "PUT" ? item.name : "",
-        },
+            id: method == "PUT" ? item.id : "",
+            minGuards: method == "PUT" ? item.minGuards : null,
+            name: method == "PUT" ? item.name : null,
+        }
     });
 
     const actionHebrew = useMemo(() => {
@@ -84,7 +85,7 @@ const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId,
                             color="primary"
                             size="small"
                             autoComplete="off"
-                            label="מקסימום שומרים בעמדה"
+                            label="מינימום שומרים בעמדה"
                             sx={{ marginTop: "8px" }}
                         />
                         <FormHelperText error={!!errors.minGuards}>

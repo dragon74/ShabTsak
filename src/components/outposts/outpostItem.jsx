@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { IconButton, TableCell, TableRow ,Button} from "@mui/material";
+import { IconButton, TableCell, TableRow, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutpost from "./deleteOutpost/deleteOutpost";
 import { useState } from "react";
@@ -39,9 +39,16 @@ const OutpostItem = ({ getOutpostsByCampId, item, campId }) => {
                 </Button>
             </TableCell>
 
-            <TableCell align="center">
-
+            <TableCell
+                align="center"
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
                 <IconButton
+                    // style={{ marginRight: "8px" }}
                     color="secondary"
                     onClick={() => {
                         setOpenDialog(true);

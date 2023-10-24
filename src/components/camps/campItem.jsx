@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, TableCell, TableRow, IconButton } from "@mui/material";
+import { Button, TableCell, TableRow, IconButton } from "@mui/material";
 import DialogCamp from "./dialogCamp";
 import DeleteCamp from "./deleteCamp/deleteCamp";
 import ROUTES from '../../constants/routeConstants';
@@ -26,22 +26,27 @@ const CampItem = ({ item, index, doApiCamps }) => {
                 >
                     רשימת עמדות
                 </Button>
-
-            </TableCell>
-            <TableCell align="center">
-                <Box style={{ marginRight: "8px" }}>
-                    <IconButton
-                        onClick={() => {
-                            setOpenDialog(true);
-                        }}
-                        color="secondary">
-                        <EditIcon />
-                    </IconButton>
-                </Box>
             </TableCell>
 
-            {/* button delete camp */}
-            <DeleteCamp item={item} doApiCamps={doApiCamps} />
+            <TableCell
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <IconButton
+                    // sx={{ marginRight: "8px" }}
+                    onClick={() => {
+                        setOpenDialog(true);
+                    }}
+                    color="secondary">
+                    <EditIcon />
+                </IconButton>
+
+                {/* button delete camp */}
+                <DeleteCamp item={item} doApiCamps={doApiCamps} />
+            </TableCell>
 
             <DialogCamp openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
