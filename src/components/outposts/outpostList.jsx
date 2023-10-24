@@ -8,7 +8,7 @@ const OutpostList = ({ outposts, getOutpostsByCampId,campId }) => {
     return (
         <>
             <CssBaseline />
-            <h5 className="camps-header">עמדות:</h5>
+            <h2 className="outposts-header">רשימת עמדות</h2>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

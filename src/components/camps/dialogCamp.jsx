@@ -1,57 +1,40 @@
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
-import { API_URL, doApiMethod } from "../../services/apiService";
+import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import OutpostsPage from "../outposts/outPostsPage";
+import { CAMP_URL } from "../../constants/apiConstants";
 
-const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, item = {} }) => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) => {
+    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            name: action == "Edit" ? item.name : "",
-            id: action == "Edit" ? item.id : ""
+            name: method == "PUT" ? item.name : "",
+            id: method == "PUT" ? item.id : ""
         },
     });
-    const [isAddCamp, setIsAddCamp] = useState(false);
-    const [idCamp, setIdCamp] = useState(Number);
-
-    const method = useMemo(() => {
-        if (action === "Add") return "POST";
-        else if (action === "Edit") return "PUT";
-        else return action;
-    }, [action]);
-
+  
     const actionHebrew = useMemo(() => {
-        if (action === "Add") return "הוסף";
-        else if (action === "Edit") return "ערוך";
-        else return action;
-    }, [action]);
+        if (method === "POST") return "הוסף";
+        else if (method === "PUT") return "ערוך";
+        else return method;
+    }, [method]);
 
     const doApiCamp = async (bodyFormData) => {
-        let url = API_URL + "/camp";
         try {
-            let resp = await doApiMethod(url, method, bodyFormData);
-            console.log(resp);
-            if (resp.status == "201" && action == "Add") {
-                toast.success(`בסיס נוסף בהצלחה`);
-                setIsAddCamp(true);
-                setIdCamp(resp.data)
-                reset();
-            }
-            else if (resp.status == "200" && action === "Edit") {
-                toast.success(`בסיס התעדכן בהצלחה`);
-                setOpenDialog(false);
-            }
-            else {
-                toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-                return;
-            }
+            let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
+            // console.log(resp);
+            if (resp.status == "201" && method == "POST")
+                toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
+            else if (resp.status == "200" && method === "PUT")
+                toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
+            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
             doApiCamps();
-
+            setOpenDialog(false);
+            reset();
         } catch (err) {
-            console.error(`An error occurred while ${action.toLowerCase()}ing the בסיס:`, err);
+            console.error(`An error occurred while ${method} בסיס`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
@@ -65,11 +48,8 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, item = {} }
     return (
         <ThemeProvider theme={theme}>
             <Dialog
+                onClose={() => setOpenDialog(false)}
                 open={openDialog}
-                onClose={() => {
-                    setOpenDialog(false)
-                    setIsAddCamp(false)
-                }}
                 PaperProps={{
                     style: {
                         minWidth: '300px', // Set your minimum width here
@@ -78,37 +58,30 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, item = {} }
                     }
                 }}
             >
-                {isAddCamp == false ?
-                    <>
-                        <DialogTitle>{actionHebrew} בסיס {item.name}</DialogTitle>
-                        <form onSubmit={handleSubmit(onSubForm)}>
-                            <DialogContent style={{ padding: '20px' }}>
-                                <TextField
-                                    {...register('name', { required: { value: true, message: 'חובה למלא שם' }, minLength: { value: 2, message: "שם חייב להיות לפחות 2 אותיות'" }, maxLength: 99 })}
-                                    variant="outlined"
-                                    fullWidth
-                                    autoComplete="off"
-                                    label="שם"
-                                />
-                                <FormHelperText error={!!errors.name}>
-                                    {errors.name && errors?.name?.message}
-                                </FormHelperText>
-                                {/* Add more TextFields and form fields here as needed */}
-                            </DialogContent>
-                            <DialogActions>
-                                <Button type="button"
-                                    onClick={() => setOpenDialog(false)}
-                                    style={{ marginLeft: '8px' }}>
-                                    ביטול
-                                </Button>
-                                <Button type="submit" autoFocus >{actionHebrew}</Button>
-                            </DialogActions>
-                        </form>
-                    </>
-                    : ""}
-
-                {isAddCamp || action == "Edit"? <OutpostsPage campId={idCamp} /> : null}
-
+                <DialogTitle>{actionHebrew} בסיס {item ? item.name : ""}</DialogTitle>
+                <form onSubmit={handleSubmit(onSubForm)}>
+                    <DialogContent style={{ padding: '20px' }}>
+                        <TextField
+                            {...register('name', { required: { value: true, message: 'חובה למלא שם' }, minLength: { value: 2, message: "שם חייב להיות לפחות 2 אותיות'" }, maxLength: 99 })}
+                            variant="outlined"
+                            fullWidth
+                            autoComplete="off"
+                            label="שם"
+                        />
+                        <FormHelperText error={!!errors.name}>
+                            {errors.name && errors?.name?.message}
+                        </FormHelperText>
+                        {/* Add more TextFields and form fields here as needed */}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button type="button"
+                            onClick={() => setOpenDialog(false)}
+                            style={{ marginLeft: '8px' }}>
+                            ביטול
+                        </Button>
+                        <Button type="submit" autoFocus >{actionHebrew}</Button>
+                    </DialogActions>
+                </form>
             </Dialog>
         </ThemeProvider>
     );

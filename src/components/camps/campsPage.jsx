@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { API_URL, doApiGet } from "../../services/apiService";
+import { doApiGet } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { Container } from "@mui/material"
 import DialogCamp from "./dialogCamp";
 import CampsList from "./campsList";
 import AddCampBtn from "./addCamp/addCampBtn";
+import { CAMP_URL } from "../../constants/apiConstants";
 
 const CampsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -15,11 +16,10 @@ const CampsPage = () => {
   }, [])
 
   const doApiCamps = async () => {
-    let url = API_URL + "/camp/all"
+    let url = CAMP_URL + "/all"
     try {
       let resp = await doApiGet(url);
       setCamps(resp.data)
-      console.log(resp.data);
     }
     catch (err) {
       console.log(err);
@@ -39,7 +39,7 @@ const CampsPage = () => {
 
         <DialogCamp openDialog={openDialog}
           setOpenDialog={setOpenDialog}
-          action="Add"
+          method="POST"
           doApiCamps={doApiCamps}
         />
 

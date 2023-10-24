@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import {  IconButton, TableCell, TableRow } from "@mui/material";
+import { IconButton, TableCell, TableRow } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutpost from "./deleteOutpost/deleteOutpost";
 import { useState } from "react";
 import DialogOutpost from "./dialogOutpost";
 
-const OutpostItem = ({ getOutpostsByCampId, item,campId }) => {
+const OutpostItem = ({ getOutpostsByCampId, item, campId }) => {
 
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -28,8 +28,13 @@ const OutpostItem = ({ getOutpostsByCampId, item,campId }) => {
                 {/* button delete Outpost */}
                 <DeleteOutpost item={item} getOutpostsByCampId={getOutpostsByCampId} />
             </TableCell>
-            
-            <DialogOutpost openDialog={openDialog} setOpenDialog={setOpenDialog} action={"Edit"} getOutpostsByCampId={getOutpostsByCampId} item={item} campId={campId}/>
+
+            <DialogOutpost openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                method={"PUT"}
+                getOutpostsByCampId={getOutpostsByCampId}
+                item={item}
+                campId={campId} />
 
 
         </TableRow>
