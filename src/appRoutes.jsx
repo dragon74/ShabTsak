@@ -19,7 +19,7 @@ export default function AppRoutes() {
           <Route index element={<CampsPage />} />
           <Route path={ROUTES.SCHEDULE} element={<ShiftSchedule />} />
           <Route path={ROUTES.GUARDS} element={<GuardList />} />
-          <Route path={ROUTES.OUTPOSTS} element={<OutpostsPage />} />
+          <Route path={ROUTES.OUTPOSTS+"/:id"} element={<OutpostsPage />} />
           <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />

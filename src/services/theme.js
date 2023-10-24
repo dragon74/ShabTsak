@@ -20,7 +20,7 @@ export const theme = createTheme({
             main: "#4169e1",
         },
         danger: {
-            main: "purple[300]",
+            main: "#899934",
         },
         success: {
             main: "#FFFFFF"
@@ -30,6 +30,9 @@ export const theme = createTheme({
         },
         lightMode: {
             main: "#FFFFFF"
+        },
+        purple: {
+            main: "#800080"
         },
     },
     direction: "rtl",

@@ -1,52 +1,40 @@
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
-import {  doApiMethod } from "../../services/apiService";
+import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { CAMP_URL } from "../../constants/apiConstants";
 
-const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, item = {} }) => {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) => {
+    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            name: action == "Edit" ? item.name : "",
-            id: action == "Edit" ? item.id : ""
+            name: method == "PUT" ? item.name : "",
+            id: method == "PUT" ? item.id : ""
         },
     });
-
-    const method = useMemo(() => {
-        if (action === "Add") return "POST";
-        else if (action === "Edit") return "PUT";
-        else return action;
-    }, [action]);
-
+  
     const actionHebrew = useMemo(() => {
-        if (action === "Add") return "הוסף";
-        else if (action === "Edit") return "ערוך";
-        else return action;
-    }, [action]);
+        if (method === "POST") return "הוסף";
+        else if (method === "PUT") return "ערוך";
+        else return method;
+    }, [method]);
 
     const doApiCamp = async (bodyFormData) => {
         try {
             let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
-            console.log(resp);
-            if (resp.status == "201" && action == "Add") {
-                toast.success(`בסיס נוסף בהצלחה`);
-                reset();
-            }
-            else if (resp.status == "200" && action === "Edit") {
-                toast.success(`בסיס התעדכן בהצלחה`);
-                setOpenDialog(false);
-            }
-            else {
-                toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-                return;
-            }
+            // console.log(resp);
+            if (resp.status == "201" && method == "POST")
+                toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
+            else if (resp.status == "200" && method === "PUT")
+                toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
+            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
             doApiCamps();
-
+            setOpenDialog(false);
+            reset();
         } catch (err) {
-            console.error(`An error occurred while ${action.toLowerCase()}ing the בסיס:`, err);
+            console.error(`An error occurred while ${method} בסיס`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
@@ -60,6 +48,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, item = {} }
     return (
         <ThemeProvider theme={theme}>
             <Dialog
+                onClose={() => setOpenDialog(false)}
                 open={openDialog}
                 PaperProps={{
                     style: {
@@ -69,7 +58,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, action, doApiCamps, item = {} }
                     }
                 }}
             >
-                <DialogTitle>{actionHebrew} בסיס {item.name}</DialogTitle>
+                <DialogTitle>{actionHebrew} בסיס {item ? item.name : ""}</DialogTitle>
                 <form onSubmit={handleSubmit(onSubForm)}>
                     <DialogContent style={{ padding: '20px' }}>
                         <TextField

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import DialogSureDelete from "../../general_comps/dialogs/dialogSureDelete";
+import DialogDelete from "../../general_comps/dialogs/DialogDelete";
 import { useState } from "react";
 
 //sure dialog
@@ -17,7 +17,7 @@ const DeleteCamp = ({ item, getOutpostsByCampId }) => {
                 <DeleteIcon />
             </IconButton>
 
-            <DialogSureDelete openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} subject={"outpost"} item={item} doApi={getOutpostsByCampId} />
+            <DialogDelete openDialog={openSureDialog} setOpenDialog={setOpenSureDialog} subject={"outpost"} item={item} doApi={getOutpostsByCampId} />
         </>
     )
 }

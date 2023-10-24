@@ -16,6 +16,7 @@ const CampsList = ({ camps, doApiCamps }) => {
                             <TableRow>
                                 <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
+                                <TableCell align="center">רשימת עמדות</TableCell>
                                 <TableCell align="center">עריכה</TableCell>
                                 <TableCell align="center">מחיקה</TableCell>
                             </TableRow>

@@ -6,7 +6,7 @@ import { doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
 import { API_URL } from "../../../constants/apiConstants";
 
-const DialogSureDelete = ({ openDialog, setOpenDialog, subject, doApi = {} }) => {
+const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) => {
 
     const subjectHebrew = useMemo(() => {
         if (subject === "camp") return "בסיס";
@@ -23,9 +23,9 @@ const DialogSureDelete = ({ openDialog, setOpenDialog, subject, doApi = {} }) =>
             let resp = await doApiMethod(url, "DELETE");
             // console.log(resp);
             if (resp.status == 200) {
-                toast.success(`נמחק בהצלחה ${item.name} ${subject}` );
-                doApi();
+                toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
                 setOpenDialog(false);
+                doApi();
             } else toast.error(resp.massege);
         }
         catch (err) {
@@ -50,10 +50,9 @@ const DialogSureDelete = ({ openDialog, setOpenDialog, subject, doApi = {} }) =>
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
                     <Button onClick={doApiDeleteCamp} autoFocus>מסכים</Button>
                 </DialogActions>
-
             </Dialog>
         </>
     )
 }
 
-export default DialogSureDelete
+export default DialogDelete
