@@ -2,14 +2,17 @@
 
 import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
 import OutpostItem from "./outpostItem";
+import { useSearchParams } from "react-router-dom";
 
 const OutpostList = ({ outposts, getOutpostsByCampId }) => {
+    const [querys] = useSearchParams();
+
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
                 <Typography variant="h4" component="h2" mb={2}>
-                    רשימת עמדות
+                    רשימת עמדות {querys.get("campName")}
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
