@@ -7,9 +7,9 @@ import NotFound from "./components/general_comps/notFound";
 import CampsPage from "./components/camps/campsPage";
 import ShiftSchedule from "./components/ShiftSchedule/ShiftSchedule";
 import GuardList from "./components/GuardList/GuardList";
-import OutpostsPage from "./components/outposts/outPostsPage";
 import ROUTES from "./constants/routeConstants";
 import LimitsPage from "./components/limits/limitsPage";
+import OutpostsPage from "./components/outposts/outpostsPage";
 
 export default function AppRoutes() {
   return (
@@ -18,8 +18,8 @@ export default function AppRoutes() {
         <Route path={ROUTES.HOME} element={<Layout />}>
           <Route index element={<CampsPage />} />
           <Route path={ROUTES.SCHEDULE} element={<ShiftSchedule />} />
-          <Route path={ROUTES.GUARDS + "/:id"} element={<GuardList />} />
-          <Route path={ROUTES.OUTPOSTS + "/:id"} element={<OutpostsPage />} />
+          <Route path={ROUTES.GUARDS + "/camp/:id"} element={<GuardList />} />
+          <Route path={ROUTES.OUTPOSTS + "/camp/:id"} element={<OutpostsPage />} />
           <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />

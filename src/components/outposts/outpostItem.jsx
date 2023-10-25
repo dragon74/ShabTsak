@@ -21,7 +21,7 @@ const OutpostItem = ({ getOutpostsByCampId, item, campId }) => {
                     color="orange"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.SHIFTS + "/" + item.id)
+                        nav(ROUTES.SHIFTS + "/camp/" + item.id)
                     }}
                 >
                     משמרות
