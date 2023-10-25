@@ -80,7 +80,7 @@ const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId,
                                 required:
                                     { value: true, message: 'חובה למלא כמה שומרים בעמדה' },
                                 min: { value: 2, message: "מנימום 2 שומרים בעמדה" },
-                                max: 99
+                                max: { value: 10, message: "מקסימום 10 שומרים בעמדה" }
                             })}
                             color="primary"
                             size="small"
