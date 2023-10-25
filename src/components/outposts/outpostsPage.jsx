@@ -11,7 +11,7 @@ import DialogOutpost from "./dialogOutpost";
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [outposts, setOutposts] = useState([]);
-  let params = useParams();
+  const params = useParams();
 
   useEffect(() => {
     getOutpostsByCampId()
@@ -38,13 +38,12 @@ const OutpostsPage = () => {
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
-        <OutpostList outposts={outposts} getOutpostsByCampId={getOutpostsByCampId} />
+        <OutpostList outposts={outposts} getOutpostsByCampId={getOutpostsByCampId}  />
 
         <DialogOutpost openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
           getOutpostsByCampId={getOutpostsByCampId}
-          campId={params["id"]}
         />
 
       </Container>
