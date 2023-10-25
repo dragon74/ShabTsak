@@ -35,9 +35,10 @@ export default function Layout() {
                     // Use flex-direction to make the children stack vertically
                     flexDirection: 'column', minHeight: '100vh',
                 }}>
-                    <Header />
+                    <Header /> 
                     <Outlet />
                     <Footer />
+        
                 </Box>
             </ThemeProvider>
         </CacheProvider>

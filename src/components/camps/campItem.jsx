@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
+import PropTypes from 'prop-types';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, TableCell, TableRow, IconButton } from "@mui/material";
@@ -8,7 +7,13 @@ import DeleteCamp from "./deleteCamp/deleteCamp";
 import ROUTES from '../../constants/routeConstants';
 import EditIcon from "@mui/icons-material/Edit";
 
-const CampItem = ({ item, index, doApiCamps }) => {
+CampItem.propTypes = {
+    index: PropTypes.number.isRequired,
+    doApiCamps: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+function CampItem ({ item, index, doApiCamps })  {
 
     const [openDialog, setOpenDialog] = useState(false);
     const nav = useNavigate();

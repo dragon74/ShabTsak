@@ -1,12 +1,19 @@
-/* eslint-disable no-undef */
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useMemo } from "react";
 import { doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
 import { API_URL } from "../../../constants/apiConstants";
 
-const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) => {
+DialogDelete.propTypes = {
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    subject: PropTypes.oneOf(['camp', 'outpost','shift','guard']).isRequired,
+    doApi: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+function DialogDelete ({ openDialog, setOpenDialog, subject, doApi , item })  {
 
     const subjectHebrew = useMemo(() => {
         if (subject === "camp") return "בסיס";
@@ -21,7 +28,6 @@ const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) =
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
-            // console.log(resp);
             if (resp.status == 200) {
                 toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
                 setOpenDialog(false);
@@ -30,7 +36,7 @@ const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) =
         }
         catch (err) {
             console.log(err);
-            toast.error(resp.massege)
+            toast.error("יש בעיה בבקשה נסה מאוחר יותר");
         }
     }
     return (

@@ -11,6 +11,7 @@ import ROUTES from "./constants/routeConstants";
 import LimitsPage from "./components/limits/limitsPage";
 import OutpostsPage from "./components/outposts/outpostsPage";
 import PrivacyPage from "./components/privacy/privacyPage";
+import ShiftsPage from "./components/shifts/shiftsPage";
 
 export default function AppRoutes() {
   return (
@@ -20,9 +21,8 @@ export default function AppRoutes() {
           <Route index element={<CampsPage />} />
           <Route path={ROUTES.SCHEDULE} element={<ShiftSchedule />} />
           <Route path={ROUTES.GUARDS + ROUTES.CAMP + '/:id'} element={<GuardList />} />
-          <Route path={ROUTES.GUARDS} element={<GuardList />} />
           <Route path={ROUTES.OUTPOSTS + ROUTES.CAMP + "/:id"} element={<OutpostsPage />} />
-          <Route path={ROUTES.SHIFTS + ROUTES.CAMP + "/:id"} element={<ShiftSchedule />} />
+          <Route path={ROUTES.SHIFTS + ROUTES.OUTPOST + "/:id"} element={<ShiftsPage />} />
           <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
         </Route>
