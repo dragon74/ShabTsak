@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { prefixer } from 'stylis';
 import createCache from '@emotion/cache';
@@ -9,7 +9,20 @@ export const cacheRtl = createCache({
     stylisPlugins: [prefixer, rtlPlugin],
 });
 
-export const theme = createTheme({
+export const theme = responsiveFontSizes(createTheme({
+    typography: {
+        fontFamily: 'inherit',
+        h2: {
+            fontWeight: 500
+        },
+        h3: {
+            fontSize: '1.2rem',
+            '@media (min-width:600px)': {
+                fontSize: '1.5rem'
+            },
+            fontWeight: 700
+        }
+    },
     palette: {
         //green
         primary: {
@@ -47,5 +60,4 @@ export const theme = createTheme({
             width: '50%', // You can adjust the width to make it smaller
         },
     }
-});
-
+}));
