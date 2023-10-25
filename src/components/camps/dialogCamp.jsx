@@ -3,15 +3,23 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, F
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { CAMP_URL } from "../../constants/apiConstants";
 
 const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) => {
-    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
+    const {
+        register,
+        handleSubmit,
+        reset,
+        getValues,
+        setFocus,
+        formState: {
+            errors
+        } } = useForm({
         defaultValues: {
-            name: method == "PUT" ? item.name : "",
-            id: method == "PUT" ? item.id : null
+            name: method === "PUT" ? item.name : "",
+            id: method === "PUT" ? item.id : null
         },
     });
   
@@ -25,9 +33,9 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
         try {
             let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
             // console.log(resp);
-            if (resp.status == "201" && method == "POST")
+            if (resp.status === "201" && method === "POST")
                 toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status == "200" && method === "PUT")
+            else if (resp.status === "200" && method === "PUT")
                 toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
             else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
             doApiCamps();
@@ -43,8 +51,17 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
         // Use the submitted form data to call your API function
         console.log(formData); // Make sure the form data is captured correctly
         doApiCamp(formData);
-
     }
+
+    React.useEffect(() => {
+        let timeout;
+        if (openDialog) {
+            timeout = setTimeout(() => setFocus('name'), 0);
+        }
+        return () => {
+            if (timeout) clearTimeout(timeout)
+        };
+    }, [openDialog])
     return (
         <ThemeProvider theme={theme}>
             <Dialog
@@ -79,7 +96,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
                             style={{ marginLeft: '8px' }}>
                             ביטול
                         </Button>
-                        <Button type="submit" autoFocus >{actionHebrew}</Button>
+                        <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
