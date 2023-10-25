@@ -29,10 +29,6 @@ body {
   font-weight: 400;
 }
 
-.main-headline {
-  margin-bottom: 20px;
-}
-
 /* scroller */
 /* width */
 ::-webkit-scrollbar {

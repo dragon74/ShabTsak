@@ -1,18 +1,17 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { doApiGet } from "../../services/apiService";
-import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 import { Container } from "@mui/material"
+import { toast } from "react-toastify";
+import { OUTPOST_URL } from "../../constants/apiConstants";
+import { doApiGet } from "../../services/apiService";
 import OutpostList from "./outpostList";
 import AddOutpostBtn from "./addOutPost/AddOutpostBtn";
 import DialogOutpost from "./dialogOutpost";
-import { OUTPOST_URL } from "../../constants/apiConstants";
-import { useParams } from "react-router-dom";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [outposts, setOutposts] = useState([]);
-  let params = useParams();
+  const params = useParams();
 
   useEffect(() => {
     getOutpostsByCampId()
@@ -39,13 +38,12 @@ const OutpostsPage = () => {
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
-        <OutpostList outposts={outposts} getOutpostsByCampId={getOutpostsByCampId} />
+        <OutpostList outposts={outposts} getOutpostsByCampId={getOutpostsByCampId}  />
 
         <DialogOutpost openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
           getOutpostsByCampId={getOutpostsByCampId}
-          campId={params["id"]}
         />
 
       </Container>

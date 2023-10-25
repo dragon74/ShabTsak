@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import CampItem from "./campItem";
 
 const CampsList = ({ camps, doApiCamps }) => {
@@ -9,7 +9,9 @@ const CampsList = ({ camps, doApiCamps }) => {
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-                <h2 className="main-headline">רשימת בסיסים</h2>
+                <Typography variant="h4" component="h2" mb={2}>
+                    רשימת בסיסים
+                </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
@@ -32,7 +34,6 @@ const CampsList = ({ camps, doApiCamps }) => {
                     </Table>
                 </TableContainer>
             </Container>
-
         </>
     )
 }
