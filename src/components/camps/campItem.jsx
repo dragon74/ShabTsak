@@ -24,7 +24,7 @@ const CampItem = ({ item, index, doApiCamps }) => {
                         nav(ROUTES.OUTPOSTS + "/" + item.id)
                     }}
                 >
-                    רשימת עמדות
+                     עמדות
                 </Button>
             </TableCell>
             <TableCell align="center">
