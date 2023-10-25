@@ -1,17 +1,17 @@
-import { Typography, Box, Button } from "@mui/material";
+import { Typography, Box, Button, Container } from "@mui/material";
 import { ChevronRightSharp } from "@mui/icons-material";
 import { Link as RouterLink } from 'react-router-dom';
 import ROUTES from "../../constants/routeConstants.js";
 
 export default function PrivacyPage() {
     return (
-        <Box sx={{ mt: 4.5, mx: 2 }}>
+        <Container sx={{ mt: 4.5, mx: { sx: 2 }}}>
             <Button variant="ghost" component={RouterLink} to={ROUTES.HOME}>
                 <ChevronRightSharp />
                 חזרה לעמוד הבית
             </Button>
-            <Typography variant="h2" align="center" sx={{ mt: -4.5 }}>תנאי פרטיות</Typography>
-            <Box as="article" sx={{ mx: 4, mt: 4 }}>
+            <Typography variant="h2" align="center" sx={{ mt: { sm: -4.5 }}}>תנאי פרטיות</Typography>
+            <Box as="article" sx={{ mx: { sm: 4, xs: 3 }, mt: { sm: 4, xs: 3 }}}>
                 <Box component="section" sx={{ mb: 2 }}>
                     <Typography variant="h3" gutterBottom>איך אנחנו משתמשים במידע?</Typography>
                     <Typography variant="body1" gutterBottom>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolores laboriosam mollitia nam omnis ratione sed velit. Aperiam at
@@ -47,6 +47,6 @@ export default function PrivacyPage() {
                     </Typography>
                 </Box>
             </Box>
-        </Box>
+        </Container>
     )
 }

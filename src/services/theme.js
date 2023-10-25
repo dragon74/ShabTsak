@@ -13,6 +13,10 @@ export const theme = responsiveFontSizes(createTheme({
     typography: {
         fontFamily: 'inherit',
         h2: {
+            fontSize: '3rem',
+            '@media (min-width:600px)': {
+                fontSize: '4rem'
+            },
             fontWeight: 500
         },
         h3: {
