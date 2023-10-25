@@ -27,7 +27,18 @@ const CampItem = ({ item, index, doApiCamps }) => {
                     רשימת עמדות
                 </Button>
             </TableCell>
-
+            <TableCell align="center">
+                <Button
+                    color="brown"
+                    variant="outlined"
+                    onClick={() => {
+                        nav(ROUTES.GUARDS + "/" + item.id)
+                    }}
+                >
+                    שומרים
+                </Button>
+            </TableCell>
+            {/* action btns */}
             <TableCell
                 sx={{
                     display: 'flex',
