@@ -5,6 +5,7 @@ const ROUTES = {
   OUTPOSTS: "/outposts",
   SHIFTS: "/shifts",
   LIMITS: "/limits",
+  PRIVACY: '/privacy'
 };
 
 export default ROUTES;

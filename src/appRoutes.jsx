@@ -10,6 +10,7 @@ import GuardList from "./components/GuardList/GuardList";
 import ROUTES from "./constants/routeConstants";
 import LimitsPage from "./components/limits/limitsPage";
 import OutpostsPage from "./components/outposts/outpostsPage";
+import PrivacyPage from "./components/privacy/privacyPage";
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AppRoutes() {
           <Route path={ROUTES.GUARDS + "/camp/:id"} element={<GuardList />} />
           <Route path={ROUTES.OUTPOSTS + "/camp/:id"} element={<OutpostsPage />} />
           <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
+          <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
