@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Snackbar, CircularProgress } from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow, MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Snackbar, CircularProgress } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { GuardItem } from "./GuardItem.jsx";
-
-
-const API_URL = "https://shabtsak.onrender.com/guard";
+import { API_URL, GUARD_URL } from "../../constants/apiConstants.js";
 
 const GuardList = () => {
   const [guards, setGuards] = useState([]);
@@ -31,7 +29,7 @@ const GuardList = () => {
   useEffect(() => {
     if (selectedCampId) {
       axios
-        .get(`${API_URL}/camp/${selectedCampId}`)
+        .get(`${GUARD_URL}/camp/${selectedCampId}`)
         .then((response) => {
           setGuards(response.data);
         })
@@ -43,7 +41,7 @@ const GuardList = () => {
 
   useEffect(() => {
     axios
-      .get("https://shabtsak.onrender.com/camp/all")
+      .get(API_URL + "/camp/all")
       .then((response) => {
         setCamps(response.data);
       })
@@ -85,7 +83,7 @@ const GuardList = () => {
     if (selectedGuard) {
       // Existing guard: PUT request
       axios
-        .put(`${API_URL}`, dataToSend)
+        .put(`${GUARD_URL}`, dataToSend)
         .then((response) => {
           if (response.status === 200) {
             setGuards((prev) => prev.map((g) => (g.id === formState.id ? dataToSend : g)));
@@ -98,7 +96,7 @@ const GuardList = () => {
     } else {
       // New guard: POST request
       axios
-        .post(API_URL, dataToSend)
+        .post(GUARD_URL, dataToSend)
         .then((response) => {
           if (response.status === 201) {
             const newGuard = { ...dataToSend, id: response.data.id };
@@ -117,7 +115,7 @@ const GuardList = () => {
     setLoading(true);
 
     axios
-      .delete(`${API_URL}/${guard.id}`)
+      .delete(`${GUARD_URL}/${guard.id}`)
       .then((response) => {
         if (response.status === 200) {
           setGuards((prev) => prev.filter((g) => g.id !== guard.id));
@@ -173,7 +171,7 @@ const GuardList = () => {
         <>
           <Grid item xs={12} style={{ textAlign: "right" }}>
             <Button startIcon={<AddIcon />} variant="contained" color="primary" onClick={() => handleOpenDialog(null)}>
-              הוספה שומר
+              הוספת שומר
             </Button>
           </Grid>
           <Grid item xs={12}>
@@ -182,7 +180,23 @@ const GuardList = () => {
                 <CircularProgress />
               </div>
             ) : (
-              <List>{guards.length ? guards.map((guard) => <GuardItem key={guard.id} guard={guard} onEdit={handleOpenDialog} onDelete={handleDelete} />) : <Typography align="center">No guards available</Typography>}</List>
+              <List>
+                {loading ? (
+                  <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100px" }}>
+                    <CircularProgress />
+                  </div>
+                ) : guards.length ? (
+                  <Table sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}>
+                    <TableBody>
+                      {guards.map((guard) => (
+                        <GuardItem key={guard.id} guard={guard} onEdit={handleOpenDialog} onDelete={handleDelete} />
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <Typography align="center">No guards available</Typography>
+                )}
+              </List>
             )}
           </Grid>
         </>

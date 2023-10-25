@@ -1,5 +1,4 @@
-import React from "react";
-import { Table, TableBody, TableCell, TableHead, TableRow, IconButton, Button, Avatar, Chip } from "@mui/material";
+import { Table, TableBody, TableCell, TableRow, IconButton, Button, Avatar, Chip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getGravatarUrl } from "./utils";
@@ -9,14 +8,6 @@ const StatusChip = ({ shouldBeAllocated }) => (shouldBeAllocated ? <Chip label="
 
 export const GuardItem = ({ guard, onEdit, onDelete }) => (
   <Table sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}>
-    <TableHead>
-      <TableRow>
-        <TableCell>Profile</TableCell>
-        <TableCell>Name & Details</TableCell>
-        <TableCell>Status</TableCell>
-        <TableCell>Actions</TableCell>
-      </TableRow>
-    </TableHead>
     <TableBody>
       <TableRow key={guard.id}>
         <TableCell>
@@ -32,7 +23,7 @@ export const GuardItem = ({ guard, onEdit, onDelete }) => (
         </TableCell>
         <TableCell>
           <Button component={Link} to={`/guards/${guard.id}`} variant="outlined" color="primary" size="small" sx={{ marginRight: "10px" }}>
-            Access Profile
+            מגבלות
           </Button>
           <IconButton onClick={() => onEdit(guard)} size="large">
             <EditIcon />

@@ -15,17 +15,6 @@ const OutpostItem = ({ getOutpostsByCampId, item, campId }) => {
         <TableRow>
             <TableCell align="center">{item.name}</TableCell>
             <TableCell align="center">{item.minGuards}</TableCell>
-            <TableCell align="center">
-                <Button
-                    color="brown"
-                    variant="outlined"
-                    onClick={() => {
-                        nav(ROUTES.GUARDS + "/" + item.id)
-                    }}
-                >
-                    שומרים
-                </Button>
-            </TableCell>
 
             <TableCell align="center">
                 <Button
