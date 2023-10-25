@@ -1,13 +1,10 @@
-import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
-import { toast } from "react-toastify";
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
-import { useForm } from "react-hook-form";
 import { CAMP_URL } from "../../constants/apiConstants";
 
 DialogCamp.propTypes = {
