@@ -1,30 +1,31 @@
 /* eslint-disable react/prop-types */
 
-import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import CampItem from "./campItem";
+import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container } from "@mui/material";
+import OutpostItem from "./outpostItem";
 
-const CampsList = ({ camps, doApiCamps }) => {
+const OutpostList = ({ outposts, getOutpostsByCampId, campId }) => {
 
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-                <h2 className="main-headline">רשימת בסיסים</h2>
+                <h2 className="main-headline">רשימת עמדות</h2>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
-                                <TableCell align="center">רשימת עמדות</TableCell>
+                                <TableCell align="center">מינימום שומרים</TableCell>
+                                <TableCell align="center">רשימת שומרים</TableCell>
+                                <TableCell align="center">רשימת משמרות</TableCell>
                                 <TableCell align="center">פעולות</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {camps.map((item, i) => {
+                            {outposts.map((item, i) => {
                                 return (
-                                    <CampItem key={item.id} doApiCamps={doApiCamps} index={i} item={item} />
+                                    <OutpostItem key={item.id} getOutpostsByCampId={getOutpostsByCampId} index={i} item={item} campId={campId} />
                                 )
                             })}
                         </TableBody>
@@ -36,4 +37,4 @@ const CampsList = ({ camps, doApiCamps }) => {
     )
 }
 
-export default CampsList
+export default OutpostList

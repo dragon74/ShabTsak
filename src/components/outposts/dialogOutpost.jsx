@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
@@ -5,36 +6,38 @@ import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { CAMP_URL } from "../../constants/apiConstants";
+import { OUTPOST_URL } from "../../constants/apiConstants";
 
-const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) => {
+const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId, item = {}, campId = "" }) => {
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            name: method == "PUT" ? item.name : "",
-            id: method == "PUT" ? item.id : null
-        },
+            campId: campId,
+            id: method == "PUT" ? item.id : "",
+            minGuards: method == "PUT" ? item.minGuards : null,
+            name: method == "PUT" ? item.name : null,
+        }
     });
-  
+
     const actionHebrew = useMemo(() => {
         if (method === "POST") return "הוסף";
         else if (method === "PUT") return "ערוך";
         else return method;
     }, [method]);
 
-    const doApiCamp = async (bodyFormData) => {
+    const doApiOutpost = async (bodyFormData) => {
         try {
-            let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
-            // console.log(resp);
+            let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
+            console.log(resp);
             if (resp.status == "201" && method == "POST")
-                toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
+                toast.success(`עמדה ${getValues('name')} נוסף בהצלחה`);
             else if (resp.status == "200" && method === "PUT")
-                toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
-            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-            doApiCamps();
+                toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
+            else toast.error(resp.message);
+            getOutpostsByCampId();
             setOpenDialog(false);
             reset();
         } catch (err) {
-            console.error(`An error occurred while ${method} בסיס`, err);
+            console.error(`An error occurred while ${method}ing the עמדה:`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
@@ -42,14 +45,14 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
     const onSubForm = (formData) => {
         // Use the submitted form data to call your API function
         console.log(formData); // Make sure the form data is captured correctly
-        doApiCamp(formData);
-
+        doApiOutpost(formData);
     }
+
     return (
         <ThemeProvider theme={theme}>
             <Dialog
-                onClose={() => setOpenDialog(false)}
                 open={openDialog}
+                onClose={() => setOpenDialog(false)}
                 PaperProps={{
                     style: {
                         minWidth: '300px', // Set your minimum width here
@@ -58,7 +61,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
                     }
                 }}
             >
-                <DialogTitle>{actionHebrew} בסיס {item ? item.name : ""}</DialogTitle>
+                <DialogTitle>{actionHebrew} עמדה {item.name}</DialogTitle>
                 <form onSubmit={handleSubmit(onSubForm)}>
                     <DialogContent style={{ padding: '20px' }}>
                         <TextField
@@ -71,6 +74,23 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
                         <FormHelperText error={!!errors.name}>
                             {errors.name && errors?.name?.message}
                         </FormHelperText>
+
+                        <TextField
+                            {...register('minGuards', {
+                                required:
+                                    { value: true, message: 'חובה למלא כמה שומרים בעמדה' },
+                                min: { value: 2, message: "מנימום 2 שומרים בעמדה" },
+                                max: 99
+                            })}
+                            color="primary"
+                            size="small"
+                            autoComplete="off"
+                            label="מינימום שומרים בעמדה"
+                            sx={{ marginTop: "8px" }}
+                        />
+                        <FormHelperText error={!!errors.minGuards}>
+                            {errors.minGuards && errors?.minGuards?.message}
+                        </FormHelperText>
                         {/* Add more TextFields and form fields here as needed */}
                     </DialogContent>
                     <DialogActions>
@@ -79,7 +99,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
                             style={{ marginLeft: '8px' }}>
                             ביטול
                         </Button>
-                        <Button type="submit" autoFocus >{actionHebrew}</Button>
+                        <Button type="submit" autoFocus>{actionHebrew}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
@@ -87,4 +107,4 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
     );
 };
 
-export default DialogCamp;
+export default DialogOutpost;

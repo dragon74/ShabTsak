@@ -1,10 +1,12 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useMemo } from "react";
-import { API_URL, doApiMethod } from "../../../services/apiService";
+import { doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
+import { API_URL } from "../../../constants/apiConstants";
 
-const DialogSureDelete = ({ openDialog, setOpenDialog, subject, idItem = {}, doApiCamps = {} }) => {
+const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) => {
 
     const subjectHebrew = useMemo(() => {
         if (subject === "camp") return "בסיס";
@@ -16,19 +18,19 @@ const DialogSureDelete = ({ openDialog, setOpenDialog, subject, idItem = {}, doA
 
 
     const doApiDeleteCamp = async () => {
-        let url = `${API_URL}/${subject}/${idItem}`
+        let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
-            console.log(resp);
+            // console.log(resp);
             if (resp.status == 200) {
-                toast.success(`בסיס נמחק בהצלחה`);
-                doApiCamps();
+                toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
                 setOpenDialog(false);
-            } else toast.error("יש בעיה בבקשה נסה אוחר יותר");
+                doApi();
+            } else toast.error(resp.massege);
         }
         catch (err) {
             console.log(err);
-            toast.error(`there problem, try later`)
+            toast.error(resp.massege)
         }
     }
     return (
@@ -42,16 +44,15 @@ const DialogSureDelete = ({ openDialog, setOpenDialog, subject, idItem = {}, doA
                 <DialogTitle
                     sx={{ mb: 2 }}
                     id="alert-dialog-title">
-                    {`אתה בטוח רוצה למחוק ${subjectHebrew}?`}
+                    {`אתה בטוח רוצה למחוק ${subjectHebrew} ${item.name}?`}
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
                     <Button onClick={doApiDeleteCamp} autoFocus>מסכים</Button>
                 </DialogActions>
-
             </Dialog>
         </>
     )
 }
 
-export default DialogSureDelete
+export default DialogDelete
