@@ -7,9 +7,9 @@ import NotFound from "./components/general_comps/notFound";
 import CampsPage from "./components/camps/campsPage";
 import ShiftSchedule from "./components/ShiftSchedule/ShiftSchedule";
 import GuardList from "./components/GuardList/GuardList";
-import OutpostsPage from "./components/outposts/outPostsPage";
 import ROUTES from "./constants/routeConstants";
 import LimitsPage from "./components/limits/limitsPage";
+import OutpostsPage from "./components/outposts/outpostsPage";
 
 export default function AppRoutes() {
   return (
