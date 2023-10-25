@@ -16,7 +16,6 @@ const OutpostList = ({ outposts, getOutpostsByCampId, campId }) => {
                             <TableRow>
                                 <TableCell align="center">שם</TableCell>
                                 <TableCell align="center">מינימום שומרים</TableCell>
-                                <TableCell align="center">רשימת שומרים</TableCell>
                                 <TableCell align="center">רשימת משמרות</TableCell>
                                 <TableCell align="center">פעולות</TableCell>
                             </TableRow>

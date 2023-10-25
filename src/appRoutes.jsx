@@ -18,8 +18,8 @@ export default function AppRoutes() {
         <Route path={ROUTES.HOME} element={<Layout />}>
           <Route index element={<CampsPage />} />
           <Route path={ROUTES.SCHEDULE} element={<ShiftSchedule />} />
-          <Route path={ROUTES.GUARDS} element={<GuardList />} />
-          <Route path={ROUTES.OUTPOSTS+"/:id"} element={<OutpostsPage />} />
+          <Route path={ROUTES.GUARDS + "/:id"} element={<GuardList />} />
+          <Route path={ROUTES.OUTPOSTS + "/:id"} element={<OutpostsPage />} />
           <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
