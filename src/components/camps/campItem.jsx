@@ -21,10 +21,10 @@ const CampItem = ({ item, index, doApiCamps }) => {
                     color="purple"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.OUTPOSTS + "/camp/" + item.id)
+                        nav(ROUTES.OUTPOSTS + "/camp/" + item.id + "?campName=" + item.name)
                     }}
                 >
-                     עמדות
+                    עמדות
                 </Button>
             </TableCell>
             <TableCell align="center">
@@ -32,7 +32,7 @@ const CampItem = ({ item, index, doApiCamps }) => {
                     color="brown"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.GUARDS + "/camp/" + item.id)
+                        nav(ROUTES.GUARDS + "/camp/" + item.id + "?campName=" + item.name)
                     }}
                 >
                     שומרים
