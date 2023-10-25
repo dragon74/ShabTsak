@@ -5,6 +5,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, F
 import { toast } from "react-toastify";
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
+import { toast } from "react-toastify";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
 import { CAMP_URL } from "../../constants/apiConstants";
 
 DialogCamp.propTypes = {
@@ -32,9 +35,9 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
     const doApiCamp = async (bodyFormData) => {
         try {
             let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
-            if (resp.status == 201 && method === "POST")
+            if (resp.status === 201 && method === "POST")
                 toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status == 200 && method === "PUT")
+            else if (resp.status === 200 && method === "PUT")
                 toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
             else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
             doApiCamps();
@@ -48,8 +51,8 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
 
     const onSubForm = (formData) => {
         doApiCamp(formData);
-    }
 
+    }
     return (
         <ThemeProvider theme={theme}>
             <Dialog
@@ -84,7 +87,7 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
                             style={{ marginLeft: '8px' }}>
                             ביטול
                         </Button>
-                        <Button type="submit" autoFocus >{actionHebrew}</Button>
+                        <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
