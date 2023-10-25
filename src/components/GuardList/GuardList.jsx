@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, TableBody, TableCell, TableHead, TableRow, MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Snackbar, CircularProgress } from "@mui/material";
+import { Table, TableBody, MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, CircularProgress, Container, Snackbar } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { GuardItem } from "./GuardItem.jsx";
+import ROUTES from "../../constants/routeConstants";
+import { useParams, Link as RouterLink } from "react-router-dom";
 import { API_URL, GUARD_URL } from "../../constants/apiConstants.js";
 
 const GuardList = () => {
+  const params = useParams();
   const [guards, setGuards] = useState([]);
   const [selectedGuard, setSelectedGuard] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [camps, setCamps] = useState([]);
-  const [selectedCampId, setSelectedCampId] = useState(null);
+  const [selectedCampId, setSelectedCampId] = useState(params["id"] || "");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -130,7 +133,7 @@ const GuardList = () => {
   };
 
   return (
-    <Grid container spacing={3} direction="column" style={{ padding: "20px" }}>
+    <Container sx={{ display: "grid", gap: 3, pt: 4 }}>
       <Typography variant="h4" gutterBottom>
         ניהול סד"כ
       </Typography>
@@ -138,8 +141,8 @@ const GuardList = () => {
         <TextField
           select
           label="בחר מחנה"
-          value={selectedCampId || ""}
           onChange={(e) => setSelectedCampId(e.target.value)}
+          value={!camps.length && selectedCampId ? "" : selectedCampId}
           fullWidth
           variant="outlined"
           SelectProps={{
@@ -153,21 +156,22 @@ const GuardList = () => {
                 vertical: "top",
                 horizontal: "left",
               },
-              getContentAnchorEl: null,
             },
           }}
         >
-          <MenuItem value="">
+          <MenuItem value="" component={RouterLink} to={ROUTES.GUARDS}>
             <em>Select a camp</em>
           </MenuItem>
           {camps.map((camp) => (
-            <MenuItem key={camp.id} value={camp.id}>
+            <MenuItem key={`camp_${camp.id}`} value={camp.id} component={RouterLink} to={ROUTES.GUARDS + ROUTES.CAMP + "/" + camp.id}>
               {camp.name}
             </MenuItem>
           ))}
         </TextField>
       </Grid>
-      {selectedCampId && (
+      {!selectedCampId ? (
+        <Typography variant="body2">אנא בחר מחנה</Typography>
+      ) : (
         <>
           <Grid item xs={12} style={{ textAlign: "right" }}>
             <Button startIcon={<AddIcon />} variant="contained" color="primary" onClick={() => handleOpenDialog(null)}>
@@ -234,7 +238,7 @@ const GuardList = () => {
         </DialogActions>
       </Dialog>
       <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
-    </Grid>
+    </Container>
   );
 };
 

@@ -7,10 +7,11 @@ import DialogOutpost from "./dialogOutpost";
 import ROUTES from "../../constants/routeConstants";
 import { useNavigate } from "react-router-dom";
 
-const OutpostItem = ({ getOutpostsByCampId, item, campId }) => {
+const OutpostItem = ({ getOutpostsByCampId, item }) => {
 
     const nav = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
+  
     return (
         <TableRow>
             <TableCell align="center">{item.name}</TableCell>
@@ -21,7 +22,7 @@ const OutpostItem = ({ getOutpostsByCampId, item, campId }) => {
                     color="orange"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.SHIFTS + "/" + item.id)
+                        nav(ROUTES.SHIFTS + "/camp/" + item.id)
                     }}
                 >
                     משמרות
@@ -55,7 +56,6 @@ const OutpostItem = ({ getOutpostsByCampId, item, campId }) => {
                 method={"PUT"}
                 getOutpostsByCampId={getOutpostsByCampId}
                 item={item}
-                campId={campId}
             />
 
 
