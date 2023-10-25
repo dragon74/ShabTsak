@@ -22,7 +22,7 @@ const OutpostsPage = () => {
     let url = OUTPOST_URL + "/camp/" + params["id"];
     try {
       let resp = await doApiGet(url);
-      if (resp.status == 200)
+      if (resp.status === 200)
         setOutposts(resp.data)
       else toast.error(resp.message);
     }

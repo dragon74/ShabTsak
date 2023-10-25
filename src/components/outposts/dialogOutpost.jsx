@@ -39,9 +39,9 @@ export default function DialogOutpost({ openDialog, setOpenDialog, method, getOu
         try {
             let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
             console.log(resp);
-            if (resp.status == "201" && method == "POST")
+            if (resp.status === "201" && method === "POST")
                 toast.success(`עמדה ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status == "200" && method === "PUT")
+            else if (resp.status === "200" && method === "PUT")
                 toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
             else toast.error(resp.message);
             getOutpostsByCampId();
