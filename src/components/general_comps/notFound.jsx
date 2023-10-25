@@ -7,7 +7,7 @@ export default function NotFound() {
             <CssBaseline />
             <Container fixed>
                 <Box textAlign={"center"}>
-                    <h1>עמוד לא נמצא 404!</h1>
+                    <h2>עמוד לא נמצא 404!</h2>
                     <Link to="/">חזרה לעמוד הבית</Link>
                 </Box>
             </Container>

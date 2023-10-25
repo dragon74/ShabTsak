@@ -1,15 +1,17 @@
 /* eslint-disable react/prop-types */
 
-import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container } from "@mui/material";
+import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
 import OutpostItem from "./outpostItem";
 
-const OutpostList = ({ outposts, getOutpostsByCampId, campId }) => {
+const OutpostList = ({ outposts, getOutpostsByCampId }) => {
 
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-                <h2 className="main-headline">רשימת עמדות</h2>
+                <Typography variant="h4" component="h2" mb={2}>
+                    רשימת עמדות
+                </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
@@ -24,14 +26,13 @@ const OutpostList = ({ outposts, getOutpostsByCampId, campId }) => {
                         <TableBody>
                             {outposts.map((item, i) => {
                                 return (
-                                    <OutpostItem key={item.id} getOutpostsByCampId={getOutpostsByCampId} index={i} item={item} campId={campId} />
+                                    <OutpostItem key={item.id} getOutpostsByCampId={getOutpostsByCampId} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </Container>
-
         </>
     )
 }
