@@ -10,7 +10,7 @@ import GuardList from "./components/GuardList/GuardList";
 import OutpostsPage from "./components/outposts/outPostsPage";
 import ROUTES from "./constants/routeConstants";
 import LimitsPage from "./components/limits/limitsPage";
-import GuardDetail from "./components/GuardList/GuardDetail";
+import GuardProfile from "./components/GuardList/GuardProfile";
 
 export default function AppRoutes() {
   return (
@@ -20,6 +20,7 @@ export default function AppRoutes() {
           <Route index element={<CampsPage />} />
           <Route path="/schedule" element={<ShiftSchedule />} />
           <Route path="/guards" element={<GuardList />} />
+          <Route path="/guards/:id" element={<GuardProfile />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
