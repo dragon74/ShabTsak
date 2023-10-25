@@ -15,6 +15,7 @@ const OutpostsPage = () => {
 
   useEffect(() => {
     getOutpostsByCampId()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getOutpostsByCampId = async () => {
