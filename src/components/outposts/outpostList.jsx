@@ -4,7 +4,6 @@ import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableH
 import OutpostItem from "./outpostItem";
 
 const OutpostList = ({ outposts, getOutpostsByCampId }) => {
-
     return (
         <>
             <CssBaseline />
