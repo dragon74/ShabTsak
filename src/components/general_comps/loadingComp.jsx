@@ -1,11 +1,10 @@
 import { CircularProgress } from '@mui/material';
+import { Box } from '@mui/system';
 
 export default function LoadingComp() {
     return (
-        <div style={{ display: "flex", alignItems: "center"}}>
-            <div style={{ margin: "0 auto" }}>
-                <CircularProgress size={"50px"} />
-            </div>
-        </div>
+        <Box style={{ display: "flex", alignItems: "center" }}>
+            <CircularProgress size={"50px"} sx={{ margin: '0 auto' }} />
+        </Box>
     )
 }
