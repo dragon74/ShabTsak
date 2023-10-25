@@ -1,9 +1,7 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 
-
-const DialogLogOut= ({ openDialog,setOpenDialog,onAction}) => {
-
+function DialogLogOut({ openDialog,setOpenDialog,onAction})  {
     return (
         <>
             <Dialog
@@ -26,5 +24,9 @@ const DialogLogOut= ({ openDialog,setOpenDialog,onAction}) => {
         </>
     )
 }
-
+DialogLogOut.propTypes = {
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    onAction: PropTypes.func.isRequired,
+}
 export default DialogLogOut

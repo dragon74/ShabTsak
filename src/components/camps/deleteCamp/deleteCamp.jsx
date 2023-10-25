@@ -1,14 +1,11 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 import DialogDelete from "../../general_comps/dialogs/dialogDelete";
 
-//sure dialog
 const DeleteCamp = ({ item, doApiCamps }) => {
-
     const [openSureDialog, setOpenSureDialog] = useState(false);
-
     return (
         <>
             <IconButton aria-label="delete" color="error" onClick={() => {
@@ -21,5 +18,8 @@ const DeleteCamp = ({ item, doApiCamps }) => {
         </>
     )
 }
-
+DeleteCamp.propTypes = {
+    doApiCamps: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
 export default DeleteCamp

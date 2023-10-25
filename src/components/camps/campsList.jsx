@@ -1,10 +1,13 @@
-/* eslint-disable react/prop-types */
-
+import PropTypes from 'prop-types';
 import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import CampItem from "./campItem";
 
-const CampsList = ({ camps, doApiCamps }) => {
+CampsList.propTypes = {
+    camps: PropTypes.array.isRequired,
+    doApiCamps: PropTypes.func.isRequired,
+}
 
+function CampsList ({ camps, doApiCamps })  {
     return (
         <>
             <CssBaseline />

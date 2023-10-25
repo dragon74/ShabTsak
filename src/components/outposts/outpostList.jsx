@@ -1,10 +1,14 @@
-/* eslint-disable react/prop-types */
-
+import PropTypes from 'prop-types';
+import { useSearchParams } from "react-router-dom";
 import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
 import OutpostItem from "./outpostItem";
-import { useSearchParams } from "react-router-dom";
 
-const OutpostList = ({ outposts, getOutpostsByCampId }) => {
+OutpostList.propTypes = {
+    outposts: PropTypes.array.isRequired,
+    doApiOutposts: PropTypes.func.isRequired,
+}
+
+export default function OutpostList({ outposts, doApiOutposts }) {
     const [querys] = useSearchParams();
 
     return (
@@ -28,7 +32,7 @@ const OutpostList = ({ outposts, getOutpostsByCampId }) => {
                         <TableBody>
                             {outposts.map((item, i) => {
                                 return (
-                                    <OutpostItem key={item.id} getOutpostsByCampId={getOutpostsByCampId} index={i} item={item} />
+                                    <OutpostItem key={item.id} doApiOutposts={doApiOutposts} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
@@ -39,4 +43,3 @@ const OutpostList = ({ outposts, getOutpostsByCampId }) => {
     )
 }
 
-export default OutpostList

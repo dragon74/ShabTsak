@@ -1,17 +1,22 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { IconButton, TableCell, TableRow, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteOutpost from "./deleteOutpost/deleteOutpost";
-import { useState } from "react";
-import DialogOutpost from "./dialogOutpost";
 import ROUTES from "../../constants/routeConstants";
-import { useNavigate } from "react-router-dom";
+import DeleteOutpost from "./deleteOutpost/deleteOutpost";
+import DialogOutpost from "./dialogOutpost";
 
-const OutpostItem = ({ getOutpostsByCampId, item }) => {
+OutpostItem.propTypes = {
+    doApiOutposts: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+function OutpostItem({ doApiOutposts, item }) {
 
     const nav = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
-  
+
     return (
         <TableRow>
             <TableCell align="center">{item.name}</TableCell>
@@ -22,7 +27,7 @@ const OutpostItem = ({ getOutpostsByCampId, item }) => {
                     color="orange"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.SHIFTS + "/camp/" + item.id)
+                        nav(ROUTES.SHIFTS + "/outpost/" + item.id)
                     }}
                 >
                     משמרות
@@ -48,17 +53,15 @@ const OutpostItem = ({ getOutpostsByCampId, item }) => {
                 </IconButton>
 
                 {/* button delete Outpost */}
-                <DeleteOutpost item={item} getOutpostsByCampId={getOutpostsByCampId} />
+                <DeleteOutpost item={item} doApiOutposts={doApiOutposts} />
             </TableCell>
 
             <DialogOutpost openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
                 method={"PUT"}
-                getOutpostsByCampId={getOutpostsByCampId}
+                doApiOutposts={doApiOutposts}
                 item={item}
             />
-
-
         </TableRow>
     )
 }
