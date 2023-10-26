@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { doApiGet } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { Container } from "@mui/material"
 import DialogCamp from "./dialogCamp";
-import CampsList from "./campsList";
-import AddCampBtn from "./addCamp/addCampBtn";
+import CampList from "./campList/campList";
+import AddCampBtn from "./addCampBtn/addCampBtn";
+import { doApiGet } from "../../services/apiService";
 import { CAMP_URL } from "../../constants/apiConstants";
 
 const CampsPage = () => {
@@ -35,7 +35,7 @@ const CampsPage = () => {
         {/* btn-add camp */}
         <AddCampBtn setOpenDialog={setOpenDialog} />
 
-        <CampsList camps={camps} doApiCamps={doApiCamps} />
+        <CampList camps={camps} doApiCamps={doApiCamps} />
 
         <DialogCamp openDialog={openDialog}
           setOpenDialog={setOpenDialog}

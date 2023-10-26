@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
-import DialogDelete from "../../general_comps/dialogs/dialogDelete";
+import DialogDelete from "../../../../general_comps/dialogs/dialogDelete";
 
-const DeleteCamp = ({ item, doApiCamps }) => {
+const CampDeleteItem = ({ item, doApiCamps }) => {
     const [openSureDialog, setOpenSureDialog] = useState(false);
     return (
         <>
@@ -18,8 +18,8 @@ const DeleteCamp = ({ item, doApiCamps }) => {
         </>
     )
 }
-DeleteCamp.propTypes = {
+CampDeleteItem.propTypes = {
     doApiCamps: PropTypes.func.isRequired,
     item: PropTypes.object
 }
-export default DeleteCamp
+export default CampDeleteItem

@@ -1,36 +1,38 @@
 import PropTypes from 'prop-types';
-import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import CampItem from "./campItem";
+import { useSearchParams } from "react-router-dom";
+import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
+import OutpostItem from "./outpostItem/outpostItem";
 
-CampsList.propTypes = {
-    camps: PropTypes.array.isRequired,
-    doApiCamps: PropTypes.func.isRequired,
+OutpostList.propTypes = {
+    outposts: PropTypes.array.isRequired,
+    doApiOutposts: PropTypes.func.isRequired,
 }
 
-function CampsList ({ camps, doApiCamps })  {
+export default function OutpostList({ outposts, doApiOutposts }) {
+    const [querys] = useSearchParams();
+
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
                 <Typography variant="h4" component="h2" mb={2}>
-                    רשימת בסיסים
+                    רשימת עמדות {querys.get("campName")}
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
-                                <TableCell align="center">רשימת עמדות</TableCell>
-                                <TableCell align="center">רשימת שומרים</TableCell>
+                                <TableCell align="center">מינימום שומרים</TableCell>
+                                <TableCell align="center">רשימת משמרות</TableCell>
                                 <TableCell align="center">פעולות</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {camps.map((item, i) => {
+                            {outposts.map((item, i) => {
                                 return (
-                                    <CampItem key={item.id} doApiCamps={doApiCamps} index={i} item={item} />
+                                    <OutpostItem key={item.id} doApiOutposts={doApiOutposts} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
@@ -41,4 +43,3 @@ function CampsList ({ camps, doApiCamps })  {
     )
 }
 
-export default CampsList
