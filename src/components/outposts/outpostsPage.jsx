@@ -6,7 +6,7 @@ import { OUTPOST_URL } from "../../constants/apiConstants";
 import { doApiGet } from "../../services/apiService";
 import OutpostList from "./outpostList/outpostList";
 import AddOutpostBtn from "./addOutpostBtn/AddOutpostBtn";
-import OutpostDialog from "./outpostDialog/outpostDialog";
+import OutpostDialog from "./outpostDialog";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);

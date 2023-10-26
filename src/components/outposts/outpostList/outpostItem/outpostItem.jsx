@@ -5,7 +5,7 @@ import { IconButton, TableCell, TableRow, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import ROUTES from "../../../../constants/routeConstants";
 import OutpostItemDelete from "../outpostItem/outpostItemDelete/outpostItemDelete";
-import OutpostDialog from "../../outpostDialog/outpostDialog";
+import OutpostDialog from "../../outpostDialog";
 
 OutpostItem.propTypes = {
     doApiOutposts: PropTypes.func.isRequired,

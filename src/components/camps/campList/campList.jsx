@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import CampItem from "./campItem";
+import CampItem from "./campItem/campItem";
 
-CampsList.propTypes = {
+CampList.propTypes = {
     camps: PropTypes.array.isRequired,
     doApiCamps: PropTypes.func.isRequired,
 }
 
-function CampsList ({ camps, doApiCamps })  {
+function CampList ({ camps, doApiCamps })  {
     return (
         <>
             <CssBaseline />
@@ -41,4 +41,4 @@ function CampsList ({ camps, doApiCamps })  {
     )
 }
 
-export default CampsList
+export default CampList
