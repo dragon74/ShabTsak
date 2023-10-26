@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useSearchParams } from "react-router-dom";
 import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
-import OutpostItem from "./outpostItem";
+import OutpostItem from "./outpostItem/outpostItem";
 
 OutpostList.propTypes = {
     outposts: PropTypes.array.isRequired,

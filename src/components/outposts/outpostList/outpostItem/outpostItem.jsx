@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IconButton, TableCell, TableRow, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import ROUTES from "../../constants/routeConstants";
-import DeleteOutpost from "./deleteOutpost/deleteOutpost";
-import DialogOutpost from "./dialogOutpost";
+import ROUTES from "../../../../constants/routeConstants";
+import OutpostItemDelete from "../outpostItem/outpostItemDelete/outpostItemDelete";
+import OutpostDialog from "../../outpostDialog/outpostDialog";
 
 OutpostItem.propTypes = {
     doApiOutposts: PropTypes.func.isRequired,
@@ -52,11 +52,11 @@ function OutpostItem({ doApiOutposts, item }) {
                     <EditIcon />
                 </IconButton>
 
-                {/* button delete Outpost */}
-                <DeleteOutpost item={item} doApiOutposts={doApiOutposts} />
+                {/* Outpost button delete */}
+                <OutpostItemDelete item={item} doApiOutposts={doApiOutposts} />
             </TableCell>
 
-            <DialogOutpost openDialog={openDialog}
+            <OutpostDialog openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
                 method={"PUT"}
                 doApiOutposts={doApiOutposts}
