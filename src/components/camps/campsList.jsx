@@ -1,15 +1,20 @@
-/* eslint-disable react/prop-types */
-
-import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import PropTypes from 'prop-types';
+import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import CampItem from "./campItem";
 
-const CampsList = ({ camps, doApiCamps }) => {
+CampsList.propTypes = {
+    camps: PropTypes.array.isRequired,
+    doApiCamps: PropTypes.func.isRequired,
+}
 
+function CampsList ({ camps, doApiCamps })  {
     return (
         <>
             <CssBaseline />
-            <Container maxWidth="md">
-                <h2 className="main-headline">רשימת בסיסים</h2>
+            <Container maxWidth="md" sx={{ padding: 0 }}>
+                <Typography variant="h4" component="h2" mb={2}>
+                    רשימת בסיסים
+                </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
@@ -17,8 +22,8 @@ const CampsList = ({ camps, doApiCamps }) => {
                                 <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
                                 <TableCell align="center">רשימת עמדות</TableCell>
-                                <TableCell align="center">עריכה</TableCell>
-                                <TableCell align="center">מחיקה</TableCell>
+                                <TableCell align="center">רשימת שומרים</TableCell>
+                                <TableCell align="center">פעולות</TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -32,7 +37,6 @@ const CampsList = ({ camps, doApiCamps }) => {
                     </Table>
                 </TableContainer>
             </Container>
-
         </>
     )
 }

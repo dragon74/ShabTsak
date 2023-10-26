@@ -1,14 +1,19 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
+import PropTypes from 'prop-types';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, TableCell, TableRow, IconButton } from "@mui/material";
+import { Button, TableCell, TableRow, IconButton } from "@mui/material";
 import DialogCamp from "./dialogCamp";
 import DeleteCamp from "./deleteCamp/deleteCamp";
 import ROUTES from '../../constants/routeConstants';
 import EditIcon from "@mui/icons-material/Edit";
 
-const CampItem = ({ item, index, doApiCamps }) => {
+CampItem.propTypes = {
+    index: PropTypes.number.isRequired,
+    doApiCamps: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+function CampItem ({ item, index, doApiCamps })  {
 
     const [openDialog, setOpenDialog] = useState(false);
     const nav = useNavigate();
@@ -21,27 +26,43 @@ const CampItem = ({ item, index, doApiCamps }) => {
                     color="purple"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.OUTPOSTS + "/" + item.id)
+                        nav(ROUTES.OUTPOSTS + "/camp/" + item.id + "?campName=" + item.name)
                     }}
                 >
-                    רשימת עמדות
+                    עמדות
                 </Button>
-
             </TableCell>
             <TableCell align="center">
-                <Box style={{ marginRight: "8px" }}>
-                    <IconButton
-                        onClick={() => {
-                            setOpenDialog(true);
-                        }}
-                        color="secondary">
-                        <EditIcon />
-                    </IconButton>
-                </Box>
+                <Button
+                    color="brown"
+                    variant="outlined"
+                    onClick={() => {
+                        nav(ROUTES.GUARDS + "/camp/" + item.id + "?campName=" + item.name)
+                    }}
+                >
+                    שומרים
+                </Button>
             </TableCell>
+            {/* action btns */}
+            <TableCell
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <IconButton
+                    // sx={{ marginRight: "8px" }}
+                    onClick={() => {
+                        setOpenDialog(true);
+                    }}
+                    color="secondary">
+                    <EditIcon />
+                </IconButton>
 
-            {/* button delete camp */}
-            <DeleteCamp item={item} doApiCamps={doApiCamps} />
+                {/* button delete camp */}
+                <DeleteCamp item={item} doApiCamps={doApiCamps} />
+            </TableCell>
 
             <DialogCamp openDialog={openDialog}
                 setOpenDialog={setOpenDialog}

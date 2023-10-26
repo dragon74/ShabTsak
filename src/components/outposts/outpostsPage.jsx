@@ -1,29 +1,29 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { doApiGet } from "../../services/apiService";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container } from "@mui/material"
+import { OUTPOST_URL } from "../../constants/apiConstants";
+import { doApiGet } from "../../services/apiService";
 import OutpostList from "./outpostList";
 import AddOutpostBtn from "./addOutPost/AddOutpostBtn";
 import DialogOutpost from "./dialogOutpost";
-import { OUTPOST_URL } from "../../constants/apiConstants";
-import { useParams } from "react-router-dom";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [outposts, setOutposts] = useState([]);
-  let params = useParams();
+  const params = useParams();
 
   useEffect(() => {
-    getOutpostsByCampId()
+    doApiOutposts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const getOutpostsByCampId = async () => {
+  const doApiOutposts = async () => {
     let url = OUTPOST_URL + "/camp/" + params["id"];
     try {
       let resp = await doApiGet(url);
-      if (resp.status == 200)
-        setOutposts(resp.data)
+      if (resp.status === 200)
+      setOutposts(resp.data)
       else toast.error(resp.message);
     }
     catch (err) {
@@ -39,13 +39,12 @@ const OutpostsPage = () => {
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
-        <OutpostList outposts={outposts} getOutpostsByCampId={getOutpostsByCampId} />
+        <OutpostList outposts={outposts} doApiOutposts={doApiOutposts}  />
 
         <DialogOutpost openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
-          getOutpostsByCampId={getOutpostsByCampId}
-          campId={params["id"]}
+          doApiOutposts={doApiOutposts}
         />
 
       </Container>

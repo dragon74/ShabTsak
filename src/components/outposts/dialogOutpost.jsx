@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
@@ -6,15 +6,26 @@ import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { OUTPOST_URL } from "../../constants/apiConstants";
+import { useParams } from 'react-router-dom';
 
-const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId, item = {}, campId }) => {
+DialogOutpost.propTypes = {
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
+    doApiOutposts: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+export default function DialogOutpost({ openDialog, setOpenDialog, method, doApiOutposts, item = {} }) {
+
+    const params = useParams();
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            campId: campId,
-            id: method == "PUT" ? item.id : null,
-            minGuards: method == "PUT" ? item.minGuards : "",
-            name: method == "PUT" ? item.name : "",
-        },
+            ...(method === "PUT" && { id: item.id }),
+            campId: params["id"],
+            minGuards: item.minGuards || '',
+            name: item.name || ''
+        }
     });
 
     const actionHebrew = useMemo(() => {
@@ -27,12 +38,12 @@ const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId,
         try {
             let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
             console.log(resp);
-            if (resp.status == "201" && method == "POST")
+            if (resp.status === 201 && method === "POST")
                 toast.success(`עמדה ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status == "200" && method === "PUT")
+            else if (resp.status === 200 && method === "PUT")
                 toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
             else toast.error(resp.message);
-            getOutpostsByCampId();
+            doApiOutposts();
             setOpenDialog(false);
             reset();
         } catch (err) {
@@ -79,12 +90,12 @@ const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId,
                                 required:
                                     { value: true, message: 'חובה למלא כמה שומרים בעמדה' },
                                 min: { value: 2, message: "מנימום 2 שומרים בעמדה" },
-                                max: 99
+                                max: { value: 10, message: "מקסימום 10 שומרים בעמדה" }
                             })}
                             color="primary"
                             size="small"
                             autoComplete="off"
-                            label="מקסימום שומרים בעמדה"
+                            label="מינימום שומרים בעמדה"
                             sx={{ marginTop: "8px" }}
                         />
                         <FormHelperText error={!!errors.minGuards}>
@@ -104,6 +115,6 @@ const DialogOutpost = ({ openDialog, setOpenDialog, method, getOutpostsByCampId,
             </Dialog>
         </ThemeProvider>
     );
-};
+}
 
-export default DialogOutpost;
+

@@ -1,20 +1,28 @@
-/* eslint-disable react/prop-types */
+import { useForm } from "react-hook-form";
+import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
-import { useForm } from "react-hook-form";
 import { CAMP_URL } from "../../constants/apiConstants";
 
-const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) => {
+DialogCamp.propTypes = {
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
+    doApiCamps: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            name: method == "PUT" ? item.name : "",
-            id: method == "PUT" ? item.id : null
+            name: method === "PUT" ? item.name : "",
+            ...(method === "PUT" && { id: item.id })
         },
     });
-  
+
     const actionHebrew = useMemo(() => {
         if (method === "POST") return "הוסף";
         else if (method === "PUT") return "ערוך";
@@ -24,10 +32,9 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
     const doApiCamp = async (bodyFormData) => {
         try {
             let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
-            // console.log(resp);
-            if (resp.status == "201" && method == "POST")
+            if (resp.status === 201 && method === "POST")
                 toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status == "200" && method === "PUT")
+            else if (resp.status === 200 && method === "PUT")
                 toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
             else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
             doApiCamps();
@@ -40,8 +47,6 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
     }
 
     const onSubForm = (formData) => {
-        // Use the submitted form data to call your API function
-        console.log(formData); // Make sure the form data is captured correctly
         doApiCamp(formData);
 
     }
@@ -79,12 +84,12 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
                             style={{ marginLeft: '8px' }}>
                             ביטול
                         </Button>
-                        <Button type="submit" autoFocus >{actionHebrew}</Button>
+                        <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
         </ThemeProvider>
     );
-};
+}
 
 export default DialogCamp;

@@ -11,6 +11,11 @@ import Login from "./components/Login/Login.jsx";
 import LimitsPage from "./components/limits/limitsPage";
 import OutpostsPage from "./components/outposts/outPostsPage";
 import ROUTES from "./constants/routeConstants";
+import LimitsPage from "./components/limits/limitsPage";
+import OutpostsPage from "./components/outposts/outpostsPage";
+import PrivacyPage from "./components/privacy/privacyPage";
+import ServiceTermsPage from "./components/service_terms/serviceTermsPage";
+import ShiftsPage from "./components/shifts/shiftsPage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Navigate } from 'react-router-dom';
 import { useUserStore } from "./services/useUserStore.jsx";
@@ -20,12 +25,15 @@ export default function AppRoutes() {
     <Router>
       <Routes>
         <Route path={ROUTES.HOME} element={<Layout />}>
-            <Route index element={<SecuredRoute><CampsPage /></SecuredRoute>} />
-            <Route path={ROUTES.SCHEDULE} element={<SecuredRoute><ShiftSchedule /></SecuredRoute>} />
-            <Route path={ROUTES.GUARDS} element={<SecuredRoute><GuardList /></SecuredRoute>} />
-            <Route path={ROUTES.OUTPOSTS+"/:id"} element={<SecuredRoute><OutpostsPage /></SecuredRoute>} />
-            <Route path={ROUTES.LIMITS} element={<SecuredRoute><LimitsPage /></SecuredRoute>} />
-            <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.DEV ? import.meta.env.VITE_CLIENT_ID : 'PROD_CLIENT_ID'}><Login /></GoogleOAuthProvider>} />
+          <Route index element={<SecuredRoute><CampsPage /></SecuredRoute>} />
+          <Route path={ROUTES.SCHEDULE} element={<SecuredRoute><ShiftSchedule /></SecuredRoute>} />
+          <Route path={ROUTES.GUARDS + ROUTES.CAMP + '/:id'} element={<SecuredRoute><GuardList /></SecuredRoute>} />
+          <Route path={ROUTES.OUTPOSTS + ROUTES.CAMP + "/:id"} element={<SecuredRoute><OutpostsPage /></SecuredRoute>} />
+          <Route path={ROUTES.SHIFTS + ROUTES.OUTPOST + "/:id"} element={<SecuredRoute><ShiftsPage /></SecuredRoute>} />
+          <Route path={ROUTES.LIMITS} element={<SecuredRoute><LimitsPage /></SecuredRoute>} />
+          <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
+          <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
+          <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.DEV ? import.meta.env.VITE_CLIENT_ID : 'PROD_CLIENT_ID'}><Login /></GoogleOAuthProvider>} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

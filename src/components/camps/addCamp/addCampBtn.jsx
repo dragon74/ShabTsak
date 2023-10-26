@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { Box, Button } from '@mui/material';
 
-const AddCampBtn = ({ setOpenDialog }) => {
+function AddCampBtn({ setOpenDialog })  {
   return (
     <Box style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
       <Button variant="contained"
@@ -13,6 +13,10 @@ const AddCampBtn = ({ setOpenDialog }) => {
       </Button>
     </Box>
   )
+}
+
+AddCampBtn.propTypes = {
+  setOpenDialog: PropTypes.func.isRequired,
 }
 
 export default AddCampBtn
