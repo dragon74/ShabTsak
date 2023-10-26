@@ -11,6 +11,7 @@ import ROUTES from "./constants/routeConstants";
 import LimitsPage from "./components/limits/limitsPage";
 import OutpostsPage from "./components/outposts/outpostsPage";
 import PrivacyPage from "./components/privacy/privacyPage";
+import ServiceTermsPage from "./components/service_terms/serviceTermsPage";
 import ShiftsPage from "./components/shifts/shiftsPage";
 
 export default function AppRoutes() {
@@ -25,6 +26,7 @@ export default function AppRoutes() {
           <Route path={ROUTES.SHIFTS + ROUTES.OUTPOST + "/:id"} element={<ShiftsPage />} />
           <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
+          <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

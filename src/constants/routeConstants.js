@@ -7,6 +7,7 @@ const ROUTES = {
   SHIFTS: "/shifts",
   LIMITS: "/limits",
   PRIVACY: '/privacy',
+  SERVICETERMS: '/serviceterms',
   CAMP: '/camp'
 };
 
