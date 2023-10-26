@@ -18,6 +18,6 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    "react/jsx-no-undef": true
+    "react/jsx-no-undef": 2
   },
 }
