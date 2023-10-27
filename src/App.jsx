@@ -1,8 +1,8 @@
 import './App.css'
-import AppRoutes from './appRoutes'
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import featuresSlice from "./features/featuresSlice"
+import AppRoutes from './appRoutes';
 
 
 export const myStore = configureStore({

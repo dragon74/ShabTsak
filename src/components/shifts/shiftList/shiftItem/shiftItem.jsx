@@ -4,36 +4,34 @@ import { useState } from "react";
 import { IconButton, TableCell, TableRow, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import ROUTES from "../../../../constants/routeConstants";
-import OutpostItemDelete from "../outpostItem/outpostItemDelete/outpostItemDelete";
-import OutpostDialog from "../../outpostDialog";
+import ShiftItemDelete from "./shiftDeleteBtn/shiftDeleteBtn";
+import ShiftDialog from "../../shiftDialog";
 
-OutpostItem.propTypes = {
-    doApiOutposts: PropTypes.func.isRequired,
+ShiftItem.propTypes = {
+    doApiShifts: PropTypes.func.isRequired,
     item: PropTypes.object
 }
 
-function OutpostItem({ doApiOutposts, item }) {
+function ShiftItem({ doApiShifts, item }) {
 
     const nav = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
 
     return (
         <TableRow>
-            <TableCell align="center">{item.name}</TableCell>
+            <TableCell align="center">{item.dayId}</TableCell>
             <TableCell align="center">{item.minGuards}</TableCell>
-
             <TableCell align="center">
                 <Button
                     color="orange"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.SHIFTS + "/outpost/" + item.id + "/" + item.name)
+                        nav(ROUTES.SHIFTS + "/outpost/" + item.id)
                     }}
                 >
                     משמרות
                 </Button>
             </TableCell>
-
             <TableCell
                 align="center"
                 sx={{
@@ -51,19 +49,18 @@ function OutpostItem({ doApiOutposts, item }) {
                 >
                     <EditIcon />
                 </IconButton>
-
                 {/* Outpost button delete */}
-                <OutpostItemDelete item={item} doApiOutposts={doApiOutposts} />
+                <ShiftItemDelete item={item} doApiShifts={doApiShifts} />
             </TableCell>
 
-            <OutpostDialog openDialog={openDialog}
+            <ShiftDialog openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
                 method={"PUT"}
-                doApiOutposts={doApiOutposts}
+                doApiShifts={doApiShifts}
                 item={item}
             />
         </TableRow>
     )
 }
 
-export default OutpostItem
+export default ShiftItem

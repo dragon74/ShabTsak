@@ -3,7 +3,7 @@ import { Button, Box } from "@mui/material";
 
 export default function AddShiftBtn ({ setOpenDialog })  {
     return (
-        <Box  style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
+        <Box style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
             <Button type="button"
                 color="primary"
                 variant="contained"
