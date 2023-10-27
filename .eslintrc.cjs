@@ -14,10 +14,11 @@ module.exports = {
   settings: { react: { version: '18.2' } },
   plugins: ['react', 'react-refresh'],
   rules: {
+    'import/no-unresolved': 0, // Add this line
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
-    "react/jsx-no-undef": 2
+    'react/jsx-no-undef': 2
   },
 }
