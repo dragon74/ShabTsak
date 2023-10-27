@@ -1,3 +1,4 @@
+import React from "react";
 import axios from 'axios';
 import { useUser } from "./useUser";
 import { useLocalStorage } from "./useLocalStorage";
@@ -5,6 +6,7 @@ import { TOKEN_NAME } from "../services/apiService";
 import { mockUserData } from "../constants/mockUserData";
 import { normalizeUserData } from "../lib/utils/normalizeUserData";
 export const useAuth = () => {
+    const [firstLoad, setFirstLoad] = React.useState(true);
     const { user, addUser, removeUser, authUserToken, createUser } = useUser();
     const { getItem } = useLocalStorage();
 
@@ -56,5 +58,13 @@ export const useAuth = () => {
         removeUser();
     };
 
-    return { user, login, logout, test, init };
+    React.useEffect(() => {
+        if (!user) {
+            init().then()
+        }
+        setFirstLoad(false);
+
+    }, [])
+
+    return { user, login, logout, test, init, firstLoad };
 };

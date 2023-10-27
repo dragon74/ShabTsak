@@ -4,15 +4,18 @@ import { theme } from "../../services/theme.js";
 import { ThemeProvider } from "@mui/material/styles";
 import { useGoogleLogin } from '@react-oauth/google';
 import { Google } from "@mui/icons-material";
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useDarkModeStore } from "../../services/useDarkModeStore.jsx";
 import { useAuth } from "../../hooks/useAuth.jsx";
 
 export default function Login() {
-    const { login, test } = useAuth();
+    const { login, test, user } = useAuth();
     const darkMode = useDarkModeStore((store) => store.darkMode);
     const navigate = useNavigate();
     const handleLogin = useGoogleLogin({ onSuccess, onNonOAuthError });
+    if (user) {
+        return <Navigate to="/" />;
+    }
 
     async function onSuccess({ access_token: firebaseToken }) {
         try {

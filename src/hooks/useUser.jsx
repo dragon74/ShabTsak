@@ -51,6 +51,6 @@ export const useUser = () => {
         setUser(null);
         removeItem(TOKEN_NAME);
     };
-    //
+
     return { user, addUser, removeUser, setUser, authUserToken, createUser };
 };

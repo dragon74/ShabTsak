@@ -44,13 +44,7 @@ export default function AppRoutes() {
 
 
 function PrivateRoute({children}) {
-    const [firstLoad, setFirstLoad] = React.useState(true);
-    const { user, init } = useAuth()
-    React.useEffect(() => {
-        init().finally(() => {
-            setFirstLoad(false);
-        });
-    }, [])
+    const { user, firstLoad } = useAuth()
 
     if (firstLoad) return null;
 
