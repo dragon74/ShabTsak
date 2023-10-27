@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { Container } from "@mui/material"
 import { OUTPOST_URL } from "../../constants/apiConstants";
 import { doApiGet } from "../../services/apiService";
-import OutpostList from "./outpostList";
-import AddOutpostBtn from "./addOutPost/AddOutpostBtn";
-import DialogOutpost from "./dialogOutpost";
+import OutpostList from "./outpostList/outpostList";
+import AddOutpostBtn from "./addOutpostBtn/AddOutpostBtn";
+import OutpostDialog from "./outpostDialog";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -41,7 +41,7 @@ const OutpostsPage = () => {
 
         <OutpostList outposts={outposts} doApiOutposts={doApiOutposts}  />
 
-        <DialogOutpost openDialog={openDialog}
+        <OutpostDialog openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
           doApiOutposts={doApiOutposts}

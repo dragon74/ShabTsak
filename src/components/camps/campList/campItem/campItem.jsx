@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, TableCell, TableRow, IconButton } from "@mui/material";
-import DialogCamp from "./dialogCamp";
-import DeleteCamp from "./deleteCamp/deleteCamp";
-import ROUTES from '../../constants/routeConstants';
 import EditIcon from "@mui/icons-material/Edit";
+import ROUTES from '../../../../constants/routeConstants';
+import CampDeleteItem from "../campItem/campDeleteItem/campDeleteItem"
+import DialogCamp from "../../dialogCamp";
 
 CampItem.propTypes = {
     index: PropTypes.number.isRequired,
@@ -14,7 +14,6 @@ CampItem.propTypes = {
 }
 
 function CampItem ({ item, index, doApiCamps })  {
-
     const [openDialog, setOpenDialog] = useState(false);
     const nav = useNavigate();
     return (
@@ -61,7 +60,7 @@ function CampItem ({ item, index, doApiCamps })  {
                 </IconButton>
 
                 {/* button delete camp */}
-                <DeleteCamp item={item} doApiCamps={doApiCamps} />
+                <CampDeleteItem item={item} doApiCamps={doApiCamps} />
             </TableCell>
 
             <DialogCamp openDialog={openDialog}

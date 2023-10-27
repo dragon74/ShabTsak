@@ -20,7 +20,7 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
         defaultValues: {
             name: method === "PUT" ? item.name : "",
             ...(method === "PUT" && { id: item.id })
-        },
+        }
     });
 
     const actionHebrew = useMemo(() => {
@@ -48,8 +48,8 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
 
     const onSubForm = (formData) => {
         doApiCamp(formData);
-
     }
+    
     return (
         <ThemeProvider theme={theme}>
             <Dialog
