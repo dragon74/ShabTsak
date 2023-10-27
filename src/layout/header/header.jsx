@@ -20,12 +20,12 @@ import srcImg from '/images/man.png';
 import { toast } from 'react-toastify';
 import ROUTES from '../../constants/routeConstants';
 import DialogLogOut from '../../components/general_comps/dialogs/dialogLogOut';
-import {useUserStore} from "../../services/useUserStore.jsx";
 import {useDarkModeStore} from "../../services/useDarkModeStore.jsx";
 import { Link as RouterLink } from 'react-router-dom';
+import { useAuth } from "../../hooks/useAuth.jsx";
 
 const Header = () => {
-    const [user, logout] = useUserStore((store) => [store.user, store.logout]);
+    const { user, logout } = useAuth();
     // Navbar states
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
