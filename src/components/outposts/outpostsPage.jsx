@@ -5,7 +5,7 @@ import { Container } from "@mui/material"
 import { OUTPOST_URL } from "../../constants/apiConstants";
 import { doApiGet } from "../../services/apiService";
 import OutpostList from "./outpostList/outpostList";
-import AddOutpostBtn from "./addOutpostBtn/AddOutpostBtn";
+import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn";
 import OutpostDialog from "./outpostDialog";
 
 const OutpostsPage = () => {
