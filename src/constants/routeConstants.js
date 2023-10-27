@@ -6,7 +6,7 @@ const ROUTES = {
   OUTPOST: "/outpost",
   SHIFTS: "/shifts",
   LIMITS: "/limits",
-  LOGIN: "/login"
+  LOGIN: "/login",
   PRIVACY: '/privacy',
   SERVICETERMS: '/serviceterms',
   CAMP: '/camp'

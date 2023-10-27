@@ -8,8 +8,6 @@ import CampsPage from "./components/camps/campsPage";
 import ShiftSchedule from "./components/ShiftSchedule/ShiftSchedule";
 import GuardList from "./components/GuardList/GuardList";
 import Login from "./components/Login/Login.jsx";
-import LimitsPage from "./components/limits/limitsPage";
-import OutpostsPage from "./components/outposts/outPostsPage";
 import ROUTES from "./constants/routeConstants";
 import LimitsPage from "./components/limits/limitsPage";
 import OutpostsPage from "./components/outposts/outpostsPage";
@@ -33,7 +31,7 @@ export default function AppRoutes() {
           <Route path={ROUTES.LIMITS} element={<SecuredRoute><LimitsPage /></SecuredRoute>} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
           <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
-          <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.DEV ? import.meta.env.VITE_CLIENT_ID : 'PROD_CLIENT_ID'}><Login /></GoogleOAuthProvider>} />
+          <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}><Login /></GoogleOAuthProvider>} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -4,6 +4,10 @@
   font-family: 'Rubik', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth !important;
+}
+
 body {
   overflow-x: hidden;
   direction: rtl;
