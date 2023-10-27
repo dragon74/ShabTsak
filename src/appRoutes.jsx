@@ -30,10 +30,10 @@ export default function AppRoutes() {
             <Route path={ROUTES.OUTPOSTS + ROUTES.CAMP + "/:id"} element={<PrivateRoute><OutpostsPage /></PrivateRoute>} />
             <Route path={ROUTES.SHIFTS + ROUTES.OUTPOST + "/:id"} element={<PrivateRoute><ShiftsPage /></PrivateRoute>} />
             <Route path={ROUTES.LIMITS} element={<PrivateRoute><LimitsPage /></PrivateRoute>} />
+            <Route path="*" element={<PrivateRoute><NotFound /></PrivateRoute>} />
             <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
             <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
             <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID || "CLIENT_ID"}><Login /></GoogleOAuthProvider>} />
-            <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
       <ToastContainer position="top-left" theme="colored" />
