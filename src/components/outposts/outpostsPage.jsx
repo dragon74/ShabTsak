@@ -7,7 +7,8 @@ import { doApiGet } from "../../services/apiService";
 import OutpostList from "./outpostList/outpostList";
 import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn";
 import OutpostDialog from "./outpostDialog";
-
+import BackLink from "../general_comps/backLink";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [outposts, setOutposts] = useState([]);
@@ -23,7 +24,7 @@ const OutpostsPage = () => {
     try {
       let resp = await doApiGet(url);
       if (resp.status === 200)
-      setOutposts(resp.data)
+        setOutposts(resp.data)
       else toast.error(resp.message);
     }
     catch (err) {
@@ -39,14 +40,14 @@ const OutpostsPage = () => {
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
-        <OutpostList outposts={outposts} doApiOutposts={doApiOutposts}  />
+        <OutpostList outposts={outposts} doApiOutposts={doApiOutposts} />
 
         <OutpostDialog openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
           doApiOutposts={doApiOutposts}
         />
-
+        <BackLink place="end" icon={<ArrowBackIosIcon/>}>חזרה לעמוד בסיסים</BackLink>
       </Container>
     </div>
   )
