@@ -1,14 +1,14 @@
 import { useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
-import { Container } from "@mui/material"
 import { toast } from "react-toastify";
+import { Container } from "@mui/material"
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { SHIFT_URL } from "../../constants/apiConstants";
 import { doApiGet } from "../../services/apiService";
 import AddShiftBtn from "./addShiftBtn/addShiftBtn";
 import DialogShift from "./shiftDialog";
 import ShiftList from "./shiftList/shiftList";
 import BackLink from "../general_comps/backLink";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const ShiftsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);

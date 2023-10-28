@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container } from "@mui/material"
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { OUTPOST_URL } from "../../constants/apiConstants";
 import { doApiGet } from "../../services/apiService";
 import OutpostList from "./outpostList/outpostList";
 import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn";
 import OutpostDialog from "./outpostDialog";
 import BackLink from "../general_comps/backLink";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [outposts, setOutposts] = useState([]);
