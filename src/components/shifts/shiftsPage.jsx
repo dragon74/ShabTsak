@@ -7,6 +7,8 @@ import { doApiGet } from "../../services/apiService";
 import AddShiftBtn from "./addShiftBtn/addShiftBtn";
 import DialogShift from "./shiftDialog";
 import ShiftList from "./shiftList/shiftList";
+import BackLink from "../general_comps/backLink";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const ShiftsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -48,6 +50,7 @@ const ShiftsPage = () => {
           method="POST"
           doApiShifts={doApiShifts}
         /> 
+        <BackLink place="end" icon={<ArrowBackIosIcon/>}>חזרה לעמוד עמדות</BackLink>
 
       </Container>
     </div>
