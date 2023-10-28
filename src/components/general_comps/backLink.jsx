@@ -16,7 +16,7 @@ export default function BackLink({ place, children, icon }) {
                 size="small"
                 onClick={() => nav(-1)}
             >
-                <span>{children}</span>
+                <span style={{ order: icon ? 0 : 1 }}>{children}</span>
                 {icon ? icon : <ChevronRightSharp sx={{ fontSize: 18 }} />}
             </Link>
         </Box>
