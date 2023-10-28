@@ -25,7 +25,7 @@ function CampItem ({ item, index, doApiCamps })  {
                     color="purple"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.OUTPOSTS + "/camp/" + item.id + "?campName=" + item.name)
+                        nav(`${ROUTES.OUTPOSTS}/camp/${item.id}/${item.name}`)
                     }}
                 >
                     עמדות
@@ -36,7 +36,7 @@ function CampItem ({ item, index, doApiCamps })  {
                     color="brown"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.GUARDS + "/camp/" + item.id + "?campName=" + item.name)
+                        nav(`${ROUTES.GUARDS}/camp/${item.id}/${item.name}`)
                     }}
                 >
                     שומרים

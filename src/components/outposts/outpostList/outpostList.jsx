@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
 import OutpostItem from "./outpostItem/outpostItem";
 
@@ -9,14 +9,14 @@ OutpostList.propTypes = {
 }
 
 export default function OutpostList({ outposts, doApiOutposts }) {
-    const [querys] = useSearchParams();
+    const params=useParams();
 
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
                 <Typography variant="h4" component="h2" mb={2}>
-                    רשימת עמדות {querys.get("campName")}
+                    רשימת עמדות {params["name"]}
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>

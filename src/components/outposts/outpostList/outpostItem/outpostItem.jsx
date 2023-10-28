@@ -27,7 +27,7 @@ function OutpostItem({ doApiOutposts, item }) {
                     color="orange"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.SHIFTS + "/outpost/" + item.id + "/" + item.name)
+                        nav(`${ROUTES.SHIFTS}/outpost/${item.id}/${item.name}`)
                     }}
                 >
                     משמרות
