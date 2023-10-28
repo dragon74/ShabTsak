@@ -47,7 +47,7 @@ const OutpostsPage = () => {
           method="POST"
           doApiOutposts={doApiOutposts}
         />
-        <BackLink place="end" icon={<ArrowBackIosIcon/>}>חזרה לעמוד בסיסים</BackLink>
+        <BackLink place="end" icon={<ArrowBackIosIcon/>}>חזרה לרשימת הבסיסים</BackLink>
       </Container>
     </div>
   )

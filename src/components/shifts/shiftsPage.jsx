@@ -50,7 +50,7 @@ const ShiftsPage = () => {
           method="POST"
           doApiShifts={doApiShifts}
         /> 
-        <BackLink place="end" icon={<ArrowBackIosIcon/>}>חזרה לעמוד עמדות</BackLink>
+        <BackLink place="end" icon={<ArrowBackIosIcon/>}>חזרה לרשימת העמדות</BackLink>
 
       </Container>
     </div>
