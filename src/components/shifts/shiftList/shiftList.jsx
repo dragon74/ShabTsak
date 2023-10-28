@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
 import ShiftItem from "./shiftItem/shiftItem";
 
@@ -9,14 +9,13 @@ ShiftList.propTypes = {
 }
 
 export default function ShiftList({ shifts, doApiShifts }) {
-    const [querys] = useSearchParams();
-
+    const params = useParams();
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
                 <Typography variant="h4" component="h2" mb={2}>
-                    רשימת משמרות {querys.get("outpostName")}
+                    רשימת משמרות {params["name"]}
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
