@@ -1,12 +1,11 @@
 import { Typography, Box, Container } from "@mui/material";
-import ROUTES from "../../constants/routeConstants.js";
 import BackLink from "../general_comps/backLink.jsx";
 
 export default function ServiceTermsPage() {
     return (
         <Container sx={{ mt: 4.5 }} disableGutters>
             <Box as="header" sx={{ mx: { sm: 2 }}}>
-                <BackLink place="start" to={ROUTES.HOME}>חזרה לעמוד הבית</BackLink>
+                <BackLink place="start" >חזרה לעמוד הבית</BackLink>
                 <Typography variant="h2" align="center" sx={{ mt: { sm: -4.5 }}}>תנאי שירות</Typography>
             </Box>
             <Box as="article" sx={{ mx: { sm: 4, xs: 3 }, mt: { sm: 4, xs: 3 }}}>
