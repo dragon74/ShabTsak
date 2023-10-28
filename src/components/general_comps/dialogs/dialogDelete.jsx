@@ -24,7 +24,7 @@ function DialogDelete ({ openDialog, setOpenDialog, subject, doApi , item })  {
     }, [subject]);
 
 
-    const doApiCampDeleteItem = async () => {
+    const doApicampDeleteBtn = async () => {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
@@ -54,7 +54,7 @@ function DialogDelete ({ openDialog, setOpenDialog, subject, doApi , item })  {
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
-                    <Button onClick={doApiCampDeleteItem} autoFocus>מסכים</Button>
+                    <Button onClick={doApicampDeleteBtn} autoFocus>מסכים</Button>
                 </DialogActions>
             </Dialog>
         </>

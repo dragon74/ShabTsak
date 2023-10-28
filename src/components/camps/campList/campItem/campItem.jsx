@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Button, TableCell, TableRow, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ROUTES from '../../../../constants/routeConstants';
-import CampDeleteItem from "../campItem/campDeleteItem/campDeleteItem"
 import DialogCamp from "../../dialogCamp";
+import CampDeleteBtn from './campDeleteBtn/campDeleteBtn';
 
 CampItem.propTypes = {
     index: PropTypes.number.isRequired,
@@ -60,7 +60,7 @@ function CampItem ({ item, index, doApiCamps })  {
                 </IconButton>
 
                 {/* button delete camp */}
-                <CampDeleteItem item={item} doApiCamps={doApiCamps} />
+                <CampDeleteBtn item={item} doApiCamps={doApiCamps} />
             </TableCell>
 
             <DialogCamp openDialog={openDialog}
