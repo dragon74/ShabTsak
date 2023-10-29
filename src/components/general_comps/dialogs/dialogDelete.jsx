@@ -1,19 +1,21 @@
 import PropTypes from 'prop-types';
-import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import { useQueryClient } from 'react-query';
 import { useMemo } from "react";
-import { doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
+import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import { doApiMethod } from "../../../services/apiService";
 import { API_URL } from "../../../constants/apiConstants";
 
 DialogDelete.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
-    subject: PropTypes.oneOf(['camp', 'outpost','shift','guard']).isRequired,
-    doApi: PropTypes.func.isRequired,
+    subject: PropTypes.oneOf(['camp', 'outpost', 'shift', 'guard']).isRequired,
     item: PropTypes.object
 }
 
-function DialogDelete ({ openDialog, setOpenDialog, subject, doApi , item })  {
+function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
+    // Access the client
+    const queryClient = useQueryClient();
 
     const subjectHebrew = useMemo(() => {
         if (subject === "camp") return "בסיס";
@@ -31,7 +33,8 @@ function DialogDelete ({ openDialog, setOpenDialog, subject, doApi , item })  {
             if (resp.status == 200) {
                 toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
                 setOpenDialog(false);
-                doApi();
+                // instead doApi function;
+                queryClient.invalidateQueries(`${subject}s`)
             } else toast.error(resp.massege);
         }
         catch (err) {

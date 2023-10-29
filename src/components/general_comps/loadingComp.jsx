@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 
 export default function LoadingComp() {
     return (
-        <Box style={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center",minHeight:"40vh" }}>
             <CircularProgress size={"50px"} sx={{ margin: '0 auto' }} />
         </Box>
     )

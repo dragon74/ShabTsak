@@ -7,16 +7,19 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { OUTPOST_URL } from "../../constants/apiConstants";
 import { useParams } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 
 OutpostDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
     method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
-    doApiOutposts: PropTypes.func.isRequired,
     item: PropTypes.object
 }
 
-export default function OutpostDialog({ openDialog, setOpenDialog, method, doApiOutposts, item = {} }) {
+export default function OutpostDialog({ openDialog, setOpenDialog, method, item = {} }) {
+    // Access the client
+    const queryClient = useQueryClient();
+
     const params = useParams();
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
@@ -42,7 +45,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, doApi
             else if (resp.status === 200 && method === "PUT")
                 toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
             else toast.error(resp.message);
-            doApiOutposts();
+            queryClient.invalidateQueries('outposts')
             setOpenDialog(false);
             reset();
         } catch (err) {
@@ -98,7 +101,6 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, doApi
                         <FormHelperText error={!!errors.minGuards}>
                             {errors.minGuards && errors?.minGuards?.message}
                         </FormHelperText>
-                        {/* Add more TextFields and form fields here as needed */}
                     </DialogContent>
                     <DialogActions>
                         <Button type="button"

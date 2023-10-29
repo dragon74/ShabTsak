@@ -3,11 +3,10 @@ import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContai
 import CampItem from "./campItem/campItem";
 
 CampList.propTypes = {
-    camps: PropTypes.array.isRequired,
-    doApiCamps: PropTypes.func.isRequired,
+    camps: PropTypes.array
 }
 
-function CampList ({ camps, doApiCamps })  {
+function CampList({camps}) {
     return (
         <>
             <CssBaseline />
@@ -30,7 +29,7 @@ function CampList ({ camps, doApiCamps })  {
                         <TableBody>
                             {camps.map((item, i) => {
                                 return (
-                                    <CampItem key={item.id} doApiCamps={doApiCamps} index={i} item={item} />
+                                    <CampItem key={item.id} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
