@@ -1,20 +1,16 @@
 import PropTypes from 'prop-types';
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, TableCell, TableRow, IconButton } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import { Button, TableCell, TableRow } from "@mui/material";
 import ROUTES from '../../../../constants/routeConstants';
-import DialogCamp from "../../dialogCamp";
-import CampDeleteBtn from './campDeleteBtn/campDeleteBtn';
+import CampItemActions from './campItemActions/campItemActions';
 
 CampItem.propTypes = {
     index: PropTypes.number.isRequired,
-    doApiCamps: PropTypes.func.isRequired,
-    item: PropTypes.object
+    item: PropTypes.object.isRequired
 }
 
-function CampItem ({ item, index, doApiCamps })  {
-    const [openDialog, setOpenDialog] = useState(false);
+function CampItem({ item, index }) {
+
     const nav = useNavigate();
     return (
         <TableRow>
@@ -42,6 +38,7 @@ function CampItem ({ item, index, doApiCamps })  {
                     שומרים
                 </Button>
             </TableCell>
+
             {/* action btns */}
             <TableCell
                 sx={{
@@ -50,25 +47,8 @@ function CampItem ({ item, index, doApiCamps })  {
                     alignItems: 'center',
                 }}
             >
-                <IconButton
-                    // sx={{ marginRight: "8px" }}
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
-                    color="secondary">
-                    <EditIcon />
-                </IconButton>
-
-                {/* button delete camp */}
-                <CampDeleteBtn item={item} doApiCamps={doApiCamps} />
+                <CampItemActions item={item}/>
             </TableCell>
-
-            <DialogCamp openDialog={openDialog}
-                setOpenDialog={setOpenDialog}
-                method={"PUT"}
-                doApiCamps={doApiCamps}
-                item={item}
-            />
 
         </TableRow>
     )

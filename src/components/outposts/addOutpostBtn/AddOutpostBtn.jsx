@@ -5,7 +5,7 @@ AddOutpostBtn.propTypes = {
     setOpenDialog: PropTypes.func.isRequired,
 }
 
-function AddOutpostBtn ({ setOpenDialog }) {
+export default function AddOutpostBtn ({ setOpenDialog }) {
     return (
         <Box  style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
             <Button type="button"
@@ -20,5 +20,3 @@ function AddOutpostBtn ({ setOpenDialog }) {
         </Box>
     )
 }
-
-export default AddOutpostBtn

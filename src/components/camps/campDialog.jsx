@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
+import { useQueryClient } from "react-query";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
@@ -7,15 +8,17 @@ import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { CAMP_URL } from "../../constants/apiConstants";
 
-DialogCamp.propTypes = {
+CampDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
     method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
-    doApiCamps: PropTypes.func.isRequired,
     item: PropTypes.object
 }
 
-function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
+function CampDialog({ openDialog, setOpenDialog, method,  item }) {
+    // Access the client
+    const queryClient = useQueryClient();
+
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
             name: method === "PUT" ? item.name : "",
@@ -37,7 +40,8 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
             else if (resp.status === 200 && method === "PUT")
                 toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
             else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-            doApiCamps();
+            //instead of doApiCamps
+            queryClient.invalidateQueries('camps')
             setOpenDialog(false);
             reset();
         } catch (err) {
@@ -49,7 +53,7 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
     const onSubForm = (formData) => {
         doApiCamp(formData);
     }
-    
+
     return (
         <ThemeProvider theme={theme}>
             <Dialog
@@ -92,4 +96,4 @@ function DialogCamp ({ openDialog, setOpenDialog, method, doApiCamps, item }) {
     );
 }
 
-export default DialogCamp;
+export default CampDialog;

@@ -1,5 +1,4 @@
 import { Box, Container, CssBaseline, Typography  } from '@mui/material'
-import ROUTES from "../../constants/routeConstants"
 import BackLink from './backLink'
 
 export default function NotFound() {
@@ -11,7 +10,7 @@ export default function NotFound() {
                     <Typography variant="h4" component="h2" >
                         עמוד לא נמצא 404!
                     </Typography>
-                    <BackLink to={ROUTES.HOME}>
+                    <BackLink>
                         חזרה לעמוד הבית
                     </BackLink>
                 </Box>

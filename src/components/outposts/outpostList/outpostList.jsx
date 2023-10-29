@@ -1,23 +1,16 @@
 import PropTypes from 'prop-types';
-import { useParams } from "react-router-dom";
-import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
+import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container } from "@mui/material";
 import OutpostItem from "./outpostItem/outpostItem";
 
 OutpostList.propTypes = {
-    outposts: PropTypes.array.isRequired,
-    doApiOutposts: PropTypes.func.isRequired,
+    outposts: PropTypes.array
 }
-
-export default function OutpostList({ outposts, doApiOutposts }) {
-    const params=useParams();
-
+export default function OutpostList({outposts}) {
+    
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-                <Typography variant="h4" component="h2" mb={2}>
-                    רשימת עמדות {params["name"]}
-                </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
@@ -32,7 +25,7 @@ export default function OutpostList({ outposts, doApiOutposts }) {
                         <TableBody>
                             {outposts.map((item, i) => {
                                 return (
-                                    <OutpostItem key={item.id} doApiOutposts={doApiOutposts} index={i} item={item} />
+                                    <OutpostItem key={item.id} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
