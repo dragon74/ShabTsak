@@ -1,21 +1,16 @@
 import PropTypes from 'prop-types';
-import { useParams } from "react-router-dom";
-import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
+import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container } from "@mui/material";
 import OutpostItem from "./outpostItem/outpostItem";
 
 OutpostList.propTypes = {
     outposts: PropTypes.array
 }
 export default function OutpostList({outposts}) {
-    const params=useParams();
-
+    
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-                <Typography variant="h4" component="h2" mb={2}>
-                    רשימת עמדות {params["name"]}
-                </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>

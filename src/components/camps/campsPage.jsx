@@ -34,6 +34,10 @@ const CampsPage = () => {
         {/* btn-add camp */}
         <AddCampBtn setOpenDialog={setOpenDialog} />
 
+        <Typography variant="h4" component="h2" mb={2}>
+          רשימת בסיסים
+        </Typography>
+
         {isLoading ?
           <LoadingComp />
           :

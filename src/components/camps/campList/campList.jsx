@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import CampItem from "./campItem/campItem";
 
 CampList.propTypes = {
@@ -11,9 +11,6 @@ function CampList({camps}) {
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-                <Typography variant="h4" component="h2" mb={2}>
-                    רשימת בסיסים
-                </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
