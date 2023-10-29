@@ -9,6 +9,8 @@ import ROUTES from "../../constants/routeConstants";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { API_URL, GUARD_URL } from "../../constants/apiConstants.js";
 import { toast } from "react-toastify";
+import BackLink from "../general_comps/backLink";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const GuardList = () => {
   const params = useParams();
@@ -283,6 +285,9 @@ const GuardList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <BackLink place="end" icon={<ArrowBackIosIcon />}>
+        חזרה לרשימת הבסיסים
+      </BackLink>
     </Container>
   );
 };

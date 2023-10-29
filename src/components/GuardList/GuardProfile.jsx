@@ -8,6 +8,8 @@ import TimeLimitForm from "./TimeLimitForm";
 import TimeLimitTable from "./TimeLimitTable";
 import { GUARD_URL, API_URL } from "../../constants/apiConstants";
 import { toast } from "react-toastify";
+import BackLink from "../general_comps/backLink";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const GuardProfile = () => {
   const { id } = useParams();
@@ -88,6 +90,9 @@ const GuardProfile = () => {
         <TimeLimitForm id={id} fetchTimeLimits={fetchTimeLimits} timeLimits={timeLimits} />
         {timeLimits.length > 0 && <TimeLimitTable timeLimits={timeLimits} handleDelete={handleDelete} />}
       </CardContent>
+      <BackLink place="end" icon={<ArrowBackIosIcon />}>
+        חזרה לרשימת השומרים
+      </BackLink>
     </Card>
   );
 };
