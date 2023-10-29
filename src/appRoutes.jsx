@@ -9,7 +9,7 @@ import ShiftSchedule from "./components/ShiftSchedule/ShiftSchedule";
 import GuardList from "./components/GuardList/GuardList";
 import GuardProfile from "./components/GuardList/GuardProfile";
 import ROUTES from "./constants/routeConstants";
-import OutpostsPage from "./components/outposts/outpostsPage";
+import OutpostsPage from "./components/Outposts/OutpostsPage";
 import PrivacyPage from "./components/privacy/privacyPage";
 import ServiceTermsPage from "./components/service_terms/serviceTermsPage";
 import ShiftsPage from "./components/shifts/shiftsPage";
