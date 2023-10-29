@@ -15,12 +15,12 @@ import LoadingComp from "../general_comps/loadingComp";
 const ShiftsPage = () => {
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
-  const { isLoading, data: shifts} = useQuery(['shifts', params["id"]], doApiShifts);
+  const { isLoading, data: shifts } = useQuery(['shifts', params["id"]], doApiShifts);
 
   // console.log(params);
   // console.log({ isLoading, isError, error, shifts });
 
-  async function doApiShifts () {
+  async function doApiShifts() {
     let url = SHIFT_URL + "/outpost/" + params["id"];
     console.log(url);
     try {
@@ -43,6 +43,10 @@ const ShiftsPage = () => {
 
         {/* btn-add Shift */}
         <AddShiftBtn setOpenDialog={setOpenDialog} />
+
+        <Typography variant="h4" component="h2" mb={2}>
+          רשימת משמרות {params["name"]}
+        </Typography>
 
         {isLoading ?
           <LoadingComp />
