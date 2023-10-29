@@ -5,10 +5,9 @@ import ShiftItem from "./shiftItem/shiftItem";
 
 ShiftList.propTypes = {
     shifts: PropTypes.array.isRequired,
-    doApiShifts: PropTypes.func.isRequired,
 }
 
-export default function ShiftList({ shifts, doApiShifts }) {
+export default function ShiftList({ shifts }) {
     const params = useParams();
     return (
         <>
@@ -31,7 +30,7 @@ export default function ShiftList({ shifts, doApiShifts }) {
                         <TableBody>
                             {shifts.map((item, i) => {
                                 return (
-                                    <ShiftItem key={item.id} doApiShifts={doApiShifts} index={i} item={item} />
+                                    <ShiftItem key={item.id}  index={i} item={item} />
                                 )
                             })}
                         </TableBody>

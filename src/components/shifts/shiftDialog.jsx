@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useForm } from "react-hook-form";
 import { useMemo } from "react";
+import { useQueryClient } from 'react-query';
 import { toast } from "react-toastify";
 import {  DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider, Select, MenuItem, Dialog } from "@mui/material";
 import { theme } from "../../services/theme";
@@ -11,11 +12,12 @@ ShiftDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
     method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
-    doApiShifts: PropTypes.func.isRequired,
     item: PropTypes.object
 }
 
-function ShiftDialog({ openDialog, setOpenDialog, method, doApiShifts, item }) {
+function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
+    const queryClient = useQueryClient();
+
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
 
@@ -39,7 +41,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, doApiShifts, item }) {
             else if (resp.status === 200 && method === "PUT")
                 toast.success(`משמרת ${item.name} התעדכן בהצלחה`);
             else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-            doApiShifts();
+            queryClient.invalidateQueries('shifts')
             setOpenDialog(false);
             reset();
         } catch (err) {
