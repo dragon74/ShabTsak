@@ -7,6 +7,7 @@ import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import TimeLimitForm from "./TimeLimitForm";
 import TimeLimitTable from "./TimeLimitTable";
 import { GUARD_URL, API_URL } from "../../constants/apiConstants";
+import { toast } from "react-toastify";
 
 const GuardProfile = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const GuardProfile = () => {
     } catch (err) {
       console.error("Error fetching guard details:", err);
       setError("Failed to fetch guard details. Please try again.");
+      toast.error("Failed to fetch guard details. Please try again.");
     }
   };
 
@@ -31,6 +33,7 @@ const GuardProfile = () => {
     } catch (err) {
       console.error("Error fetching guard time limits:", err);
       setError("Failed to fetch time limits. Please try again.");
+      toast.error("Failed to fetch time limits. Please try again.");
     }
   };
 
@@ -42,10 +45,11 @@ const GuardProfile = () => {
   const handleDelete = async (timeLimitId) => {
     try {
       await axios.delete(API_URL + `/guardtimelimit/${timeLimitId}`);
-      fetchTimeLimits(); // Refresh the time limits after deleting
+      fetchTimeLimits();
+      toast.success("Time limit deleted successfully.");
     } catch (err) {
       console.error("Error deleting time limit:", err);
-      alert("Failed to delete time limit. Please try again."); // Optional: Notify user of error
+      toast.error("Failed to delete time limit. Please try again.");
     }
   };
 
@@ -81,7 +85,7 @@ const GuardProfile = () => {
           משתתף: {guard.shouldBeAllocated ? "Yes" : "No"}
         </Typography>
 
-        <TimeLimitForm id={id} fetchTimeLimits={fetchTimeLimits} />
+        <TimeLimitForm id={id} fetchTimeLimits={fetchTimeLimits} timeLimits={timeLimits} />
         {timeLimits.length > 0 && <TimeLimitTable timeLimits={timeLimits} handleDelete={handleDelete} />}
       </CardContent>
     </Card>

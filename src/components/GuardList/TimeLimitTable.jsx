@@ -1,9 +1,17 @@
 import { getDayName } from "./utils";
-import { Table, TableBody, TableRow, TableCell, Button } from "@mui/material";
+import { Table, TableBody, TableHead, TableRow, TableCell, Button } from "@mui/material";
 
 const TimeLimitTable = ({ timeLimits, handleDelete }) => {
   return (
     <Table size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell>יום</TableCell>
+          <TableCell>משעה</TableCell>
+          <TableCell>עד שעה</TableCell>
+          <TableCell>פעולות</TableCell>
+        </TableRow>
+      </TableHead>
       <TableBody>
         {timeLimits.map((limit) => (
           <TableRow key={limit.id}>
