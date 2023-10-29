@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, Datepicker, setOptions, Popup, Button, Input, Select, formatDate, getJson, localeHe } from '@mobiscroll/react';
+import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from '@mobiscroll/react';
 
 setOptions({
     locale: localeHe,
@@ -43,7 +43,7 @@ const responsivePopup = {
 
 function ShiftSchedule() {
     const [shifts, setShifts] = useState(defaultShifts);
-    const [guards, setGuards] = useState(initGuards);
+    const [guards, _setGuards] = useState(initGuards);
     const [headerText, setHeader] = useState('');
     const [isEdit, setEdit] = useState(false);
     const [tempShift, setTempShift] = useState(null);
@@ -157,7 +157,7 @@ function ShiftSchedule() {
     const saveShift = useCallback(() => {
         const start = new Date(shiftDate[0]);
         const end = new Date(shiftDate[1]);
-        const color = guards.find(g => g.text == tempShift.guardName).color;
+        const color = guards.find(g => g.text === tempShift.guardName).color;
         const newShift = {
             id: tempShift.id,
             start: start,
@@ -180,7 +180,8 @@ function ShiftSchedule() {
         }
         // close the popup
         setOpen(false);
-    }, [isEdit, shifts, tempShift, shiftDate]);
+        //
+    }, [isEdit, shifts, shiftDate, guards, tempShift.guardName, tempShift.id, tempShift.position, tempShift.resource]);
 
     // popup options
     const popupButtons = useMemo(() => {
