@@ -1,10 +1,27 @@
-# React + Vite
 
-1 install the packages:
+
+# שבצ"ק React Application
+
+This is a React + Vite application named 'שבצ"ק'.
+
+## 🚀 Setup and Running
+
+
+1. **Install the necessary dependencies:**
+
+\```bash
 npm install
+\```
 
-2 start the server:
+3. **Start the application:**
+
+\```bash
 npm run dev
+\```
+
+After running, visit `http://localhost:3000/` in your browser to view the app.
+
+## 📖 More Information
 
 
 "camp"= "בסיס";
@@ -16,4 +33,7 @@ npm run dev
 לראות לוח שמירות
 
 רק מי שOWNER על הבסיס יכול לערוך או למחוק הכל
+
+
+
 
