@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, TableBody, MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, CircularProgress, Container, Snackbar } from "@mui/material";
+import { Table, TableBody, MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, CircularProgress, Container } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -17,8 +17,6 @@ const GuardList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [camps, setCamps] = useState([]);
   const [selectedCampId, setSelectedCampId] = useState(params["id"] || "");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState({
     shouldBeAllocated: true,
@@ -285,7 +283,6 @@ const GuardList = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)} message={snackbarMessage} />
     </Container>
   );
 };
