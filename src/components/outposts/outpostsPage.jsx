@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -8,10 +7,10 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { OUTPOST_URL } from "../../constants/apiConstants";
 import { doApiGet } from "../../services/apiService";
 import OutpostList from "./outpostList/outpostList";
-import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn";
 import OutpostDialog from "./outpostDialog";
 import BackLink from "../general_comps/backLink";
 import LoadingComp from "../general_comps/loadingComp";
+import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -43,6 +42,7 @@ const OutpostsPage = () => {
   return (
     <div className="outPosts-page">
       <Container fixed >
+        
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
