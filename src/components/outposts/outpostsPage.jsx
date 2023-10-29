@@ -10,7 +10,7 @@ import OutpostList from "./outpostList/outpostList";
 import OutpostDialog from "./outpostDialog";
 import BackLink from "../general_comps/backLink";
 import LoadingComp from "../general_comps/loadingComp";
-import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn";
+import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn.jsx";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -52,7 +52,7 @@ const OutpostsPage = () => {
 
         {isLoading ?
           <LoadingComp />
-          : outposts.length == 0 ?
+          : outposts.length === 0 ?
             <Typography variant="h6" component="h2" my={2}>אין בסיסים עדיין</Typography>
             : <OutpostList outposts={outposts} />}
 
