@@ -17,16 +17,16 @@ const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const params = useParams();
 
-  const { isLoading, data: outposts, error, isError } = useQuery(['outposts', params["id"]], doApiOutposts);
+  const { isLoading, data: outposts } = useQuery(['outposts', params["id"]], doApiOutposts);
 
-  console.log({ isLoading, isError, error, outposts });
+  // console.log({ isLoading, isError, error, outposts });
 
   async function doApiOutposts() {
     let url = OUTPOST_URL + "/camp/" + params["id"];
     try {
       let resp = await doApiGet(url);
       if (resp.status === 200) {
-        console.log(resp.data);
+        // console.log(resp.data);
         return resp.data;
       }
       else {

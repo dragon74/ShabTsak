@@ -1,21 +1,16 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { IconButton, TableCell, TableRow, Button } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import {  TableCell, TableRow, Button } from "@mui/material";
 import ROUTES from "../../../../constants/routeConstants";
-import ShiftItemDelete from "./shiftDeleteBtn/shiftDeleteBtn";
-import ShiftDialog from "../../shiftDialog";
+import ShiftItemActions from './shiftItemActions/shiftItemActions';
 
 ShiftItem.propTypes = {
-    doApiShifts: PropTypes.func.isRequired,
     item: PropTypes.object
 }
 
-function ShiftItem({ doApiShifts, item }) {
+export default function ShiftItem({ item }) {
 
     const nav = useNavigate();
-    const [openDialog, setOpenDialog] = useState(false);
 
     return (
         <TableRow>
@@ -32,6 +27,7 @@ function ShiftItem({ doApiShifts, item }) {
                     משמרות
                 </Button>
             </TableCell>
+            
             <TableCell
                 align="center"
                 sx={{
@@ -40,27 +36,11 @@ function ShiftItem({ doApiShifts, item }) {
                     alignItems: 'center',
                 }}
             >
-                <IconButton
-                    // style={{ marginRight: "8px" }}
-                    color="secondary"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
-                >
-                    <EditIcon />
-                </IconButton>
-                {/* Outpost button delete */}
-                <ShiftItemDelete item={item} doApiShifts={doApiShifts} />
-            </TableCell>
 
-            <ShiftDialog openDialog={openDialog}
-                setOpenDialog={setOpenDialog}
-                method={"PUT"}
-                doApiShifts={doApiShifts}
-                item={item}
-            />
+              <ShiftItemActions item={item}/>
+
+            </TableCell>
         </TableRow>
     )
 }
 
-export default ShiftItem
