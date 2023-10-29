@@ -4,11 +4,9 @@ import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableH
 import OutpostItem from "./outpostItem/outpostItem";
 
 OutpostList.propTypes = {
-    outposts: PropTypes.array.isRequired,
-    doApiOutposts: PropTypes.func.isRequired,
+    outposts: PropTypes.array
 }
-
-export default function OutpostList({ outposts, doApiOutposts }) {
+export default function OutpostList({outposts}) {
     const params=useParams();
 
     return (
@@ -32,7 +30,7 @@ export default function OutpostList({ outposts, doApiOutposts }) {
                         <TableBody>
                             {outposts.map((item, i) => {
                                 return (
-                                    <OutpostItem key={item.id} doApiOutposts={doApiOutposts} index={i} item={item} />
+                                    <OutpostItem key={item.id} index={i} item={item} />
                                 )
                             })}
                         </TableBody>

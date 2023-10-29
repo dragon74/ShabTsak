@@ -38,7 +38,6 @@ const ShiftsPage = () => {
     <div className="shifts-page">
       <Container fixed >
       
-      
         {/* btn-add Shift */}
         <AddShiftBtn setOpenDialog={setOpenDialog} />
 

@@ -1,21 +1,15 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { IconButton, TableCell, TableRow, Button } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import { TableCell, TableRow, Button } from "@mui/material";
 import ROUTES from "../../../../constants/routeConstants";
-import OutpostItemDelete from "../outpostItem/outpostItemDelete/outpostItemDelete";
-import OutpostDialog from "../../outpostDialog";
+import OutpostItemActions from './outpostItemActions/outpostItemAction';
 
 OutpostItem.propTypes = {
-    doApiOutposts: PropTypes.func.isRequired,
-    item: PropTypes.object
+    item: PropTypes.object.isRequired
 }
 
-function OutpostItem({ doApiOutposts, item }) {
-
+function OutpostItem({ item }) {
     const nav = useNavigate();
-    const [openDialog, setOpenDialog] = useState(false);
 
     return (
         <TableRow>
@@ -34,34 +28,18 @@ function OutpostItem({ doApiOutposts, item }) {
                 </Button>
             </TableCell>
 
+            {/* action btns */}
             <TableCell
                 align="center"
                 sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: 'center'
                 }}
             >
-                <IconButton
-                    // style={{ marginRight: "8px" }}
-                    color="secondary"
-                    onClick={() => {
-                        setOpenDialog(true);
-                    }}
-                >
-                    <EditIcon />
-                </IconButton>
-
-                {/* Outpost button delete */}
-                <OutpostItemDelete item={item} doApiOutposts={doApiOutposts} />
+              <OutpostItemActions item={item}/>
             </TableCell>
 
-            <OutpostDialog openDialog={openDialog}
-                setOpenDialog={setOpenDialog}
-                method={"PUT"}
-                doApiOutposts={doApiOutposts}
-                item={item}
-            />
         </TableRow>
     )
 }

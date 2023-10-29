@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { Container } from "@mui/material"
+import { Container, Typography } from "@mui/material"
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { OUTPOST_URL } from "../../constants/apiConstants";
 import { doApiGet } from "../../services/apiService";
@@ -9,24 +11,27 @@ import OutpostList from "./outpostList/outpostList";
 import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn";
 import OutpostDialog from "./outpostDialog";
 import BackLink from "../general_comps/backLink";
+import LoadingComp from "../general_comps/loadingComp";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [outposts, setOutposts] = useState([]);
   const params = useParams();
 
-  useEffect(() => {
-    doApiOutposts()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const { isLoading, data: outposts, error, isError } = useQuery(['outposts', params["id"]], doApiOutposts);
 
-  const doApiOutposts = async () => {
+  console.log({ isLoading, isError, error, outposts });
+
+  async function doApiOutposts() {
     let url = OUTPOST_URL + "/camp/" + params["id"];
     try {
       let resp = await doApiGet(url);
-      if (resp.status === 200)
-        setOutposts(resp.data)
-      else toast.error(resp.message);
+      if (resp.status === 200) {
+        console.log(resp.data);
+        return resp.data;
+      }
+      else {
+        toast.error(resp.message);
+      }
     }
     catch (err) {
       console.log(err);
@@ -34,21 +39,26 @@ const OutpostsPage = () => {
     }
   }
 
+
   return (
     <div className="outPosts-page">
       <Container fixed >
-
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
-        <OutpostList outposts={outposts} doApiOutposts={doApiOutposts} />
+        {isLoading ?
+          <LoadingComp />
+          : outposts.length == 0 ? 
+          <Typography variant="h4" component="h2" my={2}>אין בסיסים עדיין</Typography>
+          :  <OutpostList outposts={outposts} />}
+
 
         <OutpostDialog openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
-          doApiOutposts={doApiOutposts}
         />
-        <BackLink place="end" icon={<ArrowBackIosIcon/>}>חזרה לרשימת הבסיסים</BackLink>
+
+        <BackLink place="end" icon={<ArrowBackIosIcon />}>חזרה לרשימת הבסיסים</BackLink>
       </Container>
     </div>
   )
