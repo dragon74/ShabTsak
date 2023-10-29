@@ -1,33 +1,36 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
+import { useParams } from "react-router-dom";
+import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
+import OutpostItem from "./outpostItem/outpostItem";
 
-import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import CampItem from "./campItem";
-
-const CampsList = ({ camps, doApiCamps }) => {
+OutpostList.propTypes = {
+    outposts: PropTypes.array
+}
+export default function OutpostList({outposts}) {
+    const params=useParams();
 
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
                 <Typography variant="h4" component="h2" mb={2}>
-                    רשימת בסיסים
+                    רשימת עמדות {params["name"]}
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
-                                <TableCell align="center">רשימת עמדות</TableCell>
-                                <TableCell align="center">רשימת שומרים</TableCell>
+                                <TableCell align="center">מינימום שומרים</TableCell>
+                                <TableCell align="center">רשימת משמרות</TableCell>
                                 <TableCell align="center">פעולות</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {camps.map((item, i) => {
+                            {outposts.map((item, i) => {
                                 return (
-                                    <CampItem key={item.id} doApiCamps={doApiCamps} index={i} item={item} />
+                                    <OutpostItem key={item.id} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
@@ -38,4 +41,3 @@ const CampsList = ({ camps, doApiCamps }) => {
     )
 }
 
-export default CampsList

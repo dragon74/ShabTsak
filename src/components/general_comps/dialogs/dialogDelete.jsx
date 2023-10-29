@@ -1,12 +1,21 @@
-/* eslint-disable no-undef */
-/* eslint-disable react/prop-types */
-import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import PropTypes from 'prop-types';
+import { useQueryClient } from 'react-query';
 import { useMemo } from "react";
-import { doApiMethod } from "../../../services/apiService";
 import { toast } from "react-toastify";
+import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import { doApiMethod } from "../../../services/apiService";
 import { API_URL } from "../../../constants/apiConstants";
 
-const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) => {
+DialogDelete.propTypes = {
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    subject: PropTypes.oneOf(['camp', 'outpost', 'shift', 'guard']).isRequired,
+    item: PropTypes.object
+}
+
+function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
+    // Access the client
+    const queryClient = useQueryClient();
 
     const subjectHebrew = useMemo(() => {
         if (subject === "camp") return "בסיס";
@@ -17,20 +26,20 @@ const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) =
     }, [subject]);
 
 
-    const doApiDeleteCamp = async () => {
+    const doApicampDeleteBtn = async () => {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
-            // console.log(resp);
             if (resp.status == 200) {
                 toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
                 setOpenDialog(false);
-                doApi();
+                // instead doApi function;
+                queryClient.invalidateQueries(`${subject}s`)
             } else toast.error(resp.massege);
         }
         catch (err) {
             console.log(err);
-            toast.error(resp.massege)
+            toast.error("יש בעיה בבקשה נסה מאוחר יותר");
         }
     }
     return (
@@ -48,7 +57,7 @@ const DialogDelete = ({ openDialog, setOpenDialog, subject, doApi = {},item }) =
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
-                    <Button onClick={doApiDeleteCamp} autoFocus>מסכים</Button>
+                    <Button onClick={doApicampDeleteBtn} autoFocus>מסכים</Button>
                 </DialogActions>
             </Dialog>
         </>

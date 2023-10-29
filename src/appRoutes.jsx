@@ -9,9 +9,10 @@ import ShiftSchedule from "./components/ShiftSchedule/ShiftSchedule";
 import GuardList from "./components/GuardList/GuardList";
 import GuardProfile from "./components/GuardList/GuardProfile";
 import ROUTES from "./constants/routeConstants";
-import LimitsPage from "./components/limits/limitsPage";
 import OutpostsPage from "./components/outposts/outpostsPage";
 import PrivacyPage from "./components/privacy/privacyPage";
+import ServiceTermsPage from "./components/service_terms/serviceTermsPage";
+import ShiftsPage from "./components/shifts/shiftsPage";
 
 export default function AppRoutes() {
   return (
@@ -20,13 +21,13 @@ export default function AppRoutes() {
         <Route path={ROUTES.HOME} element={<Layout />}>
           <Route index element={<CampsPage />} />
           <Route path={ROUTES.SCHEDULE} element={<ShiftSchedule />} />
-          <Route path={ROUTES.GUARDS} element={<GuardList />} />
-          <Route path={ROUTES.GUARDS + ROUTES.CAMP + "/:id"} element={<GuardList />} />
-          <Route path={ROUTES.GUARDS + "/:id"} element={<GuardProfile />} />
-          <Route path={ROUTES.OUTPOSTS + ROUTES.CAMP + "/:id"} element={<OutpostsPage />} />
-          <Route path={ROUTES.SHIFTS + ROUTES.CAMP + "/:id"} element={<ShiftSchedule />} />
-          <Route path={ROUTES.LIMITS} element={<LimitsPage />} />
+          <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`} element={<OutpostsPage />} />
+          <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`} element={<ShiftsPage />} />
+          <Route path={`${ROUTES.GUARDS}${ROUTES.CAMP}/:id`} element={<GuardList />} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
+          <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
+          <Route path={ROUTES.GUARDS + "/:id"} element={<GuardProfile />} />
+          <Route path={ROUTES.GUARDS} element={<GuardList />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

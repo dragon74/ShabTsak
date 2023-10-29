@@ -1,25 +1,24 @@
-import { useEffect, useState } from "react";
-import { doApiGet } from "../../services/apiService";
+import { useState } from "react";
+import { useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { Container } from "@mui/material"
-import DialogCamp from "./dialogCamp";
-import CampsList from "./campsList";
-import AddCampBtn from "./addCamp/addCampBtn";
+import { Container, Typography } from "@mui/material"
+import CampDialog from "./campDialog";
+import CampList from "./campList/campList";
+import AddCampBtn from "./addCampBtn/addCampBtn";
+import { doApiGet } from "../../services/apiService";
 import { CAMP_URL } from "../../constants/apiConstants";
+import LoadingComp from "../general_comps/loadingComp";
 
 const CampsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [camps, setCamps] = useState([]);
 
-  useEffect(() => {
-    doApiCamps()
-  }, [])
+  const { isLoading, data: camps } = useQuery('camps', doApiCamps)
 
-  const doApiCamps = async () => {
+  async function doApiCamps() {
     let url = CAMP_URL + "/all"
     try {
       let resp = await doApiGet(url);
-      setCamps(resp.data)
+      return resp.data
     }
     catch (err) {
       console.log(err);
@@ -35,12 +34,17 @@ const CampsPage = () => {
         {/* btn-add camp */}
         <AddCampBtn setOpenDialog={setOpenDialog} />
 
-        <CampsList camps={camps} doApiCamps={doApiCamps} />
+        {isLoading ?
+          <LoadingComp />
+          :
+          (camps.length == 0 ?
+            <Typography variant="h4" component="h2" my={2}>אין בסיסים עדיין</Typography>
+            : <CampList camps={camps} />)}
 
-        <DialogCamp openDialog={openDialog}
+
+        <CampDialog openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
-          doApiCamps={doApiCamps}
         />
 
       </Container>

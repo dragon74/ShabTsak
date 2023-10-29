@@ -1,8 +1,11 @@
-/* eslint-disable react/prop-types */
-
+import PropTypes from 'prop-types';
 import { Button, Box } from "@mui/material";
 
-const AddOutpostBtn = ({ setOpenDialog }) => {
+AddOutpostBtn.propTypes = {
+    setOpenDialog: PropTypes.func.isRequired,
+}
+
+function AddOutpostBtn ({ setOpenDialog }) {
     return (
         <Box  style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
             <Button type="button"

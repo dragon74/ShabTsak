@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
@@ -8,24 +7,26 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { OUTPOST_URL } from "../../constants/apiConstants";
 import { useParams } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 
-DialogOutpost.propTypes = {
+OutpostDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
     method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
-    getOutpostsByCampId: PropTypes.func.isRequired,
     item: PropTypes.object
 }
 
-export default function DialogOutpost({ openDialog, setOpenDialog, method, getOutpostsByCampId, item = {} }) {
+export default function OutpostDialog({ openDialog, setOpenDialog, method, item = {} }) {
+    // Access the client
+    const queryClient = useQueryClient();
 
     const params = useParams();
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            ...method === "PUT" ? { id: item.id } : {},
+            ...(method === "PUT" && { id: item.id }),
             campId: params["id"],
             minGuards: item.minGuards || '',
-            name: item.name || '',
+            name: item.name || ''
         }
     });
 
@@ -39,12 +40,12 @@ export default function DialogOutpost({ openDialog, setOpenDialog, method, getOu
         try {
             let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
             console.log(resp);
-            if (resp.status === "201" && method === "POST")
+            if (resp.status === 201 && method === "POST")
                 toast.success(`עמדה ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status === "200" && method === "PUT")
+            else if (resp.status === 200 && method === "PUT")
                 toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
             else toast.error(resp.message);
-            getOutpostsByCampId();
+            queryClient.invalidateQueries('outposts')
             setOpenDialog(false);
             reset();
         } catch (err) {
@@ -54,8 +55,6 @@ export default function DialogOutpost({ openDialog, setOpenDialog, method, getOu
     }
 
     const onSubForm = (formData) => {
-        // Use the submitted form data to call your API function
-        console.log(formData); // Make sure the form data is captured correctly
         doApiOutpost(formData);
     }
 
@@ -102,7 +101,6 @@ export default function DialogOutpost({ openDialog, setOpenDialog, method, getOu
                         <FormHelperText error={!!errors.minGuards}>
                             {errors.minGuards && errors?.minGuards?.message}
                         </FormHelperText>
-                        {/* Add more TextFields and form fields here as needed */}
                     </DialogContent>
                     <DialogActions>
                         <Button type="button"

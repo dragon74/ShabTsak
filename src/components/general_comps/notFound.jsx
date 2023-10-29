@@ -1,6 +1,5 @@
-import { Box, Container, CssBaseline, Typography, Link as MuiLink  } from '@mui/material'
-import { Link } from 'react-router-dom'
-import ROUTES from "../../constants/routeConstants"
+import { Box, Container, CssBaseline, Typography  } from '@mui/material'
+import BackLink from './backLink'
 
 export default function NotFound() {
     return (
@@ -11,9 +10,9 @@ export default function NotFound() {
                     <Typography variant="h4" component="h2" >
                         עמוד לא נמצא 404!
                     </Typography>
-                    <MuiLink component={Link} to={ROUTES.HOME}>
+                    <BackLink>
                         חזרה לעמוד הבית
-                    </MuiLink>
+                    </BackLink>
                 </Box>
             </Container>
         </div>

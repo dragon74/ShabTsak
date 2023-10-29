@@ -1,34 +1,35 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
+import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import CampItem from "./campItem/campItem";
 
-import { CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Typography } from "@mui/material";
-import OutpostItem from "./outpostItem";
-import { useSearchParams } from "react-router-dom";
+CampList.propTypes = {
+    camps: PropTypes.array
+}
 
-const OutpostList = ({ outposts, getOutpostsByCampId }) => {
-    const [querys] = useSearchParams();
-
+function CampList({camps}) {
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
                 <Typography variant="h4" component="h2" mb={2}>
-                    רשימת עמדות {querys.get("campName")}
+                    רשימת בסיסים
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
+                                <TableCell align="center">#</TableCell>
                                 <TableCell align="center">שם</TableCell>
-                                <TableCell align="center">מינימום שומרים</TableCell>
-                                <TableCell align="center">רשימת משמרות</TableCell>
+                                <TableCell align="center">רשימת עמדות</TableCell>
+                                <TableCell align="center">רשימת שומרים</TableCell>
                                 <TableCell align="center">פעולות</TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {outposts.map((item, i) => {
+                            {camps.map((item, i) => {
                                 return (
-                                    <OutpostItem key={item.id} getOutpostsByCampId={getOutpostsByCampId} index={i} item={item} />
+                                    <CampItem key={item.id} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
@@ -39,4 +40,4 @@ const OutpostList = ({ outposts, getOutpostsByCampId }) => {
     )
 }
 
-export default OutpostList
+export default CampList

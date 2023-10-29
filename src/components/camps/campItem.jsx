@@ -31,7 +31,7 @@ const CampItem = ({ item, index, doApiCamps }) => {
           color="brown"
           variant="outlined"
           onClick={() => {
-            nav(ROUTES.GUARDS + "/camp/" + item.id + "?campName=" + item.name);
+            nav(ROUTES.GUARDS + "/camp/" + item.id);
           }}
         >
           שומרים

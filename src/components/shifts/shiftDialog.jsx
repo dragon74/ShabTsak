@@ -1,28 +1,30 @@
-/* eslint-disable react/prop-types */
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
+import PropTypes from 'prop-types';
+import { useForm } from "react-hook-form";
+import { useMemo } from "react";
+import { toast } from "react-toastify";
+import {  DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider, Select, MenuItem, Dialog } from "@mui/material";
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
-import { toast } from "react-toastify";
-import React, { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { CAMP_URL } from "../../constants/apiConstants";
+import { SHIFT_URL } from "../../constants/apiConstants";
 
-const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) => {
-    const {
-        register,
-        handleSubmit,
-        reset,
-        getValues,
-        setFocus,
-        formState: {
-            errors
-        } } = useForm({
+ShiftDialog.propTypes = {
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
+    doApiShifts: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+function ShiftDialog({ openDialog, setOpenDialog, method, doApiShifts, item }) {
+    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
+
+
             name: method === "PUT" ? item.name : "",
-            id: method === "PUT" ? item.id : null
-        },
+            ...(method === "PUT" && { id: item.id })
+        }
     });
-  
+
     const actionHebrew = useMemo(() => {
         if (method === "POST") return "הוסף";
         else if (method === "PUT") return "ערוך";
@@ -31,37 +33,25 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
 
     const doApiCamp = async (bodyFormData) => {
         try {
-            let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
-            // console.log(resp);
-            if (resp.status === "201" && method === "POST")
-                toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status === "200" && method === "PUT")
-                toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
+            let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
+            if (resp.status === 201 && method === "POST")
+                toast.success(`משמרת ${getValues('name')} נוספה בהצלחה`);
+            else if (resp.status === 200 && method === "PUT")
+                toast.success(`משמרת ${item.name} התעדכן בהצלחה`);
             else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-            doApiCamps();
+            doApiShifts();
             setOpenDialog(false);
             reset();
         } catch (err) {
-            console.error(`An error occurred while ${method} בסיס`, err);
+            console.error(`An error occurred while ${method} משמרת`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
 
     const onSubForm = (formData) => {
-        // Use the submitted form data to call your API function
-        console.log(formData); // Make sure the form data is captured correctly
         doApiCamp(formData);
     }
 
-    React.useEffect(() => {
-        let timeout;
-        if (openDialog) {
-            timeout = setTimeout(() => setFocus('name'), 0);
-        }
-        return () => {
-            if (timeout) clearTimeout(timeout)
-        };
-    }, [openDialog])
     return (
         <ThemeProvider theme={theme}>
             <Dialog
@@ -75,7 +65,7 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
                     }
                 }}
             >
-                <DialogTitle>{actionHebrew} בסיס {item ? item.name : ""}</DialogTitle>
+                <DialogTitle>{actionHebrew} משמרת {item ? item.name : ""}</DialogTitle>
                 <form onSubmit={handleSubmit(onSubForm)}>
                     <DialogContent style={{ padding: '20px' }}>
                         <TextField
@@ -85,6 +75,17 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
                             autoComplete="off"
                             label="שם"
                         />
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            {...register('fromHour', { required: { value: true, message: 'חובה למלא שם' }, minLength: { value: 2, message: "שם חייב להיות לפחות 2 אותיות'" }, maxLength: 99 })}
+                            value={"12:00"}
+                            label="Age"
+                        >
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                        </Select>
                         <FormHelperText error={!!errors.name}>
                             {errors.name && errors?.name?.message}
                         </FormHelperText>
@@ -102,6 +103,6 @@ const DialogCamp = ({ openDialog, setOpenDialog, method, doApiCamps, item={} }) 
             </Dialog>
         </ThemeProvider>
     );
-};
+}
 
-export default DialogCamp;
+export default ShiftDialog;

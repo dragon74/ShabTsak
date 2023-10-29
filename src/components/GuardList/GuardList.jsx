@@ -89,7 +89,7 @@ const GuardList = () => {
     // Name should be longer than 1 character, not be empty,
     // and shouldn't contain numbers or special characters
     const regex = /^[a-zA-Zא-ת\s]{2,}$/; // Hebrew characters are included and at least 2 characters long
-    return regex.test(name);
+    return name && regex.test(name.trim()); // Ensure name is not empty or just whitespace
   };
 
   const isValidPhone = (phone) => {

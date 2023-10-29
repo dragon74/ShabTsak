@@ -1,34 +1,37 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { IconButton, TableCell, TableRow, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteOutpost from "./deleteOutpost/deleteOutpost";
-import { useState } from "react";
-import DialogOutpost from "./dialogOutpost";
-import ROUTES from "../../constants/routeConstants";
-import { useNavigate } from "react-router-dom";
+import ROUTES from "../../../../constants/routeConstants";
+import ShiftItemDelete from "./shiftDeleteBtn/shiftDeleteBtn";
+import ShiftDialog from "../../shiftDialog";
 
-const OutpostItem = ({ getOutpostsByCampId, item }) => {
+ShiftItem.propTypes = {
+    doApiShifts: PropTypes.func.isRequired,
+    item: PropTypes.object
+}
+
+function ShiftItem({ doApiShifts, item }) {
 
     const nav = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
-  
+
     return (
         <TableRow>
-            <TableCell align="center">{item.name}</TableCell>
+            <TableCell align="center">{item.dayId}</TableCell>
             <TableCell align="center">{item.minGuards}</TableCell>
-
             <TableCell align="center">
                 <Button
                     color="orange"
                     variant="outlined"
                     onClick={() => {
-                        nav(ROUTES.SHIFTS + "/camp/" + item.id)
+                        nav(ROUTES.SHIFTS + "/outpost/" + item.id)
                     }}
                 >
                     משמרות
                 </Button>
             </TableCell>
-
             <TableCell
                 align="center"
                 sx={{
@@ -46,21 +49,18 @@ const OutpostItem = ({ getOutpostsByCampId, item }) => {
                 >
                     <EditIcon />
                 </IconButton>
-
-                {/* button delete Outpost */}
-                <DeleteOutpost item={item} getOutpostsByCampId={getOutpostsByCampId} />
+                {/* Outpost button delete */}
+                <ShiftItemDelete item={item} doApiShifts={doApiShifts} />
             </TableCell>
 
-            <DialogOutpost openDialog={openDialog}
+            <ShiftDialog openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
                 method={"PUT"}
-                getOutpostsByCampId={getOutpostsByCampId}
+                doApiShifts={doApiShifts}
                 item={item}
             />
-
-
         </TableRow>
     )
 }
 
-export default OutpostItem
+export default ShiftItem
