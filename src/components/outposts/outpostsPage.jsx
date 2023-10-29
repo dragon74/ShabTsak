@@ -10,7 +10,7 @@ import OutpostList from "./outpostList/outpostList";
 import OutpostDialog from "./outpostDialog";
 import BackLink from "../general_comps/backLink";
 import LoadingComp from "../general_comps/loadingComp";
-import AddOutpostBtn from "./addOutpostBtn/AddOutpostBtn";
+import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn.jsx";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
