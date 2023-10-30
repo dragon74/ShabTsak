@@ -41,6 +41,7 @@ export default function Login() {
 
 function LoginButton() {
     const { login } = useAuth();
+    console.log(import.meta.env);
     const handleLogin = useGoogleLogin({ onSuccess: ({ code }) => login(code), flow: "auth-code" })
     const darkMode = useDarkModeStore((store) => store.darkMode);
 
