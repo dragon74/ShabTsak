@@ -9,8 +9,6 @@ import { useAuth } from "../../hooks/useAuth.jsx";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
-    console.log('vite', import.meta.env);
-
     const clientID = React.useRef(import.meta.env.VITE_CLIENT_ID || "CLIENT_ID_MISSING")
     const { user } = useAuth();
 
