@@ -21,8 +21,8 @@ export const useAuth = () => {
         "use server"
         let { PROD: isProd, VITE_CLIENT_SECRET: clientSecret, VITE_CLIENT_ID: clientID } = import.meta.env;
         if (isProd) {
-            clientSecret = process.env.client_secret;
-            clientID = process.env.client_id;
+            clientSecret = process.env.CLIENT_SECRET;
+            clientID = process.env.CLIENT_ID;
         }
         try {
             const { data: credentials } = await axios.post(`https://oauth2.googleapis.com/token`, {
