@@ -10,7 +10,7 @@ const queryClient = new QueryClient();
 
 function App() {
     /*
-    While user state is undefined, the protected route will not render its children
+    If user state is undefined, the protected route will not render its children
     Instead, it will render null until user is set as null or a user object.
     */
     const [user, setUser] = React.useState(undefined);
