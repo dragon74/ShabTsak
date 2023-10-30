@@ -4,33 +4,25 @@ import ErrorBoundary from './services/errorBoundary ';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useAuth } from "./hooks/useAuth.jsx";
 import { AuthContext } from './context/AuthContext';
-import featuresSlice from "./features/featuresSlice"
-import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
 import './App.css';
 
 const queryClient = new QueryClient();
-const myStore = configureStore({
-  reducer: {
-    //  for darkMode and favorites
-    featuresSlice,
-  }
-})
 
 function App() {
-    const [user, setUser] = React.useState();
-    const {_user, ...auth} = useAuth();
+    /*
+    While user state is undefined, the protected route will not render its children
+    Instead, it will render null until user is set as null or a user object.
+    */
+    const [user, setUser] = React.useState(undefined);
+    const { _user, ...auth } = useAuth();
 
     return (
         <AuthContext.Provider value={{...auth, user, setUser}}>
-            <Provider store={myStore}>
-                <QueryClientProvider client={queryClient}>
-                    {/* Wrap the AppRoutes component with the ErrorBoundary */}
-                    <ErrorBoundary fallback={<p>Something went wrong</p>}>
-                        <AppRoutes/>
-                    </ErrorBoundary>
-                </QueryClientProvider>
-            </Provider>
+            <QueryClientProvider client={queryClient}>
+                <ErrorBoundary fallback={<p>Something went wrong</p>}>
+                    <AppRoutes/>
+                </ErrorBoundary>
+            </QueryClientProvider>
         </AuthContext.Provider>
     );
 }
