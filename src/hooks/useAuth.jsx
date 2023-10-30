@@ -19,13 +19,17 @@ export const useAuth = () => {
     }
     const login = async code => {
         "use server"
-
+        let { PROD: isProd, VITE_CLIENT_SECRET: clientSecret, VITE_CLIENT_ID: clientID } = import.meta.env;
+        if (isProd) {
+            clientSecret = process.env.client_secret;
+            clientID = process.env.client_id;
+        }
         try {
             const { data: credentials } = await axios.post(`https://oauth2.googleapis.com/token`, {
-                grant_type: import.meta.env.VITE_GRANT_TYPE,
-                redirect_uri: import.meta.env.VITE_REDIRECT_URI,
-                client_secret: import.meta.env.VITE_CLIENT_SECRET,
-                client_id: import.meta.env.VITE_CLIENT_ID,
+                grant_type: "authorization_code",
+                redirect_uri: isProd ? "https://shabtsak.top" : "http://localhost:5173",
+                client_secret: clientSecret,
+                client_id: clientID,
                 code,
             });
             const { data: user } = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo`, {

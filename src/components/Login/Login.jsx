@@ -29,7 +29,7 @@ export default function Login() {
                 }}>
                     <Typography variant="h1">ברוכים הבאים לשבצ״ק!</Typography>
                     <Typography variant="body2">כדי לצפות בשמירות ולבצע שינויים<br />יש להתחבר  </Typography>
-                    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID || 'CLIENT_ID_MISSING'}>
+                    <GoogleOAuthProvider clientId={import.meta.env.DEV ? import.meta.env.VITE_CLIENT_ID : process.env.client_id}>
                         <LoginButton />
                     </GoogleOAuthProvider>
                 </Box>
