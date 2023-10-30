@@ -9,7 +9,7 @@ import { useAuth } from "../../hooks/useAuth.jsx";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
-    const clientID = React.useRef(import.meta.env.PROD ? process.env.client_id : import.meta.env.VITE_CLIENT_ID)
+    const clientID = React.useRef(import.meta.env.VITE_CLIENT_ID || "CLIENT_ID_MISSING");
     const { user } = useAuth();
 
     if (user) {
