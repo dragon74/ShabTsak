@@ -33,7 +33,7 @@ export default function AppRoutes() {
             <Route path="*" element={<PrivateRoute><NotFound /></PrivateRoute>} />
             <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
             <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
-            <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID || "CLIENT_ID"}><Login /></GoogleOAuthProvider>} />
+            <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}><Login /></GoogleOAuthProvider>} />
         </Route>
       </Routes>
       <ToastContainer position="top-left" theme="colored" />
@@ -44,9 +44,16 @@ export default function AppRoutes() {
 
 
 function PrivateRoute({children}) {
-    const { user, firstLoad } = useAuth()
+    const { init, user } = useAuth();
 
-    if (firstLoad) return null;
+    React.useEffect(() => {
+        init();
+
+    }, [])
+
+    if (user === undefined) {
+        return null;
+    }
 
     if (!user) {
         return <Navigate to={'/login'} />;

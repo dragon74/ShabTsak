@@ -2,42 +2,17 @@ import React from 'react';
 import { Button, Box, Typography, Container } from "@mui/material";
 import { theme } from "../../services/theme.js";
 import { ThemeProvider } from "@mui/material/styles";
-import { useGoogleLogin } from '@react-oauth/google';
 import { Google } from "@mui/icons-material";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useDarkModeStore } from "../../services/useDarkModeStore.jsx";
 import { useAuth } from "../../hooks/useAuth.jsx";
+import { useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
-    const { login, test, user } = useAuth();
-    const darkMode = useDarkModeStore((store) => store.darkMode);
-    const navigate = useNavigate();
-    const handleLogin = useGoogleLogin({ onSuccess, onNonOAuthError });
+    const { user } = useAuth();
+
     if (user) {
         return <Navigate to="/" />;
-    }
-
-    async function onSuccess({ access_token: firebaseToken }) {
-        try {
-            const success = await login(firebaseToken);
-            if (success) {
-                navigate('/');
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-    async function onNonOAuthError() {
-        try {
-            console.log("Failed login, but our bouncer is nice today");
-            const success = test();
-            if (success) {
-                navigate('/');
-            }
-
-        } catch (err) {
-            console.log(err)
-        }
     }
 
     return (
@@ -54,13 +29,22 @@ export default function Login() {
                 }}>
                     <Typography variant="h1">ברוכים הבאים לשבצ״ק!</Typography>
                     <Typography variant="body2">כדי לצפות בשמירות ולבצע שינויים<br />יש להתחבר  </Typography>
-                    <Button onClick={() => handleLogin()} variant="outlined" sx={{...darkMode ? { color: 'white' } : {}}}>
-                        <Google sx={{ mr: 0.5 }} />
-                        <Typography variant="link">המשך עם גוגל</Typography>
-                    </Button>
-
+                    <LoginButton />
                 </Box>
             </Container>
         </ThemeProvider>
+    )
+}
+
+function LoginButton() {
+    const { login } = useAuth();
+    const handleLogin = useGoogleLogin({ onSuccess: ({ code }) => login(code), flow: "auth-code" })
+    const darkMode = useDarkModeStore((store) => store.darkMode);
+
+    return (
+        <Button onClick={() => handleLogin()} variant="outlined" sx={{...darkMode ? { color: 'white' } : {}}}>
+            <Google sx={{ mr: 0.5 }} />
+            <Typography variant="link">המשך עם גוגל</Typography>
+        </Button>
     )
 }

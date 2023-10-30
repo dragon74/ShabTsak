@@ -1,21 +1,39 @@
-import React from "react";
 import axios from 'axios';
 import { useUser } from "./useUser";
 import { useLocalStorage } from "./useLocalStorage";
 import { TOKEN_NAME } from "../services/apiService";
-import { mockUserData } from "../constants/mockUserData";
 import { normalizeUserData } from "../lib/utils/normalizeUserData";
+
 export const useAuth = () => {
-    const [firstLoad, setFirstLoad] = React.useState(true);
-    const { user, addUser, removeUser, authUserToken, createUser } = useUser();
+    const { user, addUser, removeUser } = useUser();
     const { getItem } = useLocalStorage();
 
-    const login = async firebaseToken => {
+    const init = () => {
+        const token = getItem(TOKEN_NAME);
+        if (token?.user && token?.credentials?.id_token) {
+            addUser(token.user);
+            return;
+        }
+
+        removeUser();
+    }
+    const login = async code => {
+        "use server"
+
         try {
-            const { data } = await getFirebaseUser(firebaseToken);
-            const firebaseUser = normalizeUserData(data);
-            const { user, token } = await createUser(firebaseUser);
-            addUser(user, token);
+            const { data: credentials } = await axios.post(`https://oauth2.googleapis.com/token`, {
+                grant_type: import.meta.env.VITE_GRANT_TYPE,
+                redirect_uri: import.meta.env.VITE_REDIRECT_URI,
+                client_secret: import.meta.env.VITE_CLIENT_SECRET,
+                client_id: import.meta.env.VITE_CLIENT_ID,
+                code,
+            });
+            const { data: user } = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo`, {
+                headers: {
+                    "Authorization": `Bearer ${credentials.access_token}`
+                }
+            });
+            await addUser(normalizeUserData(user), credentials);
             return true;
 
         } catch (err) {
@@ -23,48 +41,10 @@ export const useAuth = () => {
             return false;
         }
     };
-    const getFirebaseUser = async firebaseToken => await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
-        headers: {
-            "Authorization": `Bearer ${firebaseToken}`
-        }
-    });
-
-    const test = async () => {
-        const mockFirebaseUser = normalizeUserData(mockUserData);
-        const { user, token } = await createUser(mockFirebaseUser);
-        addUser(user, token);
-        return true;
-    }
-
-    const init = async () => {
-        try {
-            const userToken = getItem(TOKEN_NAME);
-            if (!userToken) {
-                return;
-            }
-            /*
-            TODO: Create user by sending firebase user details to our server, returns user and user token.
-             Example: const { data, status } = await doApi...()?user=true
-             if (status === 200) { ... }
-             */
-            return authUserToken(userToken);
-
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     const logout = () => {
         removeUser();
     };
 
-    React.useEffect(() => {
-        if (!user) {
-            init().then()
-        }
-        setFirstLoad(false);
-
-    }, [])
-
-    return { user, login, logout, test, init, firstLoad };
+    return { user, login, logout, init };
 };
