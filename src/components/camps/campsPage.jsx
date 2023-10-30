@@ -41,7 +41,7 @@ const CampsPage = () => {
         {isLoading ?
           <LoadingComp />
           :
-          (camps.length == 0 ?
+          (camps?.length === 0 ?
             <Typography variant="h4" component="h2" my={2}>אין בסיסים עדיין</Typography>
             : <CampList camps={camps} />)}
 

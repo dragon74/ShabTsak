@@ -22,11 +22,9 @@ const ShiftsPage = () => {
 
   async function doApiShifts() {
     let url = SHIFT_URL + "/outpost/" + params["id"];
-    console.log(url);
     try {
       let resp = await doApiGet(url);
       if (resp.status === 200) {
-        console.log(resp.data);
         return resp.data;
       }
       else toast.error(resp.message);
@@ -50,7 +48,7 @@ const ShiftsPage = () => {
 
         {isLoading ?
           <LoadingComp />
-          : shifts.length == 0 ?
+          : shifts?.length === 0 ?
             <Typography variant="h4" component="h2" my={2}>אין משמרות עדיין</Typography>
             : <ShiftList shifts={shifts} />}
 

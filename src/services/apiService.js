@@ -3,9 +3,9 @@ import axios from "axios";
 export const TOKEN_NAME = "FOODS_TOKEN";
 
 const getIdTokenFromLocalStorage = () => {
-  const { credentials } = JSON.parse(localStorage[TOKEN_NAME]);
-  console.log(credentials);
-  return `${credentials.token_type} ${credentials.id_token}`;
+  const token = JSON.parse(localStorage[TOKEN_NAME]);
+  if (!token?.credentials?.token_type || !token?.credentials?.id_token) return;
+  return `${token.credentials.token_type} ${token.credentials.id_token}`;
 }
 
 export const doApiGet = async (_url, params = {}) => {
