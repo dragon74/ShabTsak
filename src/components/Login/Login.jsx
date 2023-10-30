@@ -6,7 +6,7 @@ import { Google } from "@mui/icons-material";
 import { Navigate } from 'react-router-dom';
 import { useDarkModeStore } from "../../services/useDarkModeStore.jsx";
 import { useAuth } from "../../hooks/useAuth.jsx";
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
     const { user } = useAuth();
@@ -29,7 +29,9 @@ export default function Login() {
                 }}>
                     <Typography variant="h1">ברוכים הבאים לשבצ״ק!</Typography>
                     <Typography variant="body2">כדי לצפות בשמירות ולבצע שינויים<br />יש להתחבר  </Typography>
-                    <LoginButton />
+                    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
+                        <LoginButton />
+                    </GoogleOAuthProvider>
                 </Box>
             </Container>
         </ThemeProvider>

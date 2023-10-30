@@ -15,7 +15,6 @@ import OutpostsPage from "./components/outposts/outpostsPage";
 import PrivacyPage from "./components/privacy/privacyPage";
 import ServiceTermsPage from "./components/service_terms/serviceTermsPage";
 import ShiftsPage from "./components/shifts/shiftsPage";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Navigate } from 'react-router-dom';
 import { useAuth } from "./hooks/useAuth.jsx";
 
@@ -33,7 +32,7 @@ export default function AppRoutes() {
             <Route path="*" element={<PrivateRoute><NotFound /></PrivateRoute>} />
             <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
             <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
-            <Route path={ROUTES.LOGIN} element={<GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}><Login /></GoogleOAuthProvider>} />
+            <Route path={ROUTES.LOGIN} element={<Login />} />
         </Route>
       </Routes>
       <ToastContainer position="top-left" theme="colored" />
