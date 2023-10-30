@@ -1,9 +1,9 @@
 import React from "react";
-import { Card, CardContent, Grid, IconButton, ListItemText, Avatar, CardActions } from "@mui/material";
+import { Card, CardContent, Grid, IconButton, ListItemText, Avatar, CardActions , Chip, CardHeader } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getGravatarUrl } from "./utils";
-import { Chip, CardHeader } from "@mui/material";
+
 
 const StatusChip = ({ shouldBeAllocated }) => (shouldBeAllocated ? <Chip label="משתתף" color="primary" /> : <Chip label="לא משתתף" color="secondary" />);
 

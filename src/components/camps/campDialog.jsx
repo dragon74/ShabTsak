@@ -1,32 +1,28 @@
+import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
+import { useQueryClient } from "react-query";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "../../services/theme";
 import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { OUTPOST_URL } from "../../constants/apiConstants";
-import { useParams } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { CAMP_URL } from "../../constants/apiConstants";
 
-OutpostDialog.propTypes = {
+CampDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
     method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
     item: PropTypes.object
 }
 
-export default function OutpostDialog({ openDialog, setOpenDialog, method, item = {} }) {
+function CampDialog({ openDialog, setOpenDialog, method,  item }) {
     // Access the client
     const queryClient = useQueryClient();
 
-    const params = useParams();
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            ...(method === "PUT" && { id: item.id }),
-            campId: params["id"],
-            minGuards: item.minGuards || '',
-            name: item.name || ''
+            name: method === "PUT" ? item.name : "",
+            ...(method === "PUT" && { id: item.id })
         }
     });
 
@@ -36,33 +32,33 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
         else return method;
     }, [method]);
 
-    const doApiOutpost = async (bodyFormData) => {
+    const doApiCamp = async (bodyFormData) => {
         try {
-            let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
-            console.log(resp);
+            let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
             if (resp.status === 201 && method === "POST")
-                toast.success(`עמדה ${getValues('name')} נוסף בהצלחה`);
+                toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
             else if (resp.status === 200 && method === "PUT")
-                toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
-            else toast.error(resp.message);
-            queryClient.invalidateQueries('outposts')
+                toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
+            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+            //instead of doApiCamps
+            queryClient.invalidateQueries('camps')
             setOpenDialog(false);
             reset();
         } catch (err) {
-            console.error(`An error occurred while ${method}ing the עמדה:`, err);
+            console.error(`An error occurred while ${method} בסיס`, err);
             toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         }
     }
 
     const onSubForm = (formData) => {
-        doApiOutpost(formData);
+        doApiCamp(formData);
     }
 
     return (
         <ThemeProvider theme={theme}>
             <Dialog
-                open={openDialog}
                 onClose={() => setOpenDialog(false)}
+                open={openDialog}
                 PaperProps={{
                     style: {
                         minWidth: '300px', // Set your minimum width here
@@ -71,7 +67,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                     }
                 }}
             >
-                <DialogTitle>{actionHebrew} עמדה {item.name}</DialogTitle>
+                <DialogTitle>{actionHebrew} בסיס {item ? item.name : ""}</DialogTitle>
                 <form onSubmit={handleSubmit(onSubForm)}>
                     <DialogContent style={{ padding: '20px' }}>
                         <TextField
@@ -84,23 +80,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                         <FormHelperText error={!!errors.name}>
                             {errors.name && errors?.name?.message}
                         </FormHelperText>
-
-                        <TextField
-                            {...register('minGuards', {
-                                required:
-                                    { value: true, message: 'חובה למלא כמה שומרים בעמדה' },
-                                min: { value: 2, message: "מנימום 2 שומרים בעמדה" },
-                                max: { value: 10, message: "מקסימום 10 שומרים בעמדה" }
-                            })}
-                            color="primary"
-                            size="small"
-                            autoComplete="off"
-                            label="מינימום שומרים בעמדה"
-                            sx={{ marginTop: "8px" }}
-                        />
-                        <FormHelperText error={!!errors.minGuards}>
-                            {errors.minGuards && errors?.minGuards?.message}
-                        </FormHelperText>
+                        {/* Add more TextFields and form fields here as needed */}
                     </DialogContent>
                     <DialogActions>
                         <Button type="button"
@@ -108,7 +88,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                             style={{ marginLeft: '8px' }}>
                             ביטול
                         </Button>
-                        <Button type="submit" autoFocus>{actionHebrew}</Button>
+                        <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
@@ -116,4 +96,4 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
     );
 }
 
-
+export default CampDialog;

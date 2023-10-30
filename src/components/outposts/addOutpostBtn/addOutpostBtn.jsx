@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 import { Button, Box } from "@mui/material";
 
-export default function AddShiftBtn ({ setOpenDialog })  {
+AddOutpostBtn.propTypes = {
+    setOpenDialog: PropTypes.func.isRequired,
+}
+
+export default function AddOutpostBtn ({ setOpenDialog }) {
     return (
         <Box  style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
             <Button type="button"
@@ -11,13 +15,8 @@ export default function AddShiftBtn ({ setOpenDialog })  {
                     setOpenDialog(true);
                 }}
             >
-                הוסף משמרת
+                הוסף עמדה
             </Button>
         </Box>
     )
 }
-
-AddShiftBtn.propTypes = {
-    setOpenDialog: PropTypes.func.isRequired,
-}
-

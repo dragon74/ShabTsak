@@ -1,20 +1,16 @@
 import PropTypes from 'prop-types';
-import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import CampItem from "./campItem/campItem";
 
 CampList.propTypes = {
-    camps: PropTypes.array.isRequired,
-    doApiCamps: PropTypes.func.isRequired,
+    camps: PropTypes.array
 }
 
-function CampList ({ camps, doApiCamps })  {
+function CampList({camps}) {
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-                <Typography variant="h4" component="h2" mb={2}>
-                    רשימת בסיסים
-                </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
@@ -30,7 +26,7 @@ function CampList ({ camps, doApiCamps })  {
                         <TableBody>
                             {camps.map((item, i) => {
                                 return (
-                                    <CampItem key={item.id} doApiCamps={doApiCamps} index={i} item={item} />
+                                    <CampItem key={item.id} index={i} item={item} />
                                 )
                             })}
                         </TableBody>

@@ -1,47 +1,46 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
-import { TableCell, TableRow, Button } from "@mui/material";
+import {  TableCell, TableRow, Button } from "@mui/material";
 import ROUTES from "../../../../constants/routeConstants";
-import OutpostItemActions from './outpostItemActions/outpostItemAction';
+import ShiftItemActions from './shiftItemActions/shiftItemActions';
 
-OutpostItem.propTypes = {
-    item: PropTypes.object.isRequired
+ShiftItem.propTypes = {
+    item: PropTypes.object
 }
 
-function OutpostItem({ item }) {
+export default function ShiftItem({ item }) {
+
     const nav = useNavigate();
 
     return (
         <TableRow>
-            <TableCell align="center">{item.name}</TableCell>
+            <TableCell align="center">{item.dayId}</TableCell>
             <TableCell align="center">{item.minGuards}</TableCell>
-
             <TableCell align="center">
                 <Button
                     color="orange"
                     variant="outlined"
                     onClick={() => {
-                        nav(`${ROUTES.SHIFTS}/outpost/${item.id}/${item.name}`)
+                        nav(ROUTES.SHIFTS + "/outpost/" + item.id)
                     }}
                 >
                     משמרות
                 </Button>
             </TableCell>
-
-            {/* action btns */}
+            
             <TableCell
                 align="center"
                 sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
                 }}
             >
-              <OutpostItemActions item={item}/>
-            </TableCell>
 
+              <ShiftItemActions item={item}/>
+
+            </TableCell>
         </TableRow>
     )
 }
 
-export default OutpostItem

@@ -1,51 +1,66 @@
-// import { useEffect, useState} from "react";
-// import { useParams } from "react-router-dom";
-import { Container } from "@mui/material"
-// import { toast } from "react-toastify";
-// import { SHIFT_URL } from "../../constants/apiConstants";
-// import { doApiGet } from "../../services/apiService";
-// import AddShiftBtn from "./addShift/AddShiftBtn";
-// import DialogOutpost from "./dialogOutpost";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { toast } from "react-toastify";
+import { Container, Typography } from "@mui/material"
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { SHIFT_URL } from "../../constants/apiConstants";
+import { doApiGet } from "../../services/apiService";
+import AddShiftBtn from "./addShiftBtn/addShiftBtn";
+import DialogShift from "./shiftDialog";
+import ShiftList from "./shiftList/shiftList";
+import BackLink from "../general_comps/backLink";
+import LoadingComp from "../general_comps/loadingComp";
 
 const ShiftsPage = () => {
-  // const [openDialog, setOpenDialog] = useState(false);
-  // const [outposts, setOutposts] = useState([]);
-  // const params = useParams();
+  const params = useParams();
+  const [openDialog, setOpenDialog] = useState(false);
+  const { isLoading, data: shifts } = useQuery(['shifts', params["id"]], doApiShifts);
 
-  // useEffect(() => {
-  //   doApiShifts()
-  // }, [])
+  // console.log(params);
+  // console.log({ isLoading, isError, error, shifts });
 
-  // const doApiShifts = async () => {
-  //   let url = SHIFT_URL +"/"+ params["id"];
-  //   // console.log(url);
-  //   try {
-  //     let resp = await doApiGet(url);
-  //     if (resp.status === 200)
-  //       setOutposts(resp.data)
-  //     else toast.error(resp.message);
-  //   }
-  //   catch (err) {
-  //     console.log(err);
-  //     toast.error("יש בעיה בבקשה נסה מאוחר יותר");
-  //   }
-  // }
+  async function doApiShifts() {
+    let url = SHIFT_URL + "/outpost/" + params["id"];
+    console.log(url);
+    try {
+      let resp = await doApiGet(url);
+      if (resp.status === 200) {
+        console.log(resp.data);
+        return resp.data;
+      }
+      else toast.error(resp.message);
+    }
+    catch (err) {
+      console.log(err);
+      toast.error("יש בעיה בבקשה נסה מאוחר יותר");
+    }
+  }
 
   return (
     <div className="shifts-page">
       <Container fixed >
-      shiftList
+
         {/* btn-add Shift */}
-        {/* <AddShiftBtn setOpenDialog={setOpenDialog} /> */}
+        <AddShiftBtn setOpenDialog={setOpenDialog} />
 
-        {/* <OutpostList outposts={outposts} doApiOutposts={doApiShifts}  /> */}
+        <Typography variant="h4" component="h2" mb={2}>
+          רשימת משמרות {params["name"]}
+        </Typography>
 
-        {/* 
-        <DialogOutpost openDialog={openDialog}
+        {isLoading ?
+          <LoadingComp />
+          : shifts.length == 0 ?
+            <Typography variant="h4" component="h2" my={2}>אין משמרות עדיין</Typography>
+            : <ShiftList shifts={shifts} />}
+
+
+        <DialogShift openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
-          doApiOutposts={doApiShifts}
-        />  */}
+          doApiShifts={doApiShifts}
+        />
+        <BackLink place="end" icon={<ArrowBackIosIcon />}>חזרה לרשימת העמדות</BackLink>
 
       </Container>
     </div>

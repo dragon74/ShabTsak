@@ -1,23 +1,31 @@
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { Link } from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 import { ChevronRightSharp } from "@mui/icons-material";
 
-export default function BackLink({ to, children }) {
+export default function BackLink({ place, children, icon }) {
+    const nav = useNavigate()
     return (
-        <Link component={RouterLink} underline="hover" 
-            sx={{ textUnderlineOffset: 3.5, display: "flex",
-            alignItems: "center", px: .5, gap: .5
-         }} 
-            size="small" 
-            to={to}>
-            <ChevronRightSharp sx={{ fontSize: 18 }} />
-            <span>{children}</span>
-        </Link>
+        <Box display="flex" justifyContent={place} marginTop={3}>
+            <Link component={Button} underline="hover"
+                aria-label={`Go back to ${place}`}
+                sx={{
+                    textUnderlineOffset: 3.5, display: "flex",
+                    alignItems: "center", px: .5, gap: .5
+                }}
+                size="small"
+                onClick={() => nav(-1)}
+            >
+                <span style={{ order: icon ? 0 : 1 }}>{children}</span>
+                {icon ? icon : <ChevronRightSharp sx={{ fontSize: 18 }} />}
+            </Link>
+        </Box>
     )
 }
 
 BackLink.propTypes = {
     to: PropTypes.string,
-    children: PropTypes.node
+    place: PropTypes.string,
+    children: PropTypes.node,
+    icon: PropTypes.element
 }
