@@ -1,18 +1,21 @@
-/* eslint-disable no-useless-catch */
 import axios from "axios";
 
 export const TOKEN_NAME = "FOODS_TOKEN";
 
+const getIdTokenFromLocalStorage = () => {
+  const { credentials } = JSON.parse(localStorage[TOKEN_NAME]);
+  console.log(credentials);
+  return `${credentials.token_type} ${credentials.id_token}`;
+}
 
 export const doApiGet = async (_url, params = {}) => {
   try {
-    let resp = await axios.get(_url, {
+    return await axios.get(_url, {
       params,
       headers: {
-        "x-api-key": localStorage[TOKEN_NAME],
+        "Authorization": getIdTokenFromLocalStorage(),
       },
     });
-    return resp;
   } catch (err) {
     // throw-> in promise asks recognize this as error return
     throw err;
@@ -22,16 +25,14 @@ export const doApiGet = async (_url, params = {}) => {
 // For Post,delete, put, patch
 export const doApiMethod = async (_url, _method, _body = {}) => {
   try {
-    // console.log(_body);
-    let resp = await axios({
+    return await axios({
       url: _url,
       method: _method,
       data: _body,
-      // headers: {
-      //   "x-api-key": localStorage[TOKEN_NAME],
-      // },
+      headers: {
+        "Authorization": getIdTokenFromLocalStorage(),
+      },
     });
-    return resp;
   } catch (err) {
     throw err;
   }
@@ -39,13 +40,11 @@ export const doApiMethod = async (_url, _method, _body = {}) => {
 
 export const doApiMethodSignUp = async (_url, _method, _body = {}) => {
   try {
-    // console.log(_body);
-    let resp = await axios({
+    return await axios({
       url: _url,
       method: _method,
       data: _body,
     });
-    return resp;
   } catch (err) {
     throw err;
   }

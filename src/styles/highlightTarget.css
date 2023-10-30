@@ -1,0 +1,9 @@
+@keyframes highlight {
+    0%, 70% {
+        background: #ffd50050;
+    }
+}
+
+.highlight-box:target .highlight {
+    animation: highlight 1.2s ease-in 200ms;
+}

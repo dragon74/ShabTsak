@@ -12,6 +12,10 @@ export const cacheRtl = createCache({
 export const theme = responsiveFontSizes(createTheme({
     typography: {
         fontFamily: 'inherit',
+        h1: {
+            fontSize: 32,
+            fontWeight: 400
+        },
         h2: {
             fontSize: '3rem',
             '@media (min-width:600px)': {
@@ -25,6 +29,18 @@ export const theme = responsiveFontSizes(createTheme({
                 fontSize: '1.5rem'
             },
             fontWeight: 700
+        },
+        h4: {
+            fontSize: '1rem',
+            fontWeight: 400,
+            textUnderlineOffset: 2.5,
+            textDecoration: 'underline'
+        },
+        h5: {
+            fontSize: '1rem'
+        },
+        strong: {
+            fontWeight: 500,
         }
     },
     palette: {
@@ -63,5 +79,15 @@ export const theme = responsiveFontSizes(createTheme({
         smallTextField: {
             width: '50%', // You can adjust the width to make it smaller
         },
-    }
+    },
+    components: {
+        MuiLink: {
+            defaultProps: {
+                underline: "hover",
+                sx: {
+                    textUnderlineOffset: 2.5,
+                },
+            }
+        }
+    },
 }));
