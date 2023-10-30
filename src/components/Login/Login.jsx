@@ -9,7 +9,7 @@ import { useAuth } from "../../hooks/useAuth.jsx";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
-    const clientID = React.useRef(import.meta.env.VITE_CLIENT_ID || "CLIENT_ID_MISSING")
+    const clientID = React.useRef(import.meta.env.VITE_CLIENT_ID || "CLIENT_ID_MISSING");
     const { user } = useAuth();
 
     if (user) {
@@ -41,7 +41,6 @@ export default function Login() {
 
 function LoginButton() {
     const { login } = useAuth();
-    console.log(import.meta.env);
     const handleLogin = useGoogleLogin({ onSuccess: ({ code }) => login(code), flow: "auth-code" })
     const darkMode = useDarkModeStore((store) => store.darkMode);
 
