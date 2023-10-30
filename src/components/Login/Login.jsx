@@ -9,6 +9,7 @@ import { useAuth } from "../../hooks/useAuth.jsx";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
+    const clientID = React.useRef(import.meta.env.PROD ? process.env.client_id : import.meta.env.VITE_CLIENT_ID)
     const { user } = useAuth();
 
     if (user) {
@@ -29,7 +30,7 @@ export default function Login() {
                 }}>
                     <Typography variant="h1">ברוכים הבאים לשבצ״ק!</Typography>
                     <Typography variant="body2">כדי לצפות בשמירות ולבצע שינויים<br />יש להתחבר  </Typography>
-                    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID || 'CLIENT_ID_MISSING'}>
+                    <GoogleOAuthProvider clientId={clientID.current}>
                         <LoginButton />
                     </GoogleOAuthProvider>
                 </Box>
