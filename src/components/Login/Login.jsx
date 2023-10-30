@@ -9,7 +9,10 @@ import { useAuth } from "../../hooks/useAuth.jsx";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
-    const clientID = React.useRef(import.meta.env.PROD ? process.env.CLIENT_ID : import.meta.env.VITE_CLIENT_ID)
+    console.log('process', process.env);
+    console.log('vite', import.meta.env);
+
+    const clientID = React.useRef(import.meta.env.PROD ? import.meta.env.CLIENT_ID : import.meta.env.VITE_CLIENT_ID)
     const { user } = useAuth();
 
     if (user) {
