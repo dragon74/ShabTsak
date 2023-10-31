@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, Datepicker, setOptions, Popup, Button, Input, Select, formatDate, getJson, localeHe } from '@mobiscroll/react';
+import { getGuardsByCampId } from '../../services/GuardService';
+import { useQuery } from "react-query";
 
 setOptions({
     locale: localeHe,
@@ -43,14 +45,30 @@ const responsivePopup = {
 
 function ShiftSchedule() {
     const [shifts, setShifts] = useState(defaultShifts);
-    const [guards, setGuards] = useState(initGuards);
     const [headerText, setHeader] = useState('');
     const [isEdit, setEdit] = useState(false);
     const [tempShift, setTempShift] = useState(null);
     const [shiftDate, setDate] = useState([]);
     const [isOpen, setOpen] = useState(false);
     const [guardName, setGuardName] = useState(null);
+    const [campId, setCampId] = useState(1);
 
+    const colors = [
+        'red', 'green', 'blue', 'yellow', 'orange', 'purple', 'navy', 'maroon', 'olive', 'silver'
+      ];
+
+    const { data: guards } = useQuery(["guardsByCampId", campId], getGuards);
+
+    function getGuards() {
+        return getGuardsByCampId(campId)
+                .then((res) => {
+                    return res.map((g) => ({
+                        value: g.id,
+                        text: g.name,
+                        color: colors[g.id%10]
+                      }));
+                })
+    }
 
     const view = useMemo(() => {
         return {
@@ -204,12 +222,6 @@ function ShiftSchedule() {
             }];
         }
     }, [isEdit, saveShift]);
-    
-    // useEffect(() => {
-    //     getJson('https://trial.mobiscroll.com/timetable-events/', (events) => {
-    //         setEvents(events);
-    //     }, 'jsonp');
-    // }, []);
 
     const myCustomShift = useCallback((args) => {
         return <div>
