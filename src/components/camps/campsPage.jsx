@@ -5,13 +5,18 @@ import CampDialog from "./campDialog";
 import CampList from "./campList/campList";
 import AddCampBtn from "./addCampBtn/addCampBtn";
 import LoadingComp from "../general_comps/loadingComp";
-import {getCamps} from "@/services/CampService";
+import { getCamps } from "@/services/CampService";
 
 const CampsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
-  const { isLoading, data: camps } = useQuery('camps', getCamps)
+  // const { isLoading, data: camps } = useQuery('camps', getCamps)
 
+  const { isLoading, data: camps } = useQuery({
+    queryFn: getCamps,
+    queryKey: ['camps'],
+    // staleTime: Infinity
+  });
 
   return (
     <div className="camps-page">
