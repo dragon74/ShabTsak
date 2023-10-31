@@ -14,7 +14,7 @@ export async function getCamps() {
     }
 }
 
-export async function addEditCamp(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+export async function postOrPutCamp(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
     try {
         let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
@@ -22,7 +22,7 @@ export async function addEditCamp(bodyFormData, method, getValues, item, reset, 
         else if (resp.status === 200 && method === "PUT")
             toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-        //instead of doApiCamps
+        //  clear the camp query 
         queryClient.invalidateQueries('camps')
         setOpenDialog(false);
         reset();
