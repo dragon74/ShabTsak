@@ -46,14 +46,14 @@ const OutpostsPage = () => {
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
-        <Typography variant="h4" component="h2" mb={2}>
+        <Typography variant="h3" component="h2" mb={2}>
           רשימת עמדות {params["name"]}
         </Typography>
 
         {isLoading ?
           <LoadingComp />
           : outposts.length === 0 ?
-            <Typography variant="h6" component="h2" my={2}>אין בסיסים עדיין</Typography>
+            <Typography variant="h5" component="h2" my={2}>אין בסיסים עדיין</Typography>
             : <OutpostList outposts={outposts} />}
 
 

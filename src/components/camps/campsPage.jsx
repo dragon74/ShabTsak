@@ -34,7 +34,7 @@ const CampsPage = () => {
         {/* btn-add camp */}
         <AddCampBtn setOpenDialog={setOpenDialog} />
 
-        <Typography variant="h4" component="h2" mb={2}>
+        <Typography variant="h3" component="h2" mb={2}>
           רשימת בסיסים
         </Typography>
 
@@ -42,7 +42,7 @@ const CampsPage = () => {
           <LoadingComp />
           :
           (camps?.length === 0 ?
-            <Typography variant="h4" component="h2" my={2}>אין בסיסים עדיין</Typography>
+            <Typography variant="h5" component="h2" my={2}>אין בסיסים עדיין</Typography>
             : <CampList camps={camps} />)}
 
 

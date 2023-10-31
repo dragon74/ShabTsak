@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
 import { useQueryClient } from "react-query";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
-import { theme } from "../../services/theme";
+import { theme } from "@/theme/theme";
 import { doApiMethod } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { useMemo } from "react";

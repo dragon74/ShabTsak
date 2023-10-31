@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useQueryClient } from 'react-query';
 import { toast } from "react-toastify";
 import {  DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider, Select, MenuItem, Dialog } from "@mui/material";
-import { theme } from "../../services/theme";
+import { theme } from "@/theme/theme";
 import { doApiMethod } from "../../services/apiService";
 import { SHIFT_URL } from "../../constants/apiConstants";
 
