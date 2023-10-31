@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Box, Typography, Container } from "@mui/material";
-import { theme } from "../../services/theme.js";
+import { theme } from "@/theme/theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Google } from "@mui/icons-material";
 import { Navigate } from 'react-router-dom';
-import { useDarkModeStore } from "../../services/useDarkModeStore.jsx";
+import { useDarkModeStore } from "@/theme/useDarkModeStore";
 import { useAuth } from "../../hooks/useAuth.jsx";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 

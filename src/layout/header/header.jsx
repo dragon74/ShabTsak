@@ -14,13 +14,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { ThemeProvider } from '@mui/material/styles';
-import { theme } from "../../services/theme";
-import Logo from '../../components/general_comps/logo';
+import { theme } from "@/theme/theme";
+import Logo from 'components/general_comps/logo';
 import srcImg from '/images/man.png';
 import { toast } from 'react-toastify';
-import ROUTES from '../../constants/routeConstants';
-import DialogLogOut from '../../components/general_comps/dialogs/dialogLogOut';
-import {useDarkModeStore} from "../../services/useDarkModeStore.jsx";
+import ROUTES from '@/constants/routeConstants';
+import DialogLogOut from 'components/general_comps/dialogs/dialogLogOut';
+import {useDarkModeStore} from "@/theme/useDarkModeStore.jsx";
 import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from "../../hooks/useAuth.jsx";
 

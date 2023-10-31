@@ -22,18 +22,18 @@ export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-          <Route path={ROUTES.HOME} element={<Layout />}>
-            <Route index element={<PrivateRoute><CampsPage /></PrivateRoute>} />
-            <Route path={ROUTES.SCHEDULE} element={<PrivateRoute><ShiftSchedule /></PrivateRoute>} />
-            <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`} element={<PrivateRoute><OutpostsPage /></PrivateRoute>} />
-            <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`} element={<PrivateRoute><ShiftsPage /></PrivateRoute>} />
-            <Route path={`${ROUTES.GUARDS}${ROUTES.CAMP}/:id/:name`} element={<PrivateRoute><GuardList /></PrivateRoute>} />
-            <Route path={ROUTES.LIMITS} element={<PrivateRoute><LimitsPage /></PrivateRoute>} />
-            <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
-            <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path={ROUTES.LOGIN} element={<Login />} />
-          </Route>
+        <Route path={ROUTES.HOME} element={<Layout />}>
+          <Route index element={<PrivateRoute><CampsPage /></PrivateRoute>} />
+          <Route path={ROUTES.SCHEDULE} element={<PrivateRoute><ShiftSchedule /></PrivateRoute>} />
+          <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`} element={<PrivateRoute><OutpostsPage /></PrivateRoute>} />
+          <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`} element={<PrivateRoute><ShiftsPage /></PrivateRoute>} />
+          <Route path={`${ROUTES.GUARDS}${ROUTES.CAMP}/:id/:name`} element={<PrivateRoute><GuardList /></PrivateRoute>} />
+          <Route path={ROUTES.LIMITS} element={<PrivateRoute><LimitsPage /></PrivateRoute>} />
+          <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
+          <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path={ROUTES.LOGIN} element={<Login />} />
+        </Route>
       </Routes>
       <ToastContainer position="top-left" theme="colored" />
     </Router>
@@ -42,22 +42,22 @@ export default function AppRoutes() {
 
 
 
-function PrivateRoute({children}) {
-    const { init, user } = useAuth();
+function PrivateRoute({ children }) {
+  const { init, user } = useAuth();
 
-    React.useEffect(() => {
-        init();
+  React.useEffect(() => {
+    init();
 
-    }, [])
+  }, [])
 
-    if (user === undefined) {
-        return null;
-    }
+  if (user === undefined) {
+    return null;
+  }
 
-    if (!user) {
-        return <Navigate to={'/login'} />;
-    }
+  if (!user) {
+    return <Navigate to={'/login'} />;
+  }
 
-    return children;
+  return children;
 }
 
