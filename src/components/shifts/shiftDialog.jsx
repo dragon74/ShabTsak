@@ -58,6 +58,19 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         console.log(formData);
     }
 
+    const hourArr = Array.from({ length: 24 }, (_, index) => {
+        const hour = (index + 1).toString().padStart(2, '0');
+        return `${hour}`;
+    });
+    const daysOfWeek = [
+        'ראשון',
+        'שני',
+        'שלישי',
+        'רביעי',
+        'חמישי',
+        'שישי',
+        'שבת',
+    ];
 
     return (
         <ThemeProvider theme={theme}>
