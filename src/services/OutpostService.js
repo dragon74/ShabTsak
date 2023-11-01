@@ -19,7 +19,7 @@ export async function getOutpostsByCampId(campId) {
     }
 }
 
-export async function postOrPutOutpost(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+export async function createOrUpdateOutpost(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
     try {
         let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
