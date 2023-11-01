@@ -14,7 +14,7 @@ export async function getCamps() {
     }
 }
 
-export async function postOrPutCamp(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+export async function createOrUpdateCamp(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
     try {
         let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")

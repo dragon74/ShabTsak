@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
-import { postOrPutOutpost } from "@/services/OutpostService";
+import { createOrUpdateOutpost } from "@/services/OutpostService";
 
 OutpostDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -36,7 +36,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
 
 
     const onSubForm = (formData) => {
-        postOrPutOutpost(formData, method, getValues, item, reset, setOpenDialog, queryClient);
+        createOrUpdateOutpost(formData, method, getValues, item, reset, setOpenDialog, queryClient);
     }
 
     return (

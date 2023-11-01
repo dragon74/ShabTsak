@@ -2,19 +2,10 @@ import PropTypes from 'prop-types';
 import { useForm } from "react-hook-form";
 import { useMemo } from "react";
 import { useQueryClient } from 'react-query';
-import { toast } from "react-toastify";
 import { DialogTitle, DialogContent, DialogActions, Button, FormHelperText, ThemeProvider, Select, MenuItem, Dialog, InputLabel, Grid } from "@mui/material";
 import { theme } from "@/theme/theme";
-import { doApiMethod } from "../../services/apiService";
-import { SHIFT_URL } from "../../constants/apiConstants";
 import { useParams } from 'react-router-dom';
-
-ShiftDialog.propTypes = {
-    openDialog: PropTypes.bool.isRequired,
-    setOpenDialog: PropTypes.func.isRequired,
-    method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
-    item: PropTypes.object
-}
+import { createOrUpdateShift } from "@/services/ShiftService";
 
 function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const queryClient = useQueryClient();
@@ -37,25 +28,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         else return method;
     }, [method]);
 
-    const doApiShift = async (bodyFormData) => {
-        try {
-            let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
-            if (resp.status === 201 && method === "POST")
-                toast.success(`משמרת ${getValues('dayId')} נוספה בהצלחה`);
-            else if (resp.status === 200 && method === "PUT")
-                toast.success(`משמרת ${item.dayId} התעדכן בהצלחה`);
-            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-            queryClient.invalidateQueries(['shifts'])
-            setOpenDialog(false);
-            reset();
-        } catch (err) {
-            console.error(`An error occurred while ${method} משמרת`, err);
-            toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-        }
-    }
-
     const onSubForm = (formData) => {
-        doApiShift(formData);
+        createOrUpdateShift(formData, method, getValues, item, reset, setOpenDialog, queryClient);
         console.log(formData);
     }
 
@@ -63,15 +37,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         const hour = (index + 1).toString().padStart(2, '0');
         return `${hour}`;
     });
-    const daysOfWeek = [
-        'ראשון',
-        'שני',
-        'שלישי',
-        'רביעי',
-        'חמישי',
-        'שישי',
-        'שבת',
-    ];
+    const daysOfWeek = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת',];
 
     return (
         <ThemeProvider theme={theme}>
@@ -145,7 +111,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
                                             {hour}:00
                                         </MenuItem>
-                                    )) }
+                                    ))}
                                 </Select >
                                 <FormHelperText error={!!errors.toHour}>
                                     {errors.toHour && errors?.toHour?.message}
@@ -170,4 +136,10 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     );
 }
 
+ShiftDialog.propTypes = {
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
+    item: PropTypes.object
+}
 export default ShiftDialog;
