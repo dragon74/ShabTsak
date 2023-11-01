@@ -18,8 +18,9 @@ ShiftDialog.propTypes = {
 
 function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const queryClient = useQueryClient();
-    const params=useParams();
+    const params = useParams();
     const outpostId = params["id"];
+
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
             dayId: method === "PUT" ? item.dayId : '',
@@ -96,9 +97,6 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                             {...register('dayId', { required: { value: true, message: 'חובה למלא יום בשבוע' } })}
                             defaultValue={1} // Set this value to the default hour you want
                             label="יום בשבוע"
-                            displayEmpty={false}
-
-
                         >
                             {daysOfWeek.map((day, index) => (
                                 <MenuItem sx={{ textAlign: 'center' }} key={index + 1} value={index + 1}>
@@ -127,11 +125,11 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                             {hour}:00
                                         </MenuItem>
                                     ))}
-                                </Select>
+                                </Select >
                                 <FormHelperText error={!!errors.fromHour}>
                                     {errors.fromHour && errors?.fromHour?.message}
                                 </FormHelperText>
-                            </Grid>
+                            </Grid >
                             <Grid item>
                                 <InputLabel id="select-label-fromHour">עד שעה</InputLabel>
                                 <Select
@@ -147,17 +145,17 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
                                             {hour}:00
                                         </MenuItem>
-                                    ))}
-                                </Select>
+                                    )) }
+                                </Select >
                                 <FormHelperText error={!!errors.toHour}>
                                     {errors.toHour && errors?.toHour?.message}
                                 </FormHelperText>
-                            </Grid>
-                        </Grid>
+                            </Grid >
+                        </Grid >
 
 
                         {/* Add more TextFields and form fields here as needed */}
-                    </DialogContent>
+                    </DialogContent >
                     <DialogActions>
                         <Button type="button"
                             onClick={() => setOpenDialog(false)}
@@ -166,8 +164,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                         </Button>
                         <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
-                </form>
-            </Dialog>
+                </form >
+            </Dialog >
         </ThemeProvider >
     );
 }
