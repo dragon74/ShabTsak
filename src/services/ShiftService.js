@@ -1,17 +1,16 @@
-import { OUTPOST_URL } from "../constants/apiConstants";
+import { SHIFT_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService";
 import { toast } from "react-toastify";
 
-export async function getOutpostsByCampId(campId) {
-    let url = OUTPOST_URL + "/camp/" + campId;
+export async function getShiftsByOutpostId(outpostId) {
+    let url = SHIFT_URL + "/outpost/" + outpostId;
     try {
         let resp = await doApiGet(url);
         if (resp.status === 200) {
-            console.log(resp.data);
+            // console.log(resp.data);
             return resp.data;
         }
         else toast.error(resp.message);
-
     }
     catch (err) {
         console.log(err);
@@ -19,9 +18,9 @@ export async function getOutpostsByCampId(campId) {
     }
 }
 
-export async function postOrPutOutpost(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+export async function postOrPutShift(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
     try {
-        let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
+        let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
             toast.success(`משמרת ${getValues('name')} נוסף בהצלחה`);
         else if (resp.status === 200 && method === "PUT")

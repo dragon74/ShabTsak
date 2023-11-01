@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMemo } from "react";
 import { useQueryClient } from 'react-query';
 import { toast } from "react-toastify";
-import { DialogTitle, DialogContent, DialogActions, Button, FormHelperText, ThemeProvider, Select, MenuItem, Dialog, InputLabel, FormControl, Grid } from "@mui/material";
+import { DialogTitle, DialogContent, DialogActions, Button, FormHelperText, ThemeProvider, Select, MenuItem, Dialog, InputLabel, Grid } from "@mui/material";
 import { theme } from "@/theme/theme";
 import { doApiMethod } from "../../services/apiService";
 import { SHIFT_URL } from "../../constants/apiConstants";
@@ -97,9 +97,6 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                             {...register('dayId', { required: { value: true, message: 'חובה למלא יום בשבוע' } })}
                             defaultValue={1} // Set this value to the default hour you want
                             label="יום בשבוע"
-                            displayEmpty={false}
-
-
                         >
                             {daysOfWeek.map((day, index) => (
                                 <MenuItem sx={{ textAlign: 'center' }} key={index + 1} value={index + 1}>
@@ -123,16 +120,16 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                     label="משעה"
                                     displayEmpty={false}
                                 >
-                                    {hourArr.map((hour,index) => (
+                                    {hourArr.map((hour, index) => (
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
                                             {hour}:00
                                         </MenuItem>
                                     ))}
-                                </Select>
+                                </Select >
                                 <FormHelperText error={!!errors.fromHour}>
                                     {errors.fromHour && errors?.fromHour?.message}
                                 </FormHelperText>
-                            </Grid>
+                            </Grid >
                             <Grid item>
                                 <InputLabel id="select-label-fromHour">עד שעה</InputLabel>
                                 <Select
@@ -144,21 +141,21 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                     displayEmpty={false}
 
                                 >
-                                    {hourArr.map((hour,index) => (
+                                    {hourArr.map((hour, index) => (
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
                                             {hour}:00
                                         </MenuItem>
-                                    ))}
-                                </Select>
+                                    )) }
+                                </Select >
                                 <FormHelperText error={!!errors.toHour}>
                                     {errors.toHour && errors?.toHour?.message}
                                 </FormHelperText>
-                            </Grid>
-                        </Grid>
+                            </Grid >
+                        </Grid >
 
 
                         {/* Add more TextFields and form fields here as needed */}
-                    </DialogContent>
+                    </DialogContent >
                     <DialogActions>
                         <Button type="button"
                             onClick={() => setOpenDialog(false)}
@@ -167,8 +164,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                         </Button>
                         <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
-                </form>
-            </Dialog>
+                </form >
+            </Dialog >
         </ThemeProvider >
     );
 }
