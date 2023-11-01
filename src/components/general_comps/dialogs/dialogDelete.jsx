@@ -26,12 +26,12 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
     }, [subject]);
 
 
-    const doApicampDeleteBtn = async () => {
+    const doApiDelete = async () => {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
             if (resp.status == 200) {
-                toast.success(`נמחק בהצלחה ${item.name} ${subjectHebrew}`);
+                toast.success(`${subject === 'shift' ? item.dayId : item.name}נמחק בהצלחה ${subjectHebrew}`);
                 setOpenDialog(false);
                 // instead doApi function;
                 queryClient.invalidateQueries(`${subject}s`)
@@ -53,11 +53,11 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
                 <DialogTitle
                     sx={{ mb: 2 }}
                     id="alert-dialog-title">
-                    {`אתה בטוח רוצה למחוק ${subjectHebrew} ${item.name}?`}
+                    {`אתה בטוח רוצה למחוק ${subjectHebrew} ${subject === 'shift' ? item.dayId : item.name}?`}
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
-                    <Button onClick={doApicampDeleteBtn} autoFocus>מסכים</Button>
+                    <Button onClick={doApiDelete} autoFocus>מסכים</Button>
                 </DialogActions>
             </Dialog>
         </>

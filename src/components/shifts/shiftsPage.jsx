@@ -15,18 +15,19 @@ import LoadingComp from "../general_comps/loadingComp";
 const ShiftsPage = () => {
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
-  const { isLoading, data: shifts } = useQuery(['shifts', params["id"]], doApiShifts);
+  const outpostId = params["id"];
 
-  // console.log(params);
-  // console.log({ isLoading, isError, error, shifts });
+  const { isLoading, data: shifts } = useQuery({
+    queryFn: () => doApiShifts(outpostId),
+    queryKey: ['shifts', outpostId],
+    // staleTime: Infinity
+  });
 
   async function doApiShifts() {
-    let url = SHIFT_URL + "/outpost/" + params["id"];
-    console.log(url);
+    let url = SHIFT_URL + "/outpost/" + outpostId;
     try {
       let resp = await doApiGet(url);
       if (resp.status === 200) {
-        console.log(resp.data);
         return resp.data;
       }
       else toast.error(resp.message);
@@ -44,14 +45,14 @@ const ShiftsPage = () => {
         {/* btn-add Shift */}
         <AddShiftBtn setOpenDialog={setOpenDialog} />
 
-        <Typography variant="h4" component="h2" mb={2}>
+        <Typography variant="h3" component="h2" mb={2}>
           רשימת משמרות {params["name"]}
         </Typography>
 
         {isLoading ?
           <LoadingComp />
-          : shifts.length == 0 ?
-            <Typography variant="h4" component="h2" my={2}>אין משמרות עדיין</Typography>
+          : shifts?.length === 0 ?
+            <Typography variant="h5" component="h2" my={2}>אין משמרות עדיין</Typography>
             : <ShiftList shifts={shifts} />}
 
 

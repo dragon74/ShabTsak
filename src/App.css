@@ -4,6 +4,10 @@
   font-family: 'Rubik', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth !important;
+}
+
 body {
   overflow-x: hidden;
   direction: rtl;
@@ -19,6 +23,7 @@ body::-webkit-scrollbar {
 .logo-comp {
   display: flex;
   align-items: center;
+  transition: text-shadow 200ms ease-in-out;
   text-shadow: 0 -1px 4px #c2afaf, 2px 2px 2px rgba(14, 190, 206, 0), 0 -13px 16px #0EBECE;
 }
 
@@ -33,33 +38,8 @@ body::-webkit-scrollbar {
 
 .logo-comp h1 {
   font-weight: 400;
+  pointer-events: none;
 }
-
-/* scroller */
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-  background: rgb(255, 255, 255);
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-  /* border: solid 1px rgb(255, 255, 255); */
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #8ECDDD;
-  border-radius: 10px;
-  border: solid 1px rgb(246, 231, 216);
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #8ECDDD;
-}
-
 
 
 /* icon nagishLi design*/
@@ -71,8 +51,6 @@ body::-webkit-scrollbar {
   transform: scale(0.7, 0.7);
   filter: grayscale(100%);
 }
-
-
 
 @media (max-width:991px) {
   .container {

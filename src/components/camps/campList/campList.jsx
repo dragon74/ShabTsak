@@ -6,7 +6,7 @@ CampList.propTypes = {
     camps: PropTypes.array
 }
 
-function CampList({camps}) {
+function CampList({ camps = [] }) {
     return (
         <>
             <CssBaseline />
