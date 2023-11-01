@@ -97,8 +97,8 @@ const Header = () => {
                                 onClick={handleOpenNavMenu}
                                 color="white"
                             >
-                                <MenuIcon sx={{ display: displayBurger }} />
-                                <CloseIcon sx={{ display: displayButtonX }} />
+                                <MenuIcon sx={{ display: displayBurger ,color:'white'}} />
+                                <CloseIcon sx={{ display: displayButtonX ,color:'white'}} />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
