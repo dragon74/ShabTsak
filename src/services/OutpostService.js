@@ -10,9 +10,8 @@ export async function getOutpostsByCampId(campId) {
             console.log(resp.data);
             return resp.data;
         }
-        else {
-            toast.error(resp.message);
-        }
+        else toast.error(resp.message);
+
     }
     catch (err) {
         console.log(err);
@@ -24,9 +23,9 @@ export async function postOrPutOutpost(bodyFormData, method, getValues, item, re
     try {
         let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
+            toast.success(`משמרת ${getValues('name')} נוסף בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
-            toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
+            toast.success(`משמרת ${item.name} התעדכן בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         //  clear the camp query 
         queryClient.invalidateQueries(['outposts'])
