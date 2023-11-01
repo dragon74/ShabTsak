@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from '@mobiscroll/react';
-import { getGuardsByCampId } from '@/services/GuardService';
 import { useQuery } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 

@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, TableBody, MenuItem, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, CircularProgress, Container } from "@mui/material";
+import { Table, TableBody, Grid, Button, List, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, CircularProgress, Container } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { GuardItem } from "./GuardItem.jsx";
-import ROUTES from "../../constants/routeConstants";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { API_URL, GUARD_URL } from "../../constants/apiConstants.js";
 import { toast } from "react-toastify";
 import BackLink from "../general_comps/backLink";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import SelectCamp from "../general_comps/selectCamp.jsx";
 
 const GuardList = () => {
   const params = useParams();
@@ -21,7 +21,10 @@ const GuardList = () => {
   const [selectedCampId, setSelectedCampId] = useState(params["id"] || "");
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState({
-    shouldBeAllocated: true,
+    name: "",
+    mail: "",
+    phone: "",
+    shouldBeAllocated: false, 
   });
 
   const handleOpenDialog = (guard) => {
@@ -61,22 +64,22 @@ const GuardList = () => {
     setSelectedGuard(null);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+const handleInputChange = (e) => {
+  const { name, value, type, checked } = e.target;
 
-    // If the input is a checkbox, handle the "shouldBeAllocated" field specifically
-    if (type === "checkbox") {
-      setFormState((prev) => ({
-        ...prev,
-        shouldBeAllocated: checked,
-      }));
-    } else {
-      setFormState((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
+  if (type === "checkbox") {
+    setFormState((prev) => ({
+      ...prev,
+      [name]: checked, // This line ensures the 'shouldBeAllocated' field is updated
+    }));
+  } else {
+    setFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+};
+
 
   // Validation functions
   const isValidEmail = (email) => {
@@ -185,38 +188,12 @@ const GuardList = () => {
       <Typography variant="h4" gutterBottom>
         ניהול סד"כ
       </Typography>
-      <Grid item xs={12}>
-        <TextField
-          select
-          label="בחר מחנה"
-          onChange={(e) => setSelectedCampId(e.target.value)}
-          value={!camps.length && selectedCampId ? "" : selectedCampId}
-          fullWidth
-          variant="outlined"
-          SelectProps={{
-            native: false,
-            MenuProps: {
-              anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "left",
-              },
-              transformOrigin: {
-                vertical: "top",
-                horizontal: "left",
-              },
-            },
-          }}
-        >
-          <MenuItem value="" component={RouterLink} to={ROUTES.GUARDS}>
-            <em>Select a camp</em>
-          </MenuItem>
-          {camps.map((camp) => (
-            <MenuItem key={`camp_${camp.id}`} value={camp.id} component={RouterLink} to={ROUTES.GUARDS + ROUTES.CAMP + "/" + camp.id}>
-              {camp.name}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Grid>
+      <SelectCamp
+        selectedCampId={selectedCampId}
+        setSelectedCampId={setSelectedCampId}
+        title="בחר מחנה" 
+      />
+
       {!selectedCampId ? (
         <Typography variant="body2">אנא בחר מחנה</Typography>
       ) : (
@@ -264,12 +241,8 @@ const GuardList = () => {
             control={
               <Checkbox
                 checked={formState.shouldBeAllocated || false}
-                onChange={(e) => {
-                  setFormState((prev) => ({
-                    ...prev,
-                    shouldBeAllocated: e.target.checked,
-                  }));
-                }}
+                onChange={handleInputChange}
+                name="shouldBeAllocated" // Ensure you have this name property set
                 color="primary"
               />
             }
