@@ -15,16 +15,13 @@ import LoadingComp from "../general_comps/loadingComp";
 const ShiftsPage = () => {
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
-  const outpostId = params["id"];
+  const { isLoading, data: shifts } = useQuery(['shifts', params["id"]], doApiShifts);
 
-  const { isLoading, data: shifts } = useQuery({
-    queryFn: () => doApiShifts(outpostId),
-    queryKey: ['shifts', outpostId],
-    // staleTime: Infinity
-  });
+  // console.log(params);
+  // console.log({ isLoading, isError, error, shifts });
 
   async function doApiShifts() {
-    let url = SHIFT_URL + "/outpost/" + outpostId;
+    let url = SHIFT_URL + "/outpost/" + params["id"];
     try {
       let resp = await doApiGet(url);
       if (resp.status === 200) {

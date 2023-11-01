@@ -3,11 +3,10 @@ import { useForm } from "react-hook-form";
 import { useMemo } from "react";
 import { useQueryClient } from 'react-query';
 import { toast } from "react-toastify";
-import { DialogTitle, DialogContent, DialogActions, Button, FormHelperText, ThemeProvider, Select, MenuItem, Dialog, InputLabel, FormControl, Grid } from "@mui/material";
+import {  DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider, Select, MenuItem, Dialog } from "@mui/material";
 import { theme } from "@/theme/theme";
 import { doApiMethod } from "../../services/apiService";
 import { SHIFT_URL } from "../../constants/apiConstants";
-import { useParams } from 'react-router-dom';
 
 ShiftDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -18,15 +17,12 @@ ShiftDialog.propTypes = {
 
 function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const queryClient = useQueryClient();
-    const params = useParams();
-    const outpostId = params["id"];
 
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
-            dayId: method === "PUT" ? item.dayId : '',
-            fromHour: method === "PUT" ? item.fromHour : '',
-            toHour: method === "PUT" ? item.toHour : '',
-            outpostId,
+
+
+            name: method === "PUT" ? item.name : "",
             ...(method === "PUT" && { id: item.id })
         }
     });
@@ -37,15 +33,15 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         else return method;
     }, [method]);
 
-    const doApiShift = async (bodyFormData) => {
+    const doApiCamp = async (bodyFormData) => {
         try {
             let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
             if (resp.status === 201 && method === "POST")
-                toast.success(`משמרת ${getValues('dayId')} נוספה בהצלחה`);
+                toast.success(`משמרת ${getValues('name')} נוספה בהצלחה`);
             else if (resp.status === 200 && method === "PUT")
-                toast.success(`משמרת ${item.dayId} התעדכן בהצלחה`);
+                toast.success(`משמרת ${item.name} התעדכן בהצלחה`);
             else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-            queryClient.invalidateQueries(['shifts'])
+            queryClient.invalidateQueries('shifts')
             setOpenDialog(false);
             reset();
         } catch (err) {
@@ -55,23 +51,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     }
 
     const onSubForm = (formData) => {
-        doApiShift(formData);
-        console.log(formData);
+        doApiCamp(formData);
     }
-
-    const hourArr = Array.from({ length: 24 }, (_, index) => {
-        const hour = (index + 1).toString().padStart(2, '0');
-        return `${hour}`;
-    });
-    const daysOfWeek = [
-        'ראשון',
-        'שני',
-        'שלישי',
-        'רביעי',
-        'חמישי',
-        'שישי',
-        'שבת',
-    ];
 
     return (
         <ThemeProvider theme={theme}>
@@ -82,81 +63,36 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                     style: {
                         minWidth: '300px', // Set your minimum width here
                         maxWidth: '90vw',  // Set a maximum width (e.g., 90% of viewport width)
-                        padding: "20px"
+                        padding: "30px"
                     }
                 }}
             >
-                <DialogTitle>{actionHebrew} משמרת יום {item ? item.dayId : ""}</DialogTitle>
+                <DialogTitle>{actionHebrew} משמרת {item ? item.name : ""}</DialogTitle>
                 <form onSubmit={handleSubmit(onSubForm)}>
-                    <DialogContent style={{ padding: '10px 20px' }}>
-                        <InputLabel id="select-label-days">יום בשבוע</InputLabel>
-                        <Select
+                    <DialogContent style={{ padding: '20px' }}>
+                        <TextField
+                            {...register('name', { required: { value: true, message: 'חובה למלא שם' }, minLength: { value: 2, message: "שם חייב להיות לפחות 2 אותיות'" }, maxLength: 99 })}
+                            variant="outlined"
                             fullWidth
-                            labelId="select-label-days"
+                            autoComplete="off"
+                            label="שם"
+                        />
+                        <Select
+                            labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            {...register('dayId', { required: { value: true, message: 'חובה למלא יום בשבוע' } })}
-                            defaultValue={1} // Set this value to the default hour you want
-                            label="יום בשבוע"
-                            displayEmpty={false}
-
-
+                            {...register('fromHour', { required: { value: true, message: 'חובה למלא שם' }, minLength: { value: 2, message: "שם חייב להיות לפחות 2 אותיות'" }, maxLength: 99 })}
+                            value={"12"}
+                            label="Age"
                         >
-                            {daysOfWeek.map((day, index) => (
-                                <MenuItem sx={{ textAlign: 'center' }} key={index + 1} value={index + 1}>
-                                    {day}
-                                </MenuItem>
-                            ))}
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
                         </Select>
-                        <FormHelperText error={!!errors.dayId}>
-                            {errors.dayId && errors?.dayId?.message}
+                        <FormHelperText error={!!errors.name}>
+                            {errors.name && errors?.name?.message}
                         </FormHelperText>
-
-
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <InputLabel id="select-label-fromHour">משעה</InputLabel>
-                                <Select
-                                    labelId="select-label-fromHour"
-                                    id="demo-simple-select"
-                                    sx={{ textAlign: 'center' }}
-                                    {...register('fromHour', { required: { value: true, message: 'חובה למלא שעה' } })}
-                                    label="משעה"
-                                    displayEmpty={false}
-                                >
-                                    {hourArr.map((hour,index) => (
-                                        <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
-                                            {hour}:00
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText error={!!errors.fromHour}>
-                                    {errors.fromHour && errors?.fromHour?.message}
-                                </FormHelperText>
-                            </Grid>
-                            <Grid item>
-                                <InputLabel id="select-label-fromHour">עד שעה</InputLabel>
-                                <Select
-                                    labelId="select-label-fromHour"
-                                    id="demo-simple-select"
-                                    sx={{ textAlign: 'center' }}
-                                    {...register('toHour', { required: { value: true, message: 'חובה למלא שעה' } })}
-                                    label="עד שעה"
-                                    displayEmpty={false}
-
-                                >
-                                    {hourArr.map((hour,index) => (
-                                        <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
-                                            {hour}:00
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <FormHelperText error={!!errors.toHour}>
-                                    {errors.toHour && errors?.toHour?.message}
-                                </FormHelperText>
-                            </Grid>
-                        </Grid>
-
-
                         {/* Add more TextFields and form fields here as needed */}
                     </DialogContent>
                     <DialogActions>
@@ -169,7 +105,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                     </DialogActions>
                 </form>
             </Dialog>
-        </ThemeProvider >
+        </ThemeProvider>
     );
 }
 
