@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "@/theme/theme";
+import { doApiMethod } from "../../services/apiService";
+import { toast } from "react-toastify";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { OUTPOST_URL } from "../../constants/apiConstants";
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
-import { postOrPutOutpost } from "@/services/OutpostService";
 
 OutpostDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -34,9 +36,25 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
         else return method;
     }, [method]);
 
+    const doApiOutpost = async (bodyFormData) => {
+        try {
+            let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
+            if (resp.status === 201 && method === "POST")
+                toast.success(`עמדה ${getValues('name')} נוסף בהצלחה`);
+            else if (resp.status === 200 && method === "PUT")
+                toast.success(`עמדה ${item.name} התעדכן בהצלחה`);
+            else toast.error(resp.message);
+            queryClient.invalidateQueries('outposts')
+            setOpenDialog(false);
+            reset();
+        } catch (err) {
+            console.error(`An error occurred while ${method}ing the עמדה:`, err);
+            toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+        }
+    }
 
     const onSubForm = (formData) => {
-        postOrPutOutpost(formData, method, getValues, item, reset, setOpenDialog, queryClient);
+        doApiOutpost(formData);
     }
 
     return (
