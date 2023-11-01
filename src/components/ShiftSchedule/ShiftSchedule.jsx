@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from '@mobiscroll/react';
+import {Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe, snackbar} from '@mobiscroll/react';
 import { getGuardsByCampId } from '@/services/GuardService';
-import { getOutpostsByCampId } from "../../services/OutpostService";
+import { getOutpostsByCampId } from "@/services/OutpostService";
 import { useQuery } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 
@@ -39,28 +39,32 @@ function ShiftSchedule() {
     const [shiftDate, setDate] = useState([]);
     const [isOpen, setOpen] = useState(false);
     const [guardName, setGuardName] = useState(null);
-    const [campId, setCampId] = useState();
+    const [campId, setCampId] = useState(null);
 
     const colors = [
         'red', 'green', 'blue', 'yellow', 'orange', 'purple', 'navy', 'maroon', 'olive', 'silver'
       ];
 
-    const { data: guards } = useQuery({
-        queryKey: ["guardsByCampId", campId],
-        queryFn: getGuards,
-        enabled: !!campId
+    const { isLoading: loadingGuards, data: guards } = useQuery({
+        queryKey: ["guards", campId],
+        queryFn: () => getGuardsByCampId(campId),
+        enabled: !!campId,
+        select: guards => guards.map((g) => ({
+            value: g.id,
+            text: g.name,
+            color: colors[g.id%10]
+        })),
+        initialData: []
     });
+    console.log("Guards for campId:", campId, loadingGuards ? "Loading guards..." : guards);
 
-    function getGuards() {
-        return getGuardsByCampId(campId)
-                .then((res) => {
-                    return res.map((g) => ({
-                        value: g.id,
-                        text: g.name,
-                        color: colors[g.id%10]
-                      }));
-                })
-    }
+    const { isLoading: loadingOutposts, data: outposts } = useQuery({
+        queryKey: ["outposts", campId],
+        queryFn: () => getOutpostsByCampId(campId),
+        enabled: !!campId,
+        initialData: []
+    });
+    console.log("Outposts for campId:", campId, loadingOutposts ? "Loading outposts..." : outposts);
 
     const view = useMemo(() => {
         return {
