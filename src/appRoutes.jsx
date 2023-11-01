@@ -1,23 +1,23 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 //for toast container you need the container will be in app and his css
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Layout from "./layout/layout";
-import NotFound from "./components/general_comps/notFound";
-import CampsPage from "./components/camps/campsPage";
-import ShiftSchedule from "./components/ShiftSchedule/ShiftSchedule";
-import GuardList from "./components/GuardList/GuardList";
-import Login from "./components/Login/Login.jsx";
-import GuardProfile from "./components/GuardList/GuardProfile";
-import ROUTES from "./constants/routeConstants";
-import OutpostsPage from "./components/outposts/outPostsPage";
-import PrivacyPage from "./components/privacy/privacyPage";
-import ServiceTermsPage from "./components/service_terms/serviceTermsPage";
-import ShiftsPage from "./components/shifts/shiftsPage";
-import LimitsPage from "./components/limits/limitsPage";
-import { Navigate } from 'react-router-dom';
-import { useAuth } from "./hooks/useAuth.jsx";
+import Layout from "@/layout/layout";
+import NotFound from "components/general_comps/notFound";
+import CampsPage from "components/camps/campsPage";
+import ShiftSchedule from "components/ShiftSchedule/ShiftSchedule";
+import GuardList from "components/GuardList/GuardList";
+import Login from "components/Login/Login.jsx";
+import GuardProfile from "components/GuardList/GuardProfile";
+import ROUTES from "@/constants/routeConstants";
+import OutpostsPage from "components/outposts/outpostsPage";
+import PrivacyPage from "components/privacy/privacyPage";
+import ServiceTermsPage from "components/service_terms/serviceTermsPage";
+import ShiftsPage from "components/shifts/shiftsPage";
+import LimitsPage from "components/limits/limitsPage";
+import { useAuth } from "@/hooks/useAuth.jsx";
+import PropTypes from "prop-types";
 
 export default function AppRoutes() {
   return (
@@ -51,6 +51,7 @@ function PrivateRoute({ children }) {
   React.useEffect(() => {
     init();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (user === undefined) {
@@ -62,5 +63,8 @@ function PrivateRoute({ children }) {
   }
 
   return children;
+}
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
