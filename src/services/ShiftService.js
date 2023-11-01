@@ -1,12 +1,16 @@
-import { CAMP_URL } from "../constants/apiConstants";
+import { SHIFT_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService";
 import { toast } from "react-toastify";
 
-export async function getCamps() {
-    let url = CAMP_URL + "/all"
+export async function getShiftsByOutpostId(outpostId) {
+    let url = SHIFT_URL + "/outpost/" + outpostId;
     try {
         let resp = await doApiGet(url);
-        return resp.data
+        if (resp.status === 200) {
+            // console.log(resp.data);
+            return resp.data;
+        }
+        else toast.error(resp.message);
     }
     catch (err) {
         console.log(err);
@@ -14,16 +18,16 @@ export async function getCamps() {
     }
 }
 
-export async function createOrUpdateCamp(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+export async function createOrUpdateShift(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
     try {
-        let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
+        let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
+            toast.success(`משמרת ${getValues('name')} נוסף בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
-            toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
+            toast.success(`משמרת ${item.dayId} התעדכן בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         //  clear the camp query 
-        queryClient.invalidateQueries(['camps'])
+        queryClient.invalidateQueries(['outposts'])
         setOpenDialog(false);
         reset();
     } catch (err) {
