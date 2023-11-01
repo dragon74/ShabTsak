@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useQueryClient } from 'react-query';
 import { toast } from "react-toastify";
 import {  DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider, Select, MenuItem, Dialog } from "@mui/material";
-import { theme } from "../../services/theme";
+import { theme } from "@/theme/theme";
 import { doApiMethod } from "../../services/apiService";
 import { SHIFT_URL } from "../../constants/apiConstants";
 
@@ -81,12 +81,14 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             {...register('fromHour', { required: { value: true, message: 'חובה למלא שם' }, minLength: { value: 2, message: "שם חייב להיות לפחות 2 אותיות'" }, maxLength: 99 })}
-                            value={"12:00"}
+                            value={"12"}
                             label="Age"
                         >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
                         </Select>
                         <FormHelperText error={!!errors.name}>
                             {errors.name && errors?.name?.message}

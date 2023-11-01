@@ -1,12 +1,10 @@
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
-import { useQueryClient } from "react-query";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
-import { theme } from "../../services/theme";
-import { doApiMethod } from "../../services/apiService";
-import { toast } from "react-toastify";
+import { theme } from "@/theme/theme";
 import { useMemo } from "react";
-import { CAMP_URL } from "../../constants/apiConstants";
+import { addEditCamp } from "../../services/CampService";
+import { useQueryClient } from "react-query";
 
 CampDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -15,7 +13,8 @@ CampDialog.propTypes = {
     item: PropTypes.object
 }
 
-function CampDialog({ openDialog, setOpenDialog, method,  item }) {
+function CampDialog({ openDialog, setOpenDialog, method, item }) {
+
     // Access the client
     const queryClient = useQueryClient();
 
@@ -32,26 +31,9 @@ function CampDialog({ openDialog, setOpenDialog, method,  item }) {
         else return method;
     }, [method]);
 
-    const doApiCamp = async (bodyFormData) => {
-        try {
-            let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
-            if (resp.status === 201 && method === "POST")
-                toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
-            else if (resp.status === 200 && method === "PUT")
-                toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
-            else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-            //instead of doApiCamps
-            queryClient.invalidateQueries('camps')
-            setOpenDialog(false);
-            reset();
-        } catch (err) {
-            console.error(`An error occurred while ${method} בסיס`, err);
-            toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-        }
-    }
 
     const onSubForm = (formData) => {
-        doApiCamp(formData);
+        addEditCamp(formData, method, getValues, item, reset, setOpenDialog, queryClient);
     }
 
     return (

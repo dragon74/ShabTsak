@@ -3,10 +3,10 @@ import Header from './header/header';
 import Footer from './footer/footer';
 import { useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import { theme, cacheRtl } from '../services/theme';
+import { theme, cacheRtl} from '@/theme/theme';
 import { Box, CssBaseline } from '@mui/material';
 import { CacheProvider } from '@emotion/react';
-import {useDarkModeStore} from "../services/useDarkModeStore.jsx";
+import {useDarkModeStore} from "@/theme/useDarkModeStore.jsx";
 
 export default function Layout() {
     const darkMode = useDarkModeStore((store) => store.darkMode);
@@ -36,7 +36,6 @@ export default function Layout() {
                     <Header /> 
                     <Outlet />
                     <Footer />
-        
                 </Box>
             </ThemeProvider>
         </CacheProvider>

@@ -1,6 +1,6 @@
 import React from 'react';
 import AppRoutes from './appRoutes';
-import ErrorBoundary from './services/errorBoundary ';
+import ErrorBoundary from 'components/general_comps/errorBoundary';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useAuth } from "./hooks/useAuth.jsx";
 import { AuthContext } from './context/AuthContext';
@@ -14,13 +14,13 @@ function App() {
     Instead, it will render null until user is set as null or a user object.
     */
     const [user, setUser] = React.useState(undefined);
-    const { _user, ...auth } = useAuth();
+    const auth = useAuth();
 
     return (
-        <AuthContext.Provider value={{...auth, user, setUser}}>
+        <AuthContext.Provider value={{ ...auth, user, setUser }}>
             <QueryClientProvider client={queryClient}>
                 <ErrorBoundary fallback={<p>Something went wrong</p>}>
-                    <AppRoutes/>
+                    <AppRoutes />
                 </ErrorBoundary>
             </QueryClientProvider>
         </AuthContext.Provider>

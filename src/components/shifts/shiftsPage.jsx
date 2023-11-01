@@ -42,14 +42,14 @@ const ShiftsPage = () => {
         {/* btn-add Shift */}
         <AddShiftBtn setOpenDialog={setOpenDialog} />
 
-        <Typography variant="h4" component="h2" mb={2}>
+        <Typography variant="h3" component="h2" mb={2}>
           רשימת משמרות {params["name"]}
         </Typography>
 
         {isLoading ?
           <LoadingComp />
           : shifts?.length === 0 ?
-            <Typography variant="h4" component="h2" my={2}>אין משמרות עדיין</Typography>
+            <Typography variant="h5" component="h2" my={2}>אין משמרות עדיין</Typography>
             : <ShiftList shifts={shifts} />}
 
 
