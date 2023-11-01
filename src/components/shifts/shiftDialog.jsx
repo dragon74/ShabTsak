@@ -18,9 +18,8 @@ ShiftDialog.propTypes = {
 
 function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const queryClient = useQueryClient();
-    const params = useParams();
+    const params=useParams();
     const outpostId = params["id"];
-
     const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
         defaultValues: {
             dayId: method === "PUT" ? item.dayId : '',
@@ -59,19 +58,6 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         console.log(formData);
     }
 
-    const hourArr = Array.from({ length: 24 }, (_, index) => {
-        const hour = (index + 1).toString().padStart(2, '0');
-        return `${hour}`;
-    });
-    const daysOfWeek = [
-        'ראשון',
-        'שני',
-        'שלישי',
-        'רביעי',
-        'חמישי',
-        'שישי',
-        'שבת',
-    ];
 
     return (
         <ThemeProvider theme={theme}>
@@ -123,7 +109,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                     label="משעה"
                                     displayEmpty={false}
                                 >
-                                    {hourArr.map((hour,index) => (
+                                    {hourArr.map((hour, index) => (
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
                                             {hour}:00
                                         </MenuItem>
@@ -144,7 +130,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                     displayEmpty={false}
 
                                 >
-                                    {hourArr.map((hour,index) => (
+                                    {hourArr.map((hour, index) => (
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
                                             {hour}:00
                                         </MenuItem>

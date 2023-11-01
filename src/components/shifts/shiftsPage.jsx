@@ -43,7 +43,7 @@ const ShiftsPage = () => {
         <DialogShift openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
-      
+
         />
         <BackLink place="end" icon={<ArrowBackIosIcon />}>חזרה לרשימת העמדות</BackLink>
 

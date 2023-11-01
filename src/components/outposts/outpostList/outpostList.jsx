@@ -5,8 +5,7 @@ import OutpostItem from "./outpostItem/outpostItem";
 OutpostList.propTypes = {
     outposts: PropTypes.array
 }
-
-export default function OutpostList({outposts=[]}) {
+export default function OutpostList({outposts}) {
     
     return (
         <>
@@ -24,7 +23,7 @@ export default function OutpostList({outposts=[]}) {
                         </TableHead>
 
                         <TableBody>
-                            {outposts?.map((item, i) => {
+                            {outposts.map((item, i) => {
                                 return (
                                     <OutpostItem key={item.id} index={i} item={item} />
                                 )
