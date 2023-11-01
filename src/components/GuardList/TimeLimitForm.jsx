@@ -1,15 +1,17 @@
 import { useState } from "react";
-import axios from "axios";
 import { Grid, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel, Box, Dialog, DialogActions } from "@mui/material";
-import { API_URL } from "../../constants/apiConstants";
 import { toast } from "react-toastify";
+import {useParams} from "react-router-dom";
+import PropTypes from "prop-types";
+import TimeLimitService from "@/services/TimeLimitService.js";
 
-const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
+const TimeLimitForm = ({ timeLimits }) => {
+  const { id: guardId } = useParams();
   const initialTimeLimit = {
     dayId: 0,
     fromHour: 0,
     toHour: 0,
-    guardId: Number(id),
+    guardId: Number(guardId),
   };
   const [newTimeLimit, setNewTimeLimit] = useState(initialTimeLimit);
   const [open, setOpen] = useState(false);
@@ -19,12 +21,11 @@ const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (newTimeLimit.fromHour >= newTimeLimit.toHour) {
       toast.warn("End time should be after start time!");
       return;
     }
-
     // Check for duplicates
     const isDuplicate = timeLimits.some((limit) => limit.dayId === newTimeLimit.dayId && limit.fromHour === newTimeLimit.fromHour && limit.toHour === newTimeLimit.toHour);
 
@@ -33,16 +34,17 @@ const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
       return;
     }
 
-    try {
-      await axios.post(API_URL + "/guardtimelimit", newTimeLimit);
-      fetchTimeLimits();
-      toast.success("Time limit added successfully.");
-      handleClose(); // Close the dialog after successful submission
-      setNewTimeLimit(initialTimeLimit); // Reset the form data
-    } catch (error) {
-      console.error("Error creating new time limit:", error);
-      toast.error("Failed to add new time limit. Please try again.");
-    }
+    TimeLimitService.createTimeLimit(newTimeLimit)
+        .then(res => {
+          if (res.status === 200) {
+            toast.success("Time limit added successfully.");
+            handleClose(); // Close the dialog after successful submission
+          }
+        })
+        .catch(err => {
+          console.error("Error creating new time limit:", err);
+          toast.error("Failed to add new time limit. Please try again.");
+        });
   };
 
   return (
@@ -115,5 +117,9 @@ const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
     </div>
   );
 };
+
+TimeLimitForm.propTypes = {
+  timeLimits: PropTypes.array.isRequired
+}
 
 export default TimeLimitForm;

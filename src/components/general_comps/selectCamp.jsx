@@ -4,6 +4,7 @@ import { getCamps } from "@/services/CampService.js";
 import {FormControl, Stack, TextField, Typography} from "@mui/material";
 import {KeyboardArrowDownRounded} from "@mui/icons-material";
 import MenuItem from "@mui/material/MenuItem";
+import PropTypes from "prop-types";
 
 export default function SelectCamp({ selectedCampId, setSelectedCampId, title, title2 }) {
     const { isLoadingCamps, data } = useQuery({
@@ -15,6 +16,7 @@ export default function SelectCamp({ selectedCampId, setSelectedCampId, title, t
         if (!selectedCampId && Array.isArray(data) && data?.length > 0) {
             setSelectedCampId(data[0].value)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
 
     return (
@@ -70,4 +72,11 @@ export default function SelectCamp({ selectedCampId, setSelectedCampId, title, t
         </Stack>
 
     )
+}
+
+SelectCamp.propTypes = {
+    title: PropTypes.string.isRequired,
+    title2: PropTypes.string,
+    selectedCampId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    setSelectedCampId: PropTypes.func
 }

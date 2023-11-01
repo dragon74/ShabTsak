@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from '@mobiscroll/react';
-import { getGuardsByCampId } from '@/services/GuardService';
+import GuardService from '@/services/GuardService';
 import { useQuery } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 
@@ -67,7 +67,7 @@ function ShiftSchedule() {
     });
 
     function getGuards() {
-        return getGuardsByCampId(campId)
+        return GuardService.getGuardsByCampId(campId)
                 .then((res) => {
                     return res.map((g) => ({
                         value: g.id,
@@ -131,6 +131,7 @@ function ShiftSchedule() {
     const deleteShift = useCallback((shift) => {
         setShifts(shifts.filter(item => item.id !== shift.id));
         setTimeout(() => {
+            /*
             snackbar({
                 button: {
                     action: () => {
@@ -140,6 +141,7 @@ function ShiftSchedule() {
                 },
                 message: 'Shift deleted'
             });
+             */
         });
     }, [shifts]);
 

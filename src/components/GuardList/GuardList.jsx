@@ -7,11 +7,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { GuardItem } from "./GuardItem.jsx";
 import ROUTES from "../../constants/routeConstants";
 import { useParams, Link as RouterLink } from "react-router-dom";
-import { API_URL, GUARD_URL } from "../../constants/apiConstants.js";
+import { API_URL, GUARD_URL } from "@/constants/apiConstants.js";
 import { toast } from "react-toastify";
 import BackLink from "../general_comps/backLink";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import SelectCamp from "components/general_comps/selectCamp.jsx";
 
+const initialFormState = {
+  shouldBeAllocated: true,
+}
 const GuardList = () => {
   const params = useParams();
   const [guards, setGuards] = useState([]);
@@ -20,13 +24,11 @@ const GuardList = () => {
   const [camps, setCamps] = useState([]);
   const [selectedCampId, setSelectedCampId] = useState(params["id"] || "");
   const [loading, setLoading] = useState(false);
-  const [formState, setFormState] = useState({
-    shouldBeAllocated: true,
-  });
+  const [formState, setFormState] = useState(initialFormState);
 
   const handleOpenDialog = (guard) => {
     setSelectedGuard(guard);
-    setFormState(guard || {});
+    setFormState(guard || initialFormState);
     setDialogOpen(true);
   };
 
@@ -182,9 +184,7 @@ const GuardList = () => {
 
   return (
     <Container sx={{ display: "grid", gap: 3, pt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        ניהול סד"כ
-      </Typography>
+      <SelectCamp title={"ניהול סד\"כ"} title2={"במחנה:"} setSelectedCampId={setSelectedCampId} selectedCampId={selectedCampId} />
       <Grid item xs={12}>
         <TextField
           select

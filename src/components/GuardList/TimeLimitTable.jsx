@@ -1,7 +1,20 @@
 import { getDayName } from "./utils";
 import { Table, TableBody, TableHead, TableRow, TableCell, Button } from "@mui/material";
+import { useMutation } from "react-query";
+import { toast} from "react-toastify";
+import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
+import TimeLimitService from "@/services/TimeLimitService.js";
 
-const TimeLimitTable = ({ timeLimits, handleDelete }) => {
+const TimeLimitTable = ({ timeLimits }) => {
+    const { id: guardId } = useParams()
+    const deleteTimeLimit = useMutation(({
+        mutationKey: ["timeLimit", guardId],
+        mutationFn: (limitId) => TimeLimitService.deleteTimeLimit(limitId),
+        onSuccess: () => toast.success("Time limit deleted successfully."),
+        onError: () => toast.error("Failed to delete time limit. Please try again."),
+        enabled: !!guardId
+    }))
   return (
     <Table size="small">
       <TableHead>
@@ -19,7 +32,7 @@ const TimeLimitTable = ({ timeLimits, handleDelete }) => {
             <TableCell>{limit.fromHour}:00</TableCell>
             <TableCell>{limit.toHour}:00</TableCell>
             <TableCell>
-              <Button onClick={() => handleDelete(limit.id)}>Delete</Button>
+              <Button onClick={() => deleteTimeLimit(limit.id)}>Delete</Button>
             </TableCell>
           </TableRow>
         ))}
@@ -27,5 +40,9 @@ const TimeLimitTable = ({ timeLimits, handleDelete }) => {
     </Table>
   );
 };
+
+TimeLimitTable.propTypes = {
+    timeLimits: PropTypes.array.isRequired
+}
 
 export default TimeLimitTable;
