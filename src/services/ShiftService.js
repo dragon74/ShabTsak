@@ -22,12 +22,12 @@ export async function createOrUpdateShift(bodyFormData, method, getValues, item,
     try {
         let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`משמרת ${getValues('name')} נוסף בהצלחה`);
+            toast.success(`משמרת ${getValues('dayId')} נוסף בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
             toast.success(`משמרת ${item.dayId} התעדכן בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         //  clear the camp query 
-        queryClient.invalidateQueries(['outposts'])
+        queryClient.invalidateQueries(['shifts'])
         setOpenDialog(false);
         reset();
     } catch (err) {

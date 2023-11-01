@@ -32,9 +32,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         createOrUpdateShift(formData, method, getValues, item, reset, setOpenDialog, queryClient);
         console.log(formData);
     }
-
     const hourArr = Array.from({ length: 24 }, (_, index) => {
-        const hour = (index + 1).toString().padStart(2, '0');
+        const hour = (index + 1).toString();
         return `${hour}`;
     });
     const daysOfWeek = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת',];
@@ -84,7 +83,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                     sx={{ textAlign: 'center' }}
                                     {...register('fromHour', { required: { value: true, message: 'חובה למלא שעה' } })}
                                     label="משעה"
-                                    displayEmpty={false}
+                                    defaultValue={5} 
                                 >
                                     {hourArr.map((hour, index) => (
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
@@ -104,8 +103,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                                     sx={{ textAlign: 'center' }}
                                     {...register('toHour', { required: { value: true, message: 'חובה למלא שעה' } })}
                                     label="עד שעה"
-                                    displayEmpty={false}
-
+                                    defaultValue={8} 
                                 >
                                     {hourArr.map((hour, index) => (
                                         <MenuItem sx={{ textAlign: 'center' }} key={index} value={hour}>
