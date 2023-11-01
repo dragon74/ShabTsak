@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from '@mobiscroll/react';
 import { getGuardsByCampId } from '@/services/GuardService';
+import { getOutpostsByCampId } from "../../services/OutpostService";
 import { useQuery } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 
@@ -15,26 +16,10 @@ const defaultShifts = [{
     start: '2023-10-25T07:00',
     end: '2023-10-25T13:00',
     guardName: 'אריה',
-    position: 2,
+    outpost: 2,
     resource:1,
     color:"green"
 }];
-
-/*
-const initGuards = [{
-    value: 1,
-    text: 'בושי',
-    color:"red",
-}, {
-    value: 2,
-    text: 'אריה',
-    color:"green",
-}, {
-    value: 3,
-    text: 'דוד',
-    color:"yellow",
-}];
-*/
 
 const responsivePopup = {
     medium: {
@@ -87,7 +72,7 @@ function ShiftSchedule() {
         };
     }, []);
     
-    const myPositions = useMemo(() => {
+    const myOutposts = useMemo(() => {
         return [{
             id: 1,
             name: 'ש"ג'
@@ -123,7 +108,7 @@ function ShiftSchedule() {
             start: startsDate,
             end: endDate,
             guardName: '',
-            position: args.resource,
+            outpost: args.resource,
             color: '#ff0000'
         };
     }, []);
@@ -145,9 +130,9 @@ function ShiftSchedule() {
 
     const onShiftClick = useCallback((args) => {
         const shift = args.event;
-        const position = myPositions.find((p) => { return p.id === shift.position });
+        const outpost = myOutposts.find((p) => { return p.id === shift.outpost });
         //drop down with all existing guards
-        setHeader('<div>שינוי שומר  ' + shift.guardName + ' בעמדה ' + position.name +'</div><div class="employee-shifts-day">' +
+        setHeader('<div>שינוי שומר  ' + shift.guardName + ' בעמדה ' + outpost.name +'</div><div class="employee-shifts-day">' +
                 formatDate('HH:mm', new Date(shift.start)) + ' עד ' + formatDate('HH:mm', new Date(shift.end)) + '</div>');
         setEdit(true);
         setTempShift({ ...shift });
@@ -164,9 +149,9 @@ function ShiftSchedule() {
 
     const onShiftCreated = useCallback((args) => {
         const shift = args.event;
-        const position = myPositions.find((p) => { return p.id === shift.position });
+        const outpost = myOutposts.find((p) => { return p.id === shift.outpost });
         //drop down with all existing guards
-        setHeader('<div>משמרת חדשה בעמדה ' + position.name + '</div><div class="employee-shifts-day">' +
+        setHeader('<div>משמרת חדשה בעמדה ' + outpost.name + '</div><div class="employee-shifts-day">' +
             formatDate('HH:mm', new Date(shift.start)) + ' עד ' + formatDate('HH:mm', new Date(shift.end)) + '</div>');
         setEdit(false);
         setTempShift(shift);
@@ -188,7 +173,7 @@ function ShiftSchedule() {
             start: start,
             end: end,
             guardName: tempShift.guardName,
-            position: tempShift.position,
+            outpost: tempShift.outpost,
             resource: tempShift.resource,
             color: color
         };
@@ -252,7 +237,7 @@ function ShiftSchedule() {
                 className="md-timetable"
                 view={view}
                 data={shifts}
-                resources={myPositions}
+                resources={myOutposts}
                 extendDefaultEvent={myDefaultShift}
                 renderScheduleEventContent={myCustomShift}
                 clickToCreate={true}
