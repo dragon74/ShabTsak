@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
 import { theme } from "@/theme/theme";
 import { useMemo } from "react";
-import { addEditCamp } from "../../services/CampService";
+import { postOrPutCamp } from "../../services/CampService";
 import { useQueryClient } from "react-query";
 
 CampDialog.propTypes = {
@@ -33,7 +33,7 @@ function CampDialog({ openDialog, setOpenDialog, method, item }) {
 
 
     const onSubForm = (formData) => {
-        addEditCamp(formData, method, getValues, item, reset, setOpenDialog, queryClient);
+        postOrPutCamp(formData, method, getValues, item, reset, setOpenDialog, queryClient);
     }
 
     return (
