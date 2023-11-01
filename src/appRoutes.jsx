@@ -7,7 +7,6 @@ import Layout from "@/layout/layout";
 import NotFound from "components/general_comps/notFound";
 import CampsPage from "components/camps/campsPage";
 import ShiftSchedule from "components/ShiftSchedule/ShiftSchedule";
-import GuardList from "components/GuardList/GuardList";
 import Login from "components/Login/Login.jsx";
 import GuardProfile from "components/GuardList/GuardProfile";
 import ROUTES from "@/constants/routeConstants";
@@ -18,6 +17,7 @@ import ShiftsPage from "components/shifts/shiftsPage";
 import LimitsPage from "components/limits/limitsPage";
 import { useAuth } from "@/hooks/useAuth.jsx";
 import PropTypes from "prop-types";
+import GuardsPage from "components/guards/guardsPage.jsx";
 
 export default function AppRoutes() {
   return (
@@ -28,10 +28,10 @@ export default function AppRoutes() {
           <Route path={ROUTES.SCHEDULE} element={<PrivateRoute><ShiftSchedule /></PrivateRoute>} />
           <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`} element={<PrivateRoute><OutpostsPage /></PrivateRoute>} />
           <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`} element={<PrivateRoute><ShiftsPage /></PrivateRoute>} />
-          <Route path={`${ROUTES.GUARDS}${ROUTES.CAMP}/:id`} element={<PrivateRoute><GuardList /></PrivateRoute>} />
+          <Route path={`${ROUTES.GUARDS}${ROUTES.CAMP}/:id`} element={<PrivateRoute><GuardsPage /></PrivateRoute>} />
           <Route path={ROUTES.LIMITS} element={<PrivateRoute><LimitsPage /></PrivateRoute>} />
           <Route path={ROUTES.GUARDS + "/:id"} element={<PrivateRoute><GuardProfile /></PrivateRoute>} />
-          <Route path={ROUTES.GUARDS} element={<PrivateRoute><GuardList /></PrivateRoute>} />
+          <Route path={ROUTES.GUARDS} element={<PrivateRoute><GuardsPage /></PrivateRoute>} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
           <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
           <Route path="*" element={<NotFound />} />

@@ -5,27 +5,19 @@ import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { GuardItem } from "./GuardItem.jsx";
-import { useParams, Link as RouterLink } from "react-router-dom";
-import { API_URL, GUARD_URL } from "../../constants/apiConstants.js";
+import { useParams } from "react-router-dom";
+import { GUARD_URL } from "../../constants/apiConstants.js";
 import { toast } from "react-toastify";
 import BackLink from "../general_comps/backLink";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SelectCamp from "../general_comps/selectCamp.jsx";
+import {useQuery} from "react-query";
+import GuardService from "@/services/GuardService.js";
 
 const GuardList = () => {
-  const params = useParams();
-  const [guards, setGuards] = useState([]);
   const [selectedGuard, setSelectedGuard] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [camps, setCamps] = useState([]);
-  const [selectedCampId, setSelectedCampId] = useState(params["id"] || "");
   const [loading, setLoading] = useState(false);
-  const [formState, setFormState] = useState({
-    name: "",
-    mail: "",
-    phone: "",
-    shouldBeAllocated: false, 
-  });
+
 
   const handleOpenDialog = (guard) => {
     setSelectedGuard(guard);
@@ -33,31 +25,12 @@ const GuardList = () => {
     setDialogOpen(true);
   };
 
-  useEffect(() => {
-    if (selectedCampId) {
-      axios
-        .get(`${GUARD_URL}/camp/${selectedCampId}`)
-        .then((response) => {
-          setGuards(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching guards for selected camp:", error);
-          toast.error("Error fetching guards for selected camp!");
-        });
-    }
-  }, [selectedCampId]);
-
-  useEffect(() => {
-    axios
-      .get(API_URL + "/camp/all")
-      .then((response) => {
-        setCamps(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching camps:", error);
-        toast.error("Error fetching camps!");
-      });
-  }, []);
+  const { data: guards } = useQuery({
+    queryKey: ["guards", selectedCampId],
+    queryFn: () => GuardService.getGuardsByCampId(selectedCampId),
+    enabled: !!selectedCampId,
+    initialData: []
+  })
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
