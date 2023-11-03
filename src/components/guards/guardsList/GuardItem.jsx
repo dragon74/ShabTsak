@@ -4,7 +4,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { getGravatarUrl } from "../../GuardList/utils";
 import { Link } from "react-router-dom";
 
-const StatusChip = ({ shouldBeAllocated }) => (shouldBeAllocated ? <Chip label="משתתף" color="primary" /> : <Chip label="לא משתתף" color="secondary" />);
 
 const GuardItem = ({ guard, onEdit, onDelete }) => (
   <Table sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}>
@@ -19,7 +18,7 @@ const GuardItem = ({ guard, onEdit, onDelete }) => (
           <div>Phone: {guard.phone}</div>
         </TableCell>
         <TableCell>
-          <StatusChip shouldBeAllocated={guard.shouldBeAllocated} />
+          <Chip label={guard?.shouldBeAllocated? "משתתף":"לא משתתף"} color={guard?.shouldBeAllocated? "primary": "secondary"} />
         </TableCell>
         <TableCell>
           <Button component={Link} to={`/guards/${guard.id}`} variant="outlined" color="primary" size="small" sx={{ marginRight: "10px" }}>

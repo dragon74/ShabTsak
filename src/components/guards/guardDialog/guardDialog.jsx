@@ -16,6 +16,7 @@ import {
     Checkbox,
     FormControlLabel, Typography
 } from "@mui/material";
+import GuardService from "@/services/GuardService";
 
 export default function GuardDialog({ guardId, method, open, close }) {
     const { id: campId } = useParams();
@@ -26,6 +27,8 @@ export default function GuardDialog({ guardId, method, open, close }) {
     })
     function submit(formData) {
         console.log(formData);
+
+
     }
 
     function handleCloseDialog() {

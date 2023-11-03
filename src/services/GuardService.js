@@ -22,6 +22,12 @@ const GuardService = {
         toast.error("Failed to fetch guard details. Please try again.");
       });
   },
+  deleteGuard(guardId) {
+    return doApiMethod(`${GUARD_URL}/${guardId}`, "DELETE")
+  },
+  addNewGuard(newGuardDetails){
+        return doApiMethod(GUARD_URL, "POST", newGuardDetails)
+  }
 };
 
 export default GuardService;
