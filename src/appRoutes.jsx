@@ -28,7 +28,6 @@ export default function AppRoutes() {
           <Route path={ROUTES.SCHEDULE} element={<PrivateRoute><ShiftSchedule /></PrivateRoute>} />
           <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`} element={<PrivateRoute><OutpostsPage /></PrivateRoute>} />
           <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`} element={<PrivateRoute><ShiftsPage /></PrivateRoute>} />
-          <Route path={`${ROUTES.GUARDS}${ROUTES.CAMP}/:id`} element={<PrivateRoute><GuardsPage /></PrivateRoute>} />
           <Route path={ROUTES.LIMITS} element={<PrivateRoute><LimitsPage /></PrivateRoute>} />
           <Route path={ROUTES.GUARDS + "/:id"} element={<PrivateRoute><GuardProfile /></PrivateRoute>} />
           <Route path={ROUTES.GUARDS} element={<PrivateRoute><GuardsPage /></PrivateRoute>} />

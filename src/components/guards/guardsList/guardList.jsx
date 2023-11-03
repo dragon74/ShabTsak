@@ -3,19 +3,20 @@ import { Table, TableBody, Typography } from "@mui/material";
 import GuardItem from "./GuardItem";
 import { useQuery } from "react-query";
 import GuardService from "../../../services/GuardService";
-import { useParams } from "react-router-dom";
 
-const GuardList = ({ handleEdit }) => {
-  const params = useParams();
-  const campId = params.id;
+const GuardList = ({ campId, handleEdit }) => {
+  console.log(campId);
 
   const {
     data: guards,
     isLoading,
     isError,
-  } = useQuery(["guards", campId], () => GuardService.getGuardsByCampId(campId), {
+  } = useQuery({
     enabled: !!campId,
-    initialData: [],
+    queryFn: () => GuardService.getGuardsByCampId(campId),
+    queryKey: ["guards", campId],
+
+    staleTime: Infinity
   });
 
   if (isLoading) {
@@ -27,10 +28,16 @@ const GuardList = ({ handleEdit }) => {
   }
 
   return (
-    <Table sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}>
+    <Table
+      sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}
+    >
       <TableBody>
         {guards.map((guard) => (
-          <GuardItem key={guard.id} guard={guard} onEdit={() => handleEdit(guard)} />
+          <GuardItem
+            key={guard.id}
+            guard={guard}
+            onEdit={() => handleEdit(guard)}
+          />
         ))}
       </TableBody>
     </Table>
