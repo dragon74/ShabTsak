@@ -4,7 +4,7 @@ import { Table, TableBody, Grid, Button, List, TextField, Dialog, DialogActions,
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { GuardItem } from "./GuardItem.jsx";
+import { GuardItem } from "../guards/guardsList/GuardItem.jsx";
 import { useParams } from "react-router-dom";
 import { GUARD_URL } from "../../constants/apiConstants.js";
 import { toast } from "react-toastify";

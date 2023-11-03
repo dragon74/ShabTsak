@@ -1,12 +1,12 @@
 import { Table, TableBody, TableCell, TableRow, IconButton, Button, Avatar, Chip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { getGravatarUrl } from "./utils";
+import { getGravatarUrl } from "../../GuardList/utils";
 import { Link } from "react-router-dom";
 
 const StatusChip = ({ shouldBeAllocated }) => (shouldBeAllocated ? <Chip label="משתתף" color="primary" /> : <Chip label="לא משתתף" color="secondary" />);
 
-export const GuardItem = ({ guard, onEdit, onDelete }) => (
+const GuardItem = ({ guard, onEdit, onDelete }) => (
   <Table sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}>
     <TableBody>
       <TableRow key={guard.id}>
@@ -36,3 +36,4 @@ export const GuardItem = ({ guard, onEdit, onDelete }) => (
     </TableBody>
   </Table>
 );
+export default GuardItem
