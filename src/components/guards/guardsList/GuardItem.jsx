@@ -3,6 +3,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getGravatarUrl } from "../../GuardList/utils";
 import { Link } from "react-router-dom";
+import PropType from "prop-types";
+import GuardType from "@/types/Guard.type";
 
 
 const GuardItem = ({ guard, onEdit, onDelete }) => (
@@ -18,16 +20,30 @@ const GuardItem = ({ guard, onEdit, onDelete }) => (
           <div>Phone: {guard.phone}</div>
         </TableCell>
         <TableCell>
-          <Chip label={guard?.shouldBeAllocated? "משתתף":"לא משתתף"} color={guard?.shouldBeAllocated? "primary": "secondary"} />
+          <Chip
+            label={guard?.shouldBeAllocated ? "משתתף" : "לא משתתף"}
+            color={guard?.shouldBeAllocated ? "primary" : "secondary"}
+          />
         </TableCell>
         <TableCell>
-          <Button component={Link} to={`/guards/${guard.id}`} variant="outlined" color="primary" size="small" sx={{ marginRight: "10px" }}>
+          <Button
+            component={Link}
+            to={`/guards/${guard.id}`}
+            variant="outlined"
+            color="primary"
+            size="small"
+            sx={{ marginRight: "10px" }}
+          >
             מגבלות
           </Button>
           <IconButton onClick={() => onEdit(guard)} size="large">
             <EditIcon />
           </IconButton>
-          <IconButton onClick={() => onDelete(guard)} size="large" sx={{ marginLeft: "10px" }}>
+          <IconButton
+            onClick={() => onDelete(guard)}
+            size="large"
+            sx={{ marginLeft: "10px" }}
+          >
             <DeleteIcon />
           </IconButton>
         </TableCell>
@@ -36,3 +52,8 @@ const GuardItem = ({ guard, onEdit, onDelete }) => (
   </Table>
 );
 export default GuardItem
+
+
+GuardItem.propTypes = {
+  guard: GuardType,
+};

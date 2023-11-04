@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, Container, Button } from "@mui/material";
+import { Typography, Container, Button, Box } from "@mui/material";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 import GuardDialog from "components/guards/guardDialog/guardDialog.jsx";
 import GuardList from "./guardsList/guardList";
@@ -10,10 +10,11 @@ export default function GuardsPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMethod, setDialogMethod] = useState("POST"); // default to POST for adding new guards
   const [selectedGuardId, setSelectedGuardId] = useState(null);
+  const [guardDetails, setGuardDetails] = useState(null);
+
   // TODO: Fetch outside or inside the list? Create / Edit (Guard or Initial) (method: POST / PUT) (guard details?)
   // const [selectedGuardId, setSelectedGuardId] = useState(null); TODO: Is this the best way ?
   const [selectedCampId, setSelectedCampId] = useState(state?.campId || "");
-
 
   const handleOpenAddDialog = () => {
     setSelectedGuardId(null); // No guard is selected when adding a new one
@@ -21,16 +22,16 @@ export default function GuardsPage() {
     setDialogOpen(true);
   };
 
-  const handleOpenEditDialog = (guardId) => {
-    setSelectedGuardId(guardId); // Set the selected guard's ID when editing
+  const handleOpenEditDialog = (guard) => {
+    setSelectedGuardId(guard.id);
     setDialogMethod("PUT");
+    setGuardDetails(guard); // Set the selected guard's details
     setDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
-
 
   return (
     <Container sx={{ display: "grid", gap: 3, pt: 4 }}>
@@ -43,14 +44,27 @@ export default function GuardsPage() {
         title="בחר מחנה: "
       />
       {/* TODO: <GuardsList dialogOpen={} />*/}
-      <Button onClick={handleOpenAddDialog}>Add Guard</Button>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          marginTop: "20px",
+        }}
+      >
+        <Button variant="contained" onClick={handleOpenAddDialog}>
+          הוסף שומר
+        </Button>
+      </Box>
       <GuardList campId={selectedCampId} handleEdit={handleOpenEditDialog} />
       {dialogOpen && (
         <GuardDialog
           open={dialogOpen}
           close={handleCloseDialog}
           guardId={selectedGuardId}
+          campId={selectedCampId}
           method={dialogMethod}
+          guardDetails={guardDetails}
         />
       )}
       {/* <GuardDialog open={dialogOpen} guardId={0} method={"POST"} close={() => setDialogOpen(false)} /> */}

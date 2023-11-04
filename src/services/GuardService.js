@@ -1,5 +1,5 @@
 import { GUARD_URL } from "../constants/apiConstants";
-import { doApiGet } from "./apiService";
+import { doApiGet, doApiMethod } from "./apiService";
 import { toast } from "react-toastify";
 
 const GuardService = {
@@ -27,6 +27,9 @@ const GuardService = {
   },
   addNewGuard(newGuardDetails){
         return doApiMethod(GUARD_URL, "POST", newGuardDetails)
+  },
+  updateGuard(guardDetails){
+        return doApiMethod(GUARD_URL, "PUT", guardDetails)
   }
 };
 

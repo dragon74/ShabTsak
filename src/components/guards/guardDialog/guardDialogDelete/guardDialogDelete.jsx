@@ -16,7 +16,7 @@ export const GuardDialogDelete = ({ guard, closeDialog }) => {
 
     function onSuccess() {
         invalidateQueries("guards")
-        toast.success("It did it!!!");
+        toast.success("שומר נמחק בהצלחה!");
         closeDialog();
     }
 

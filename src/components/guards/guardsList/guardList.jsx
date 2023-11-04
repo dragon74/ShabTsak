@@ -15,15 +15,15 @@ const GuardList = ({ campId, handleEdit }) => {
     enabled: !!campId,
     queryFn: () => GuardService.getGuardsByCampId(campId),
     queryKey: ["guards", campId],
-
-    staleTime: Infinity
+    staleTime: Infinity,
   });
 
   if (isLoading) {
     return <Typography align="center">Loading...</Typography>;
   }
 
-  if (isError || !guards.length) {
+  // Updated check here
+  if (isError || !Array.isArray(guards) || guards.length === 0) {
     return <Typography align="center">No guards available</Typography>;
   }
 
