@@ -4,6 +4,7 @@ import SelectCamp from "components/general_comps/selectCamp.jsx";
 import GuardDialog from "components/guards/guardDialog/guardDialog.jsx";
 import GuardList from "./guardsList/guardList";
 import { useLocation } from "react-router-dom";
+import BackLink from "@/general_comps/backLink";
 
 export default function GuardsPage() {
   let { state } = useLocation();
@@ -68,6 +69,7 @@ export default function GuardsPage() {
         />
       )}
       {/* <GuardDialog open={dialogOpen} guardId={0} method={"POST"} close={() => setDialogOpen(false)} /> */}
+      <BackLink place="end">חזרה לעמוד הקודם</BackLink>
     </Container>
   );
 }
