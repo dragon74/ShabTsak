@@ -54,7 +54,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         else return method;
     }, [method]);
 
-    const onSubForm = (formData) => {
+    const onSubForm = async (formData) => {
         if (method === "PUT") {
             const hasFormChanged =
                 formData.dayId !== defaultDayId ||
@@ -66,8 +66,12 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                 return;
             }
         }
-        createOrUpdateShift(formData, method, getValues, item, reset, setOpenDialog, queryClient);
         console.log(formData);
+        await createOrUpdateShift(formData, method, getValues, item);
+        //  clear the shifts query 
+        queryClient.invalidateQueries(['shifts'])
+        setOpenDialog(false);
+        reset();
     }
 
     const isFromHourValid = (fromHour, toHour) => {
@@ -172,7 +176,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                         </Button>
                         <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
-                    
+
                 </form >
             </Dialog >
         </ThemeProvider >

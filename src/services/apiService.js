@@ -38,14 +38,3 @@ export const doApiMethod = async (_url, _method, _body = {}) => {
   }
 };
 
-export const doApiMethodSignUp = async (_url, _method, _body = {}) => {
-  try {
-    return await axios({
-      url: _url,
-      method: _method,
-      data: _body,
-    });
-  } catch (err) {
-    throw err;
-  }
-};

@@ -14,20 +14,18 @@ export async function getCamps() {
     }
 }
 
-export async function createOrUpdateCamp(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+export async function createOrUpdateCamp(bodyFormData, method, getValues, item) {
     try {
         let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`בסיס ${getValues('name')} נוסף בהצלחה`);
+            toast.success(`בסיס ${getValues('dayId')} נוסף בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
-            toast.success(`בסיס ${item.name} התעדכן בהצלחה`);
+            toast.success(`בסיס ${item.dayId} התעדכן בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-        //  clear the camp query 
-        queryClient.invalidateQueries(['camps'])
-        setOpenDialog(false);
-        reset();
+  
     } catch (err) {
         console.error(`An error occurred while ${method} בסיס`, err);
         toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+        throw err;
     }
 }

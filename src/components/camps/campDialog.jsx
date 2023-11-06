@@ -32,8 +32,12 @@ function CampDialog({ openDialog, setOpenDialog, method, item }) {
     }, [method]);
 
 
-    const onSubForm = (formData) => {
-        createOrUpdateCamp(formData, method, getValues, item, reset, setOpenDialog, queryClient);
+    const onSubForm = async(formData) => {
+        await createOrUpdateCamp(formData, method, getValues, item);
+        //  clear the shifts query 
+        queryClient.invalidateQueries(['camps'])
+        setOpenDialog(false);
+        reset();
     }
 
     return (

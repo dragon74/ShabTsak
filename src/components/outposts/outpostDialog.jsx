@@ -35,8 +35,12 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
     }, [method]);
 
 
-    const onSubForm = (formData) => {
-        createOrUpdateOutpost(formData, method, getValues, item, reset, setOpenDialog, queryClient);
+    const onSubForm = async (formData) => {
+        await createOrUpdateOutpost(formData, method, getValues, item);
+        //  clear the outposts query 
+        queryClient.invalidateQueries(['outposts'])
+        setOpenDialog(false);
+        reset();
     }
 
     return (

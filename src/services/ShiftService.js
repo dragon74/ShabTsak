@@ -18,20 +18,19 @@ export async function getShiftsByOutpostId(outpostId) {
     }
 }
 
-export async function createOrUpdateShift(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+
+export async function createOrUpdateShift(bodyFormData, method, getValues, item) {
     try {
         let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`משמרת ${getValues('dayId')} נוסף בהצלחה`);
+            toast.success(`משמרת ${getValues('dayId')} נוספה בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
-            toast.success(`משמרת ${item.dayId} התעדכן בהצלחה`);
+            toast.success(`משמרת ${item.dayId} התעדכנה בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-        //  clear the camp query 
-        queryClient.invalidateQueries(['shifts'])
-        setOpenDialog(false);
-        reset();
+  
     } catch (err) {
-        console.error(`An error occurred while ${method} בסיס`, err);
+        console.error(`An error occurred while ${method} משמרת`, err);
         toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+        throw err;
     }
 }
