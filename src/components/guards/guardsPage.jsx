@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Typography, Container, Button, Box } from "@mui/material";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 import GuardDialog from "components/guards/guardDialog/guardDialog.jsx";
 import GuardList from "./guardsList/guardList";
 import { useLocation } from "react-router-dom";
-import BackLink from "@/general_comps/backLink";
+import { GuardDialogDelete } from "./guardDialog/guardDialogDelete/guardDialogDelete";
+
 
 export default function GuardsPage() {
   let { state } = useLocation();
@@ -12,6 +13,8 @@ export default function GuardsPage() {
   const [dialogMethod, setDialogMethod] = useState("POST"); // default to POST for adding new guards
   const [selectedGuardId, setSelectedGuardId] = useState(null);
   const [guardDetails, setGuardDetails] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [guardToDelete, setGuardToDelete] = useState(null);
 
   // TODO: Fetch outside or inside the list? Create / Edit (Guard or Initial) (method: POST / PUT) (guard details?)
   // const [selectedGuardId, setSelectedGuardId] = useState(null); TODO: Is this the best way ?
@@ -28,6 +31,16 @@ export default function GuardsPage() {
     setDialogMethod("PUT");
     setGuardDetails(guard); // Set the selected guard's details
     setDialogOpen(true);
+  };
+
+  const handleOpenDeleteDialog = (guard) => {
+    setGuardToDelete(guard);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setGuardToDelete(null); // Clear the selected guard when closing the dialog
   };
 
   const handleCloseDialog = () => {
@@ -57,7 +70,11 @@ export default function GuardsPage() {
           הוסף שומר
         </Button>
       </Box>
-      <GuardList campId={selectedCampId} handleEdit={handleOpenEditDialog} />
+      <GuardList
+        campId={selectedCampId}
+        handleEdit={handleOpenEditDialog}
+        handleDelete={handleOpenDeleteDialog}
+      />
       {dialogOpen && (
         <GuardDialog
           open={dialogOpen}
@@ -68,8 +85,18 @@ export default function GuardsPage() {
           guardDetails={guardDetails}
         />
       )}
+      {deleteDialogOpen && guardToDelete && (
+        <GuardDialogDelete
+          guard={guardToDelete}
+          closeDialog={handleCloseDeleteDialog}
+          open={deleteDialogOpen} // Pass the open state
+        />
+      )}
+
       {/* <GuardDialog open={dialogOpen} guardId={0} method={"POST"} close={() => setDialogOpen(false)} /> */}
-      <BackLink place="end">חזרה לעמוד הקודם</BackLink>
+      {/* <BackLink place="end" icon={<ArrowBackIosIcon />}>
+        חזרה לרשימת השומרים
+      </BackLink> */}
     </Container>
   );
 }

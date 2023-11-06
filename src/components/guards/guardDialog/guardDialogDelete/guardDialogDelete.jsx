@@ -1,44 +1,66 @@
 import { useMutation, useQueryClient } from 'react-query';
 import GuardService from '@/services/GuardService';
 import GuardType from '@/types/Guard.type';
-import { Box, Button, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import PropTypes from "prop-types";
 import { toast } from 'react-toastify';
 
-export const GuardDialogDelete = ({ guard, closeDialog }) => {
-    const mutation = useMutation({
-        mutationFn: () => GuardService.deleteGuard(guard.id),
-        onSuccess,
-        onError: () => toast.error("Failed to delete"),
-    })
+export const GuardDialogDelete = ({ guard, closeDialog, open }) => {
+  const mutation = useMutation({
+    mutationFn: () => GuardService.deleteGuard(guard.id),
+    onSuccess,
+    onError: () => toast.error("Failed to delete"),
+  });
 
-    const { invalidateQueries } = useQueryClient();
+  const { invalidateQueries } = useQueryClient();
 
-    function onSuccess() {
-        invalidateQueries("guards")
-        toast.success("שומר נמחק בהצלחה!");
-        closeDialog();
-    }
+  function onSuccess() {
+    invalidateQueries("guards");
+    toast.success("שומר נמחק בהצלחה!");
+    closeDialog();
+  }
 
-
-    return (
-        <Box component="form" onSubmit={() => closeDialog()} sx={{ px: 2, py: 1 }}>
-            <DialogTitle>האם ברצונך למחוק את שומר {guard.name}?</DialogTitle>
-            <DialogContent></DialogContent>
-            <DialogActions>
-                <Button type="submit" color="primary">
-                    ביטול
-                </Button>
-                <Button onClick={() => mutation()} color="primary" variant="contained">
-                    מחק
-                </Button>
-
-            </DialogActions>
-        </Box>
-    );
-}
+  return (
+    <Dialog
+      open={open}
+      onClose={closeDialog}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <Box
+        component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          closeDialog();
+        }}
+        sx={{ px: 2, py: 1 }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {`האם ברצונך למחוק את השומר ${guard.name}?`}
+        </DialogTitle>
+        <DialogContent>
+          {/* You can add more content here if needed */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog} color="primary">
+            ביטול
+          </Button>
+          <Button
+            onClick={() => mutation.mutate()}
+            color="primary"
+            autoFocus
+            variant="contained"
+          >
+            מחק
+          </Button>
+        </DialogActions>
+      </Box>
+    </Dialog>
+  );
+};
 
 GuardDialogDelete.propTypes = {
-    guard: GuardType,
-    closeDialog: PropTypes.func
-}
+  guard: PropTypes.object.isRequired,
+  closeDialog: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+};

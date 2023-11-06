@@ -1,10 +1,9 @@
-import React from "react";
 import { Table, TableBody, Typography } from "@mui/material";
 import GuardItem from "./GuardItem";
 import { useQuery } from "react-query";
 import GuardService from "../../../services/GuardService";
 
-const GuardList = ({ campId, handleEdit }) => {
+const GuardList = ({ campId, handleEdit, handleDelete }) => {
   console.log(campId);
 
   const {
@@ -37,6 +36,7 @@ const GuardList = ({ campId, handleEdit }) => {
             key={guard.id}
             guard={guard}
             onEdit={() => handleEdit(guard)}
+            onDelete={() => handleDelete(guard)}
           />
         ))}
       </TableBody>
