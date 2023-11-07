@@ -3,8 +3,8 @@ import { useQueryClient } from 'react-query';
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
-import { doApiMethod } from "../../../services/apiService";
-import { API_URL } from "../../../constants/apiConstants";
+import { doApiMethod } from "@/services/apiService";
+import { API_URL } from "@/constants/apiConstants";
 
 DialogDelete.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -30,12 +30,12 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
-            if (resp.status == 200) {
+            if (resp.status === 200) {
                 toast.success(`${subject === 'shift' ? item.dayId : item.name}נמחק בהצלחה ${subjectHebrew}`);
                 setOpenDialog(false);
                 // instead doApi function;
-                queryClient.invalidateQueries(`${subject}s`)
-            } else toast.error(resp.massege);
+                await queryClient.invalidateQueries(`${subject}s`)
+            } else toast.error(resp.message);
         }
         catch (err) {
             console.log(err);
