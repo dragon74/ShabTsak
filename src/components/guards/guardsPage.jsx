@@ -1,10 +1,18 @@
 import  { useState } from "react";
-import { Typography, Container, Button, Box } from "@mui/material";
+import {
+  Typography,
+  Container,
+  Button,
+  Box,
+} from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 import GuardDialog from "components/guards/guardDialog/guardDialog.jsx";
 import GuardList from "./guardsList/guardList";
 import { useLocation } from "react-router-dom";
 import { GuardDialogDelete } from "./guardDialog/guardDialogDelete/guardDialogDelete";
+import BackLink from "../general_comps/backLink";
 
 
 export default function GuardsPage() {
@@ -15,9 +23,6 @@ export default function GuardsPage() {
   const [guardDetails, setGuardDetails] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [guardToDelete, setGuardToDelete] = useState(null);
-
-  // TODO: Fetch outside or inside the list? Create / Edit (Guard or Initial) (method: POST / PUT) (guard details?)
-  // const [selectedGuardId, setSelectedGuardId] = useState(null); TODO: Is this the best way ?
   const [selectedCampId, setSelectedCampId] = useState(state?.campId || "");
 
   const handleOpenAddDialog = () => {
@@ -92,11 +97,9 @@ export default function GuardsPage() {
           open={deleteDialogOpen} // Pass the open state
         />
       )}
-
-      {/* <GuardDialog open={dialogOpen} guardId={0} method={"POST"} close={() => setDialogOpen(false)} /> */}
-      {/* <BackLink place="end" icon={<ArrowBackIosIcon />}>
-        חזרה לרשימת השומרים
-      </BackLink> */}
+      <BackLink place="end" icon={<ArrowBackIosIcon />}>
+        חזרה לרשימת הבסיסים
+      </BackLink>
     </Container>
   );
 }
