@@ -4,8 +4,6 @@ import { useQuery } from "react-query";
 import GuardService from "../../../services/GuardService";
 
 const GuardList = ({ campId, handleEdit, handleDelete }) => {
-  console.log(campId);
-
   const {
     data: guards,
     isLoading,
