@@ -13,11 +13,11 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const GuardItem = ({ guard, onEdit, onDelete }) => (
-  <TableRow key={guard.id}>
+  <TableRow key={guard.id} sx={{ display: "flex", alignItems: 'center', flexDirection: "column", "> *": { border: 0 }, border: "1px solid red", marginBottom: 2 }}>
     <TableCell>
       <Avatar src={getGravatarUrl(guard.mail)} alt={guard.name} />
     </TableCell>
-    <TableCell>
+    <TableCell sx={{ textAlign: "center" }}>
       <div style={{ maxWidth: "200px", textOverflow: "ellipsis", overflow: "hidden" }}>{guard.name}</div>
       <div style={{ whiteSpace: "nowrap" }}>Email: {guard.mail}</div>
       <div>Phone: {guard.phone}</div>
