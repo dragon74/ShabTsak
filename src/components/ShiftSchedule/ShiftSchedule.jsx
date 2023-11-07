@@ -3,6 +3,7 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from '@mobiscroll/react';
 import { useQuery } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
+import GuardService from "@/services/GuardService.js";
 
 setOptions({
     locale: localeHe,
@@ -66,7 +67,7 @@ function ShiftSchedule() {
     });
 
     function getGuards() {
-        return getGuardsByCampId(campId)
+        return GuardService.getGuardsByCampId(campId)
                 .then((res) => {
                     return res.map((g) => ({
                         value: g.id,
