@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 import GuardService from "@/services/GuardService";
 import GuardType from "@/types/Guard.type";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography} from "@mui/material";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
@@ -9,8 +9,8 @@ export const GuardDialogDelete = ({ guard, closeDialog, open }) => {
 const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => GuardService.deleteGuard(guard.id),
-    onSuccess: () => {
-      queryClient.invalidateQueries("guards");
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("guards");
       toast.success("שומר נמחק בהצלחה!");
       closeDialog();
     },
@@ -28,7 +28,11 @@ const queryClient = useQueryClient();
         sx={{ px: 2, py: 1 }}
       >
         <DialogTitle id="alert-dialog-title">{`האם ברצונך למחוק את השומר ${guard.name}?`}</DialogTitle>
-        <DialogContent>{/* You can add more content here if needed */}</DialogContent>
+        <DialogContent>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            פעולה זו אינה הפיכה ולא ניתן לשחזר אותה.
+          </Typography>
+        </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog} color="primary">
             ביטול
@@ -43,7 +47,7 @@ const queryClient = useQueryClient();
 };
 
 GuardDialogDelete.propTypes = {
-  guard: PropTypes.object.isRequired,
+  guard: GuardType.isRequired,
   closeDialog: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
 };

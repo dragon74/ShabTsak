@@ -37,7 +37,7 @@ export default function AppRoutes() {
           <Route path={ROUTES.LOGIN} element={<Login />} />
         </Route>
       </Routes>
-      <ToastContainer position="top-left" theme="colored" />
+      <ToastContainer position="top-left" theme="colored" rtl />
     </Router>
   );
 }

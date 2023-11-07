@@ -1,10 +1,10 @@
 import {
-  TableCell,
-  TableRow,
-  IconButton,
-  Button,
-  Avatar,
-  Chip,
+    TableCell,
+    TableRow,
+    IconButton,
+    Button,
+    Avatar,
+    Chip, Stack,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,8 +18,8 @@ const GuardItem = ({ guard, onEdit, onDelete }) => (
       <Avatar src={getGravatarUrl(guard.mail)} alt={guard.name} />
     </TableCell>
     <TableCell>
-      <div>{guard.name}</div>
-      <div>Email: {guard.mail}</div>
+      <div style={{ maxWidth: "200px", textOverflow: "ellipsis", overflow: "hidden" }}>{guard.name}</div>
+      <div style={{ whiteSpace: "nowrap" }}>Email: {guard.mail}</div>
       <div>Phone: {guard.phone}</div>
     </TableCell>
     <TableCell>
@@ -29,22 +29,24 @@ const GuardItem = ({ guard, onEdit, onDelete }) => (
       />
     </TableCell>
     <TableCell>
-      <Button
-        component={Link}
-        to={`/guards/${guard.id}`}
-        variant="outlined"
-        color="primary"
-        size="small"
-        sx={{ marginRight: "10px" }}
-      >
-        מגבלות
-      </Button>
-      <IconButton onClick={() => onEdit(guard)} size="large">
-        <EditIcon />
-      </IconButton>
-      <IconButton onClick={() => onDelete(guard)} size="large">
-        <DeleteIcon />
-      </IconButton>
+        <Stack direction="row" alignItems="center" flexWrap="nowrap">
+            <Button
+                component={Link}
+                to={`/guards/${guard.id}`}
+                variant="outlined"
+                color="primary"
+                size="small"
+                sx={{ marginRight: "10px" }}
+            >
+                מגבלות
+            </Button>
+            <IconButton onClick={() => onEdit(guard)} size="large" color="secondary">
+                <EditIcon />
+            </IconButton>
+            <IconButton onClick={() => onDelete(guard)} size="large" color="error">
+                <DeleteIcon />
+            </IconButton>
+        </Stack>
     </TableCell>
   </TableRow>
 );
