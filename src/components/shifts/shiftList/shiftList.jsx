@@ -16,7 +16,7 @@ export default function ShiftList({ shifts }) {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center">ID Day</TableCell>
+                                <TableCell align="center"> יום</TableCell>
                                 <TableCell align="center">יום בשבוע</TableCell>
                                 <TableCell align="center">משעה </TableCell>
                                 <TableCell align="center">עד שעה</TableCell>
