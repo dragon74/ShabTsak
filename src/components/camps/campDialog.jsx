@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
+import { useQueryClient } from "react-query";
 import { theme } from "@/theme/theme";
 import { useMemo } from "react";
-import { createOrUpdateCamp } from "../../services/CampService";
-import { useQueryClient } from "react-query";
+import { createOrUpdateCamp } from "@/services/CampService";
 
 CampDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -18,7 +18,7 @@ function CampDialog({ openDialog, setOpenDialog, method, item }) {
     // Access the client
     const queryClient = useQueryClient();
 
-    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             name: method === "PUT" ? item.name : "",
             ...(method === "PUT" && { id: item.id })
@@ -33,11 +33,10 @@ function CampDialog({ openDialog, setOpenDialog, method, item }) {
 
 
     const onSubForm = async(formData) => {
-        await createOrUpdateCamp(formData, method, getValues, item);
+        await createOrUpdateCamp(formData, method,item);
         //  clear the shifts query 
         queryClient.invalidateQueries(['camps'])
         setOpenDialog(false);
-        reset();
     }
 
     return (
@@ -53,7 +52,7 @@ function CampDialog({ openDialog, setOpenDialog, method, item }) {
                     }
                 }}
             >
-                <DialogTitle>{actionHebrew} בסיס {item ? item.name : ""}</DialogTitle>
+                <DialogTitle>{actionHebrew} בסיס {item ? item.name : undefined}</DialogTitle>
                 <form onSubmit={handleSubmit(onSubForm)}>
                     <DialogContent style={{ padding: '20px' }}>
                         <TextField

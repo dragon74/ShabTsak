@@ -1,6 +1,6 @@
+import { toast } from "react-toastify";
 import { CAMP_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService";
-import { toast } from "react-toastify";
 
 export async function getCamps() {
     let url = CAMP_URL + "/all"
@@ -14,15 +14,14 @@ export async function getCamps() {
     }
 }
 
-export async function createOrUpdateCamp(bodyFormData, method, getValues, item) {
+export async function createOrUpdateCamp(bodyFormData, method, prevItemForUpdate) {
     try {
         let resp = await doApiMethod(CAMP_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`בסיס ${getValues('dayId')} נוסף בהצלחה`);
+            toast.success(`בסיס ${resp.data.name} נוסף בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
-            toast.success(`בסיס ${item.dayId} התעדכן בהצלחה`);
+            toast.success(`בסיס ${prevItemForUpdate.name} התעדכן בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-  
     } catch (err) {
         console.error(`An error occurred while ${method} בסיס`, err);
         toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
