@@ -7,6 +7,7 @@ import { doApiMethod } from "@/services/apiService";
 import { API_URL } from "@/constants/apiConstants";
 import { getDayOfWeekHebrew } from "@/lib/utils/dateUtils"
 
+
 DialogDelete.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
@@ -31,6 +32,7 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
+
             console.log(resp);
             if (resp.status == 200) {
                 toast.success(`${subjectHebrew}  ${subject === 'shift' ? `יום ${getDayOfWeekHebrew(item.dayId)}` : item.name} נמחק בהצלחה`);
@@ -40,6 +42,7 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
                 // the caching system will recognize it as outdated and fetch the data again
                 queryClient.invalidateQueries(`${subject}s`)
             } else toast.error(resp.massege);
+
         }
         catch (err) {
             console.log(err);
