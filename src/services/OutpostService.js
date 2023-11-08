@@ -19,13 +19,13 @@ export async function getOutpostsByCampId(campId) {
     }
 }
 
-export async function createOrUpdateOutpost(bodyFormData, method, getValues, item) {
+export async function createOrUpdateOutpost(bodyFormData, method, prevItemForUpdate) {
     try {
         let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`עמדה ${getValues('dayId')} נוספה בהצלחה`);
+            toast.success(`עמדה ${resp.data.name} נוספה בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
-            toast.success(`עמדה ${item.dayId} התעדכנה בהצלחה`);
+            toast.success(`עמדה ${prevItemForUpdate.name} התעדכנה בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
   
     } catch (err) {
