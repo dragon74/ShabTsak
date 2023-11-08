@@ -57,7 +57,7 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
                 <DialogTitle
                     sx={{ mb: 2 }}
                     id="alert-dialog-title">
-                    {`אתה בטוח רוצה למחוק ${subjectHebrew} ${subject === 'shift' ? item.dayId : item.name}?`}
+                    {`אתה בטוח רוצה למחוק ${subjectHebrew} ${subject === 'shift' ? getDayOfWeekHebrew(item.dayId) : item.name}?`}
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>
