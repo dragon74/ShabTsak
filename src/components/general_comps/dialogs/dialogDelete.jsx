@@ -33,9 +33,11 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
             let resp = await doApiMethod(url, "DELETE");
             console.log(resp);
             if (resp.status == 200) {
-                toast.success(`${subjectHebrew} יום ${subject === 'shift' ?getDayOfWeekHebrew(item.dayId) : item.name} נמחק בהצלחה`);
+                toast.success(`${subjectHebrew} יום ${subject === 'shift' ? getDayOfWeekHebrew(item.dayId) : item.name} נמחק בהצלחה`);
                 setOpenDialog(false);
-                // instead doApi function;
+                // marked as outdated.
+                // The next time this query is requested, 
+                // the caching system will recognize it as outdated and fetch the data again
                 queryClient.invalidateQueries(`${subject}s`)
             } else toast.error(resp.massege);
         }
