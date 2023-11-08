@@ -19,7 +19,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
     const queryClient = useQueryClient();
 
     const params = useParams();
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             ...(method === "PUT" && { id: item.id }),
             campId: params["id"],
