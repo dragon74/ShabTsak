@@ -21,6 +21,7 @@ export default function ShiftItem({ item }) {
 
     return (
         <TableRow>
+            <TableCell align="center">{item.dayId}</TableCell>
             <TableCell align="center">{dayHebrew}</TableCell>
             <TableCell align="center" direction="asc" >{item.fromHour}:00</TableCell>
             <TableCell align="center">{item.toHour}:00</TableCell>

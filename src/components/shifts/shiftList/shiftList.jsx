@@ -11,11 +11,12 @@ export default function ShiftList({ shifts }) {
         <>
             <CssBaseline />
             <Container maxWidth="md" sx={{ padding: 0 }}>
-               
+
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
+                                <TableCell align="center">ID Day</TableCell>
                                 <TableCell align="center">יום בשבוע</TableCell>
                                 <TableCell align="center">משעה </TableCell>
                                 <TableCell align="center">עד שעה</TableCell>
@@ -26,7 +27,7 @@ export default function ShiftList({ shifts }) {
                         <TableBody>
                             {shifts.map((item, i) => {
                                 return (
-                                    <ShiftItem key={item.id}  index={i} item={item} />
+                                    <ShiftItem key={item.id} index={i} item={item} />
                                 )
                             })}
                         </TableBody>
