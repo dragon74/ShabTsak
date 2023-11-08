@@ -31,7 +31,6 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
-            console.log(resp);
             if (resp.status == 200) {
                 toast.success(`${subjectHebrew}  ${subject === 'shift' ? `יום ${getDayOfWeekHebrew(item.dayId)}` : item.name} נמחק בהצלחה`);
                 setOpenDialog(false);
