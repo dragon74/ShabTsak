@@ -19,7 +19,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const defaultFromHour = method === "PUT" ? Number(item.fromHour) : 8; // Set a default "fromHour" value
     const defaultToHour = method === "PUT" ? Number(item.toHour) : 11; // Set a default "toHour" value
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             dayId: defaultDayId,
             fromHour: defaultFromHour,
@@ -71,7 +71,6 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         //  clear the shifts query 
         queryClient.invalidateQueries(['shifts'])
         setOpenDialog(false);
-        reset();
     }
 
     const isFromHourValid = (fromHour, toHour) => {
