@@ -20,12 +20,13 @@ export async function getShiftsByOutpostId(outpostId) {
 }
 
 
-export async function createOrUpdateShift(bodyFormData, method, prevItemForUpdate) {
+export async function createOrUpdateShift(bodyFormData, method, prevItemForUpdate,reset) {
     try {
-
         let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
-        if (resp.status === 201 && method === "POST")
+        if (resp.status === 201 && method === "POST"){
             toast.success(`משמרת יום ${getDayOfWeekHebrew(resp.data.dayId)} נוספה בהצלחה `);
+            reset();
+        }
         else if (resp.status === 200 && method === "PUT")
             toast.success(`משמרת יום ${getDayOfWeekHebrew(prevItemForUpdate.dayId)} התעדכנה בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
