@@ -8,7 +8,6 @@ export async function getShiftsByOutpostId(outpostId) {
     try {
         let resp = await doApiGet(url);
         if (resp.status === 200) {
-            // console.log(resp.data);
             return resp.data;
         }
         else toast.error(resp.message);
