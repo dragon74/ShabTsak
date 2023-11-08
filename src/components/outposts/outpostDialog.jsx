@@ -19,7 +19,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
     const queryClient = useQueryClient();
 
     const params = useParams();
-    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             ...(method === "PUT" && { id: item.id }),
             campId: params["id"],
@@ -35,8 +35,11 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
     }, [method]);
 
 
-    const onSubForm = (formData) => {
-        createOrUpdateOutpost(formData, method, getValues, item, reset, setOpenDialog, queryClient);
+    const onSubForm = async (formData) => {
+        await createOrUpdateOutpost(formData, method, item);
+        //  clear the outposts query 
+        queryClient.invalidateQueries(['outposts'])
+        setOpenDialog(false);
     }
 
     return (

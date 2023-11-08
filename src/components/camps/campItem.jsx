@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, TableCell, TableRow, IconButton } from "@mui/material";
-import DialogCamp from "./dialogCamp";
+import CampDialog from "./campDialog";
 import DeleteCamp from "./deleteCamp/deleteCamp";
 import ROUTES from "../../constants/routeConstants";
 import EditIcon from "@mui/icons-material/Edit";
@@ -59,7 +59,7 @@ const CampItem = ({ item, index, doApiCamps }) => {
         <DeleteCamp item={item} doApiCamps={doApiCamps} />
       </TableCell>
 
-      <DialogCamp openDialog={openDialog} setOpenDialog={setOpenDialog} method={"PUT"} doApiCamps={doApiCamps} item={item} />
+      <CampDialog openDialog={openDialog} setOpenDialog={setOpenDialog} method="PUT" doApiCamps={doApiCamps} item={item} />
     </TableRow>
   );
 };

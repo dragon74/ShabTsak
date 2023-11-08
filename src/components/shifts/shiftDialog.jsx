@@ -19,7 +19,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const defaultFromHour = method === "PUT" ? Number(item.fromHour) : 8; // Set a default "fromHour" value
     const defaultToHour = method === "PUT" ? Number(item.toHour) : 11; // Set a default "toHour" value
 
-    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
             dayId: defaultDayId,
             fromHour: defaultFromHour,
@@ -54,7 +54,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         else return method;
     }, [method]);
 
-    const onSubForm = (formData) => {
+    const onSubForm = async (formData) => {
         if (method === "PUT") {
             const hasFormChanged =
                 formData.dayId !== defaultDayId ||
@@ -66,8 +66,11 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                 return;
             }
         }
-        createOrUpdateShift(formData, method, getValues, item, reset, setOpenDialog, queryClient);
-        console.log(formData);
+        await createOrUpdateShift(formData, method, item);
+        //  clear the shifts query 
+        if (method === 'POST') reset();
+        queryClient.invalidateQueries(['shifts'])
+        setOpenDialog(false);
     }
 
     const isFromHourValid = (fromHour, toHour) => {
@@ -172,7 +175,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                         </Button>
                         <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
-                    
+
                 </form >
             </Dialog >
         </ThemeProvider >
