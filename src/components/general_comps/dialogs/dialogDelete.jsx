@@ -3,8 +3,9 @@ import { useQueryClient } from 'react-query';
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
-import { doApiMethod } from "../../../services/apiService";
-import { API_URL } from "../../../constants/apiConstants";
+import { doApiMethod } from "@/services/apiService";
+import { API_URL } from "@/constants/apiConstants";
+import { getDayOfWeekHebrew } from "@/lib/utils/dateUtils"
 
 DialogDelete.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -31,9 +32,11 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
         try {
             let resp = await doApiMethod(url, "DELETE");
             if (resp.status == 200) {
-                toast.success(`${subject === 'shift' ? item.dayId : item.name}נמחק בהצלחה ${subjectHebrew}`);
+                toast.success(`${subjectHebrew}  ${subject === 'shift' ? `יום ${getDayOfWeekHebrew(item.dayId)}` : item.name} נמחק בהצלחה`);
                 setOpenDialog(false);
-                // instead doApi function;
+                // marked as outdated.
+                // The next time this query is requested, 
+                // the caching system will recognize it as outdated and fetch the data again
                 queryClient.invalidateQueries(`${subject}s`)
             } else toast.error(resp.massege);
         }
@@ -42,6 +45,7 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
             toast.error("יש בעיה בבקשה נסה מאוחר יותר");
         }
     }
+
     return (
         <>
             <Dialog
@@ -53,7 +57,7 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
                 <DialogTitle
                     sx={{ mb: 2 }}
                     id="alert-dialog-title">
-                    {`אתה בטוח רוצה למחוק ${subjectHebrew} ${subject === 'shift' ? item.dayId : item.name}?`}
+                    {`אתה בטוח רוצה למחוק ${subjectHebrew} ${subject === 'shift' ? getDayOfWeekHebrew(item.dayId) : item.name}?`}
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>לא מסכים</Button>

@@ -31,7 +31,7 @@ function CampItem({ item, index }) {
           color="brown"
           variant="outlined"
           onClick={() => {
-            nav(`${ROUTES.GUARDS}/camp/${item.id}`);
+            nav(ROUTES.GUARDS,{state:{campId: item.id}})
           }}
         >
           שומרים
