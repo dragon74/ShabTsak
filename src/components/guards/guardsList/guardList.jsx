@@ -5,8 +5,7 @@ import GuardService from "@/services/GuardService";
 import useBreakpoint from "../../../hooks/useBreakpoint";
 
 const GuardList = ({ campId, handleEdit, handleDelete }) => {
-  const tableSx = useBreakpoint({ md: [false, { boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }], marginBottom: "15px", })
-  console.log(tableSx);
+  const tableSx = useBreakpoint({ md: [true, { boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }], marginBottom: "15px", })
   const {
     data: guards,
     isLoading,
