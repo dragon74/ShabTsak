@@ -10,7 +10,6 @@ const useBreakpoint = ({ xs, sm, md, lg, xl, ...rest }) => {
     const [sxObj, setSxObj] = React.useState(rest || {});
     const up = useCallback((key) => `@media (min-width:${theme.breakpoints.values[key]}px)`, [theme.breakpoints]);
     const down = useCallback((key) => `@media (max-width:${theme.breakpoints.values[key] - 1}px)`, [theme.breakpoints]);
-    const timer = React.useRef(null);
 
     const xsMatches = useMediaQuery(xs?.[0] === true ? up("xs") : down("xs"))
     const smMatches = useMediaQuery(sm?.[0] === true ? up("sm") : down("sm"));
@@ -26,14 +25,14 @@ const useBreakpoint = ({ xs, sm, md, lg, xl, ...rest }) => {
             if (mdMatches && md?.[1]) Object.assign(newSxObj, md[1]);
             if (lgMatches && lg?.[1]) Object.assign(newSxObj, lg[1]);
             if (xlMatches && xl?.[1]) Object.assign(newSxObj, xl[1]);
-            timer.current = null;
+            console.log(newSxObj);
             return newSxObj;
         });
     }
 
     React.useEffect(() => {
-        if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(reset, 300);
+        const t = setTimeout(reset, 300);
+        return () => clearTimeout(t);
     }, [xsMatches, smMatches, mdMatches, lgMatches, xlMatches])
     return sxObj;
 }
