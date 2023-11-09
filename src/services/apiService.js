@@ -22,30 +22,25 @@ export const doApiGet = async (_url, params = {}) => {
   }
 };
 
-// For Post,delete, put, patch
-export const doApiMethod = async (_url, _method, _body = {}) => {
+export const doApiMethod = async (url, method, body = {}) => {
   try {
-    return await axios({
-      url: _url,
-      method: _method,
-      data: _body,
+    const config = {
+      url,
+      method,
       headers: {
-        "Authorization": getIdTokenFromLocalStorage(),
+        Authorization: getIdTokenFromLocalStorage(),
       },
-    });
-  } catch (err) {
-    throw err;
+    };
+
+    if (!["get", "delete"].includes(method.toLowerCase())) {
+      config.data = body;
+    }
+
+    const response = await axios(config);
+    return response;
+  } catch (error) {
+    console.error(`Error during API ${method.toUpperCase()} request:`, error);
+    throw error;
   }
 };
 
-export const doApiMethodSignUp = async (_url, _method, _body = {}) => {
-  try {
-    return await axios({
-      url: _url,
-      method: _method,
-      data: _body,
-    });
-  } catch (err) {
-    throw err;
-  }
-};

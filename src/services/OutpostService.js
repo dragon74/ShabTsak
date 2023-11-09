@@ -7,7 +7,6 @@ export async function getOutpostsByCampId(campId) {
     try {
         let resp = await doApiGet(url);
         if (resp.status === 200) {
-            console.log(resp.data);
             return resp.data;
         }
         else toast.error(resp.message);
@@ -19,20 +18,18 @@ export async function getOutpostsByCampId(campId) {
     }
 }
 
-export async function createOrUpdateOutpost(bodyFormData, method, getValues, item, reset, setOpenDialog, queryClient) {
+export async function createOrUpdateOutpost(bodyFormData, method, prevItemForUpdate) {
     try {
         let resp = await doApiMethod(OUTPOST_URL, method, bodyFormData);
         if (resp.status === 201 && method === "POST")
-            toast.success(`משמרת ${getValues('name')} נוסף בהצלחה`);
+            toast.success(`עמדה ${resp.data.name} נוספה בהצלחה`);
         else if (resp.status === 200 && method === "PUT")
-            toast.success(`משמרת ${item.name} התעדכן בהצלחה`);
+            toast.success(`עמדה ${prevItemForUpdate.name} התעדכנה בהצלחה`);
         else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
-        //  clear the camp query 
-        queryClient.invalidateQueries(['outposts'])
-        setOpenDialog(false);
-        reset();
+  
     } catch (err) {
-        console.error(`An error occurred while ${method} בסיס`, err);
+        console.error(`An error occurred while ${method} עמדה`, err);
         toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+        throw err;
     }
 }

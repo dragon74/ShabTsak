@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Card, CardContent, Typography, Avatar } from "@mui/material";
-import { getGravatarUrl, getDayName } from "./utils";
+import { getGravatarUrl } from "./utils";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import TimeLimitForm from "./TimeLimitForm";
 import TimeLimitTable from "./TimeLimitTable";
-import { GUARD_URL, API_URL } from "../../constants/apiConstants";
+import { GUARD_URL, API_URL } from "@/constants/apiConstants";
 import { toast } from "react-toastify";
-import BackLink from "../general_comps/backLink";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import BackLink from "components/general_comps/backLink.jsx";
 
 const GuardProfile = () => {
   const { id } = useParams();
