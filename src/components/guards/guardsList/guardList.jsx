@@ -1,9 +1,12 @@
 import { Table, TableBody, Typography } from "@mui/material";
 import GuardItem from "./GuardItem";
 import { useQuery } from "react-query";
-import GuardService from "../../../services/GuardService";
+import GuardService from "@/services/GuardService";
+import useBreakpoint from "../../../hooks/useBreakpoint";
 
 const GuardList = ({ campId, handleEdit, handleDelete }) => {
+  const tableSx = useBreakpoint({ md: [false, { boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }], marginBottom: "15px", })
+  console.log(tableSx);
   const {
     data: guards,
     isLoading,
@@ -25,9 +28,7 @@ const GuardList = ({ campId, handleEdit, handleDelete }) => {
   }
 
   return (
-    <Table
-      sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}
-    >
+    <Table sx={tableSx}>
       <TableBody>
         {guards.map((guard) => (
           <GuardItem
