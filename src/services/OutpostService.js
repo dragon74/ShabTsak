@@ -33,3 +33,18 @@ export async function createOrUpdateOutpost(bodyFormData, method, prevItemForUpd
         throw err;
     }
 }
+
+export async function getOutpostsAndShiftsForCampId(campId) {
+    try {
+        let resp = await doApiGet(OUTPOST_URL + "/full/camp/" + campId);
+        if (resp.status === 200) {
+            console.log(resp.data);
+            return resp.data;
+        }
+        else toast.error(resp.message);
+    }
+    catch (err) {
+        console.log(err);
+        toast.error("יש בעיה בבקשה נסה מאוחר יותר");
+    }
+}

@@ -1,9 +1,9 @@
 import {useState, useMemo, useCallback, useEffect } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import {Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe, snackbar} from '@mobiscroll/react';
-import { getGuardsByCampId } from '@/services/GuardService';
-import { getOutpostsByCampId, getOutpostsAndShiftsForCampId } from "@/services/OutpostService";
-import { createOrUpdateShift } from "@/services/ShiftService";
+import GuardService from "@/services/GuardService.js";
+import { getOutpostsAndShiftsForCampId } from "@/services/OutpostService";
+//import { createOrUpdateShift } from "@/services/ShiftService";
 import { useQuery } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 import { getTimeStr, getDayStr, getDayNumber, getHourNumber } from "../../lib/utils/dateUtils";
@@ -47,13 +47,15 @@ function ShiftSchedule() {
     const [guards, setGuards] = useState([]);
     const [shifts, setShifts] = useState([]);
 
-    const colors = [
-        'red', 'green', 'blue', 'yellow', 'orange', 'purple', 'navy', 'maroon', 'olive', 'silver'
-      ];
+    const colors = useMemo(() => {
+        return [
+            'red', 'green', 'blue', 'yellow', 'orange', 'purple', 'navy', 'maroon', 'olive', 'silver'
+          ];
+    }, []);
 
     const { isLoading: loadingGuardsAndLimits, isError: errorGuardsAndLimits, data: guardsAndLimits } = useQuery({
         queryKey: ["guardsAndLimits", campId],
-        queryFn: () => getGuardsByCampId(campId),
+        queryFn: () => GuardService.getGuardsAndLimitsForCampId(campId),
         enabled: !!campId,
         initialData: []
     });
@@ -73,7 +75,6 @@ function ShiftSchedule() {
             const shifts = outpostsAndShifts.map((o) => o.shifts)
             handleSetShifts(shifts);
         }
-
         //set guards and limits
         if(!loadingOutpostsAndShifts && !errorOutpostsAndShifts){
             console.log("guardsAndLimits" , guardsAndLimits)
@@ -197,7 +198,7 @@ function ShiftSchedule() {
             toast.error("יש יותר ממשמרת אחת בזמן הנבחר");
             args.event = {};
         }
-    }, [loadPopupForm, outposts, findShift]);
+    }, [loadPopupForm, outposts]);
 
     const findShift = useCallback((outpost, start, end) => {
         return shifts.filter(s => s.resource == outpost && 
@@ -239,6 +240,7 @@ function ShiftSchedule() {
             end: end,
             guardName: tempShibuts.guardName,
             outpost: tempShibuts.outpost,
+            resource: tempShibuts.outpost,
             color: color
         };
         if (isEdit) {

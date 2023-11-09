@@ -30,6 +30,17 @@ const GuardService = {
   },
   updateGuard(guardDetails){
         return doApiMethod(GUARD_URL, "PUT", guardDetails)
+  },
+  getGuardsAndLimitsForCampId(campId) {
+    return doApiGet(GUARD_URL + "/all/full/" + campId)
+            .then((res) => {
+              console.log(res.data);
+              return res.data;
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error("Failed to fetch guard details. Please try again.");
+            });
   }
 };
 
