@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { useForm } from "react-hook-form";
 import { useMemo } from "react";
-import { useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { DialogTitle, DialogContent, DialogActions, Button, FormHelperText, ThemeProvider, Select, MenuItem, Dialog, InputLabel, Grid } from "@mui/material";
 import { theme } from "@/theme/theme";
 import { toast } from 'react-toastify';
-import { createOrUpdateShift } from "@/services/ShiftService";
+import { createOrUpdateShift, getShiftsByOutpostId } from "@/services/ShiftService";
 import { daysOfWeekHebrew, hourArr } from "@/lib/utils/dateUtils";
 
 function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
@@ -14,6 +14,11 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const params = useParams();
     const outpostId = Number(params["id"]);
     const isdayNumberExist = method === "PUT" ? item.dayId : '';
+
+    const {  data: shifts } = useQuery({
+        queryFn: () => getShiftsByOutpostId(outpostId),
+        queryKey: ['shifts', outpostId],
+    });
 
     const defaultDayId = method === "PUT" ? Number(item.dayId) : 1; // Set a default day value when not in "PUT" mode
     const defaultFromHour = method === "PUT" ? Number(item.fromHour) : 8; // Set a default "fromHour" value
@@ -54,6 +59,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         else return method;
     }, [method]);
 
+
+
     const onSubForm = async (formData) => {
         if (method === "PUT") {
             const hasFormChanged =
@@ -66,7 +73,30 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                 return;
             }
         }
+        // Check if formData is not in the ShiftList
+        const fromHourObj = formData.fromHour;
+        const toHourObj = formData.toHour;
+        const isDuplicate = shifts && shifts.some(shift => {
+            return (
+                formData.outpostId === shift.outpostId &&
+                formData.dayId === shift.dayId &&
+                (fromHourObj >= shift.fromHour && fromHourObj < shift.toHour
+                ||
+                toHourObj > shift.fromHour && toHourObj <= shift.toHour
+                ||
+                fromHourObj < shift.fromHour && toHourObj < shift.toHour
+                )
+            );
+        });
+        if (isDuplicate) {
+            // Show an error message or handle the duplicate case here
+            toast.error('המשמרת בשעות הללו כבר קיימת ברשימת המשמרות');
+            return;
+        }
+
+        // If it's not a duplicate do create or update
         await createOrUpdateShift(formData, method, item);
+
         //  clear the shifts query 
         if (method === 'POST') reset();
         queryClient.invalidateQueries(['shifts'])

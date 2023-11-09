@@ -10,12 +10,12 @@ import BackLink from "../general_comps/backLink";
 import LoadingComp from "../general_comps/loadingComp";
 import { getShiftsByOutpostId } from "@/services/ShiftService";
 
-const ShiftsPage = () => {
+export default function ShiftsPage() {
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
   const outpostId = params["id"];
 
-  const sortedArrayShifts = async () => {
+ const sortedArrayShifts = async () => {
     const shiftsData = await getShiftsByOutpostId(outpostId);
     return shiftsData?.slice().sort((a, b) => {
       // First, compare by dayId
@@ -64,4 +64,3 @@ const ShiftsPage = () => {
   )
 }
 
-export default ShiftsPage

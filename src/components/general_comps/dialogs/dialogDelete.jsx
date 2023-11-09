@@ -23,7 +23,7 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
         else if (subject === "outpost") return "עמדה";
         else if (subject === "shift") return "משמרת";
         else if (subject === "guard") return "שומר";
-        else return subject; // You can specify a default value if needed
+        else return subject; 
     }, [subject]);
 
 
