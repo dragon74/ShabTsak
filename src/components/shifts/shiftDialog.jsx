@@ -97,12 +97,19 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     const isDuplicate =
       shifts &&
       shifts.some((shift) => {
+        let fromHourShift = shift.fromHour;
+        let toHourShift = shift.toHour;
         return (
           formData.outpostId === shift.outpostId &&
           formData.dayId === shift.dayId &&
-          ((fromHourObj >= shift.fromHour && fromHourObj < shift.toHour) ||
-            (toHourObj > shift.fromHour && toHourObj <= shift.toHour) ||
-            (fromHourObj < shift.fromHour && toHourObj < shift.toHour))
+          //fromHour obj inside the shift time
+          ((fromHourObj >= fromHourShift && fromHourObj < toHourShift) ||
+            //toHour obj inside the shift time
+            (toHourObj > fromHourShift && toHourObj <= toHourShift) ||
+            //all obj outside the shift time
+            (fromHourObj <= fromHourShift && toHourObj >= toHourShift) ||
+            //all obj inside the shift time
+            (fromHourObj >= fromHourShift && toHourObj <= toHourShift))
         );
       });
     if (isDuplicate) {
@@ -110,6 +117,17 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
       toast.error("המשמרת בשעות הללו כבר קיימת ברשימת המשמרות");
       return;
     }
+
+    //   if (gsl.getDayId().equals(shift.getDayId()) &&
+    //   // Banned time containing shift
+    //   ((gsl.getFromHour() <= shift.getFromHour()  && gsl.getToHour() >= shift.getToHour()) ||
+    //   // Banned time intersects
+    //   (gsl.getToHour() >= shift.getFromHour()  && gsl.getToHour() <= shift.getToHour()) ||
+    //   // Banned time intersects
+    //   (gsl.getFromHour() >= shift.getFromHour()  && gsl.getFromHour() <= shift.getToHour()) ||
+    //   // Banned time contained in shift
+    //   (gsl.getFromHour() >= shift.getFromHour()  && gsl.getToHour() <= shift.getToHour()))
+    // ) {
 
     // If it's not a duplicate do create or update
     await createOrUpdateShift(formData, method, item);
