@@ -79,12 +79,20 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     else return method;
   }, [method]);
 
+
+  const isFormChanged = (formData, defaultDayId, defaultFromHour, defaultToHour) => {
+    return (
+      formData.dayId !== defaultDayId ||
+      formData.fromHour !== defaultFromHour ||
+      formData.toHour !== defaultToHour
+    );
+  };
+
+
   const onSubForm = async (formData) => {
     if (method === "PUT") {
-      const hasFormChanged =
-        formData.dayId !== defaultDayId ||
-        formData.fromHour !== defaultFromHour ||
-        formData.toHour !== defaultToHour;
+      const hasFormChanged = isFormChanged(formData, defaultDayId, defaultFromHour, defaultToHour);
+      
       if (!hasFormChanged) {
         // Form data has not changed, show a toast error
         toast.info("הטופס לא השתנה, נא שנה את אחד הפרמטרים");
@@ -102,13 +110,13 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         return (
           formData.outpostId === shift.outpostId &&
           formData.dayId === shift.dayId &&
-          //fromHour obj inside the shift time
+          // fromHour obj inside the shift time range
           ((fromHourObj >= fromHourShift && fromHourObj < toHourShift) ||
-            //toHour obj inside the shift time
+            //toHour obj inside the shift time range
             (toHourObj > fromHourShift && toHourObj <= toHourShift) ||
-            //all obj outside the shift time
+            //all obj outside the shift time range
             (fromHourObj <= fromHourShift && toHourObj >= toHourShift) ||
-            //all obj inside the shift time
+            //all obj inside the shift time range
             (fromHourObj >= fromHourShift && toHourObj <= toHourShift))
         );
       });
@@ -117,18 +125,6 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
       toast.error("המשמרת בשעות הללו כבר קיימת ברשימת המשמרות");
       return;
     }
-
-    //   if (gsl.getDayId().equals(shift.getDayId()) &&
-    //   // Banned time containing shift
-    //   ((gsl.getFromHour() <= shift.getFromHour()  && gsl.getToHour() >= shift.getToHour()) ||
-    //   // Banned time intersects
-    //   (gsl.getToHour() >= shift.getFromHour()  && gsl.getToHour() <= shift.getToHour()) ||
-    //   // Banned time intersects
-    //   (gsl.getFromHour() >= shift.getFromHour()  && gsl.getFromHour() <= shift.getToHour()) ||
-    //   // Banned time contained in shift
-    //   (gsl.getFromHour() >= shift.getFromHour()  && gsl.getToHour() <= shift.getToHour()))
-    // ) {
-
     // If it's not a duplicate do create or update
     await createOrUpdateShift(formData, method, item);
 
