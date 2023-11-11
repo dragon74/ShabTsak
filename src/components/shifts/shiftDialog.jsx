@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
-import { useMemo } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import {
@@ -29,6 +28,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
   const queryClient = useQueryClient();
   const params = useParams();
   const outpostId = Number(params["id"]);
+  const actionHebrew = method === "POST" ? "הוסף" : "ערוך";
 
   const { data: shifts } = useQuery({
     queryFn: () => getShiftsByOutpostId(outpostId),
@@ -72,13 +72,6 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
       };
     },
   });
-
-  const actionHebrew = useMemo(() => {
-    if (method === "POST") return "הוסף";
-    else if (method === "PUT") return "ערוך";
-    else return method;
-  }, [method]);
-
   const onSubForm = async ({ fromHour, toHour, outpostId, dayId }) => {
     if (method === "PUT" && !isDirty) {
       // Form data has not changed, show a toast error
