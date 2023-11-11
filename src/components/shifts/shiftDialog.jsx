@@ -23,12 +23,12 @@ import {
   getShiftsByOutpostId,
 } from "@/services/ShiftService";
 import { daysOfWeekHebrew, hourArr } from "@/lib/utils/dateUtils";
+import dayjs from "dayjs";
 
 function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
   const queryClient = useQueryClient();
   const params = useParams();
   const outpostId = Number(params["id"]);
-  const isdayNumberExist = method === "PUT" ? item.dayId : "";
 
   const { data: shifts } = useQuery({
     queryFn: () => getShiftsByOutpostId(outpostId),
@@ -79,32 +79,27 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     else return method;
   }, [method]);
 
-  const onSubForm = async (formData) => {
+  const onSubForm = async ({ fromHour, toHour, outpostId, dayId }) => {
     if (method === "PUT" && !isDirty) {
       // Form data has not changed, show a toast error
       toast.info("הטופס לא השתנה, נא שנה את אחד הפרמטרים");
       return;
     }
 
-    // Check if formData is not in the ShiftList
-    const fromHourObj = formData.fromHour;
-    const toHourObj = formData.toHour;
     const isDuplicate =
       shifts &&
       shifts.some((shift) => {
-        let fromHourShift = shift.fromHour;
-        let toHourShift = shift.toHour;
         return (
-          formData.outpostId === shift.outpostId &&
-          formData.dayId === shift.dayId &&
+          outpostId === shift.outpostId &&
+          dayId === shift.dayId &&
           // fromHour obj inside the shift time range
-          ((fromHourObj >= fromHourShift && fromHourObj < toHourShift) ||
+          ((fromHour >= shift.fromHour && fromHour < shift.toHour) ||
             //toHour obj inside the shift time range
-            (toHourObj > fromHourShift && toHourObj <= toHourShift) ||
+            (toHour > shift.fromHour && toHour <= shift.toHour) ||
             //all obj outside the shift time range
-            (fromHourObj <= fromHourShift && toHourObj >= toHourShift) ||
+            (fromHour <= shift.fromHour && toHour >= shift.toHour) ||
             //all obj inside the shift time range
-            (fromHourObj >= fromHourShift && toHourObj <= toHourShift))
+            (fromHour >= shift.fromHour && toHour <= shift.toHour))
         );
       });
     if (isDuplicate) {
@@ -113,7 +108,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
       return;
     }
     // If it's not a duplicate do create or update
-    await createOrUpdateShift(formData, method, item);
+    await createOrUpdateShift({ fromHour, toHour, outpostId, dayId }, method, item);
 
     //  clear the shifts query
     if (method === "POST") reset();
@@ -139,7 +134,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         }}
       >
         <DialogTitle>
-          {actionHebrew} משמרת יום {isdayNumberExist}
+          {actionHebrew} משמרת {item?.id && `יום ${dayjs().weekday(item?.dayId).format("dddd")}`}
         </DialogTitle>
         <form onSubmit={handleSubmit(onSubForm)}>
           <DialogContent style={{ padding: "10px 20px" }}>
