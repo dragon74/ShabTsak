@@ -43,7 +43,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
       dayId: defaultDayId,
@@ -79,26 +79,13 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     else return method;
   }, [method]);
 
-
-  const isFormChanged = (formData, defaultDayId, defaultFromHour, defaultToHour) => {
-    return (
-      formData.dayId !== defaultDayId ||
-      formData.fromHour !== defaultFromHour ||
-      formData.toHour !== defaultToHour
-    );
-  };
-
-
   const onSubForm = async (formData) => {
-    if (method === "PUT") {
-      const hasFormChanged = isFormChanged(formData, defaultDayId, defaultFromHour, defaultToHour);
-      
-      if (!hasFormChanged) {
-        // Form data has not changed, show a toast error
-        toast.info("הטופס לא השתנה, נא שנה את אחד הפרמטרים");
-        return;
-      }
+    if (method === "PUT" && !isDirty) {
+      // Form data has not changed, show a toast error
+      toast.info("הטופס לא השתנה, נא שנה את אחד הפרמטרים");
+      return;
     }
+
     // Check if formData is not in the ShiftList
     const fromHourObj = formData.fromHour;
     const toHourObj = formData.toHour;
