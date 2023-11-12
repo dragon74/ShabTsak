@@ -1,5 +1,5 @@
-export const hourArr = Array.from({ length: 24 }, (_, index) => {
-    const hour = (index + 1).toString();
+export const hourArr = Array.from({ length: 25 }, (_, index) => {
+    const hour = (index).toString();
     return hour;
 });
 

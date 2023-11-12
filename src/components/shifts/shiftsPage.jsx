@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Container, Typography } from "@mui/material"
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Container, Typography } from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddShiftBtn from "./addShiftBtn/addShiftBtn";
 import DialogShift from "./shiftDialog";
 import ShiftList from "./shiftList/shiftList";
@@ -10,7 +10,7 @@ import BackLink from "../general_comps/backLink";
 import LoadingComp from "../general_comps/loadingComp";
 import { getShiftsByOutpostId } from "@/services/ShiftService";
 
-const ShiftsPage = () => {
+export default function ShiftsPage() {
   const params = useParams();
   const [openDialog, setOpenDialog] = useState(false);
   const outpostId = params["id"];
@@ -23,21 +23,19 @@ const ShiftsPage = () => {
         return a.dayId - b.dayId;
       }
       // If dayId is the same, compare by fromHour
-      else return a.fromHour-b.fromHour;
+      else return a.fromHour - b.fromHour;
     });
-  }
+  };
 
   const { isLoading, data: shifts } = useQuery({
     queryFn: () => sortedArrayShifts(),
-    queryKey: ['shifts', outpostId],
+    queryKey: ["shifts", outpostId],
     // staleTime: Infinity
   });
 
-
   return (
     <div className="shifts-page">
-      <Container fixed >
-
+      <Container fixed>
         {/* btn-add Shift */}
         <AddShiftBtn setOpenDialog={setOpenDialog} />
 
@@ -45,23 +43,25 @@ const ShiftsPage = () => {
           רשימת משמרות {params["name"]}
         </Typography>
 
-        {isLoading ?
+        {isLoading ? (
           <LoadingComp />
-          : shifts?.length === 0 ?
-            <Typography variant="h5" component="h2" my={2}>אין משמרות עדיין</Typography>
-            : <ShiftList shifts={shifts} />}
+        ) : shifts?.length === 0 ? (
+          <Typography variant="h5" component="h2" my={2}>
+            אין משמרות עדיין
+          </Typography>
+        ) : (
+          <ShiftList shifts={shifts} />
+        )}
 
-
-        <DialogShift openDialog={openDialog}
+        <DialogShift
+          openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
-
         />
-        <BackLink place="end" icon={<ArrowBackIosIcon />}>חזרה לרשימת העמדות</BackLink>
-
+        <BackLink place="end" icon={<ArrowBackIosIcon />}>
+          חזרה לרשימת העמדות
+        </BackLink>
       </Container>
     </div>
-  )
+  );
 }
-
-export default ShiftsPage
