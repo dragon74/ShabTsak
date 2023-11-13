@@ -1,13 +1,11 @@
 import React from 'react';
-import { Button, Box, Typography, Container } from "@mui/material";
+import { Box, Typography, Container } from "@mui/material";
 import { theme } from "@/theme/theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { Google } from "@mui/icons-material";
 import { Navigate } from 'react-router-dom';
-import { useDarkModeStore } from "@/theme/useDarkModeStore";
 import { useAuth } from "../../hooks/useAuth.jsx";
-import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import NewLoginButton from "@/components/general_comps/loginButton";
 export default function Login() {
     const clientID = React.useRef(import.meta.env.VITE_CLIENT_ID || "CLIENT_ID_MISSING");
     const { user } = useAuth();
@@ -31,23 +29,11 @@ export default function Login() {
                     <Typography variant="h1">ברוכים הבאים לשבצ״ק!</Typography>
                     <Typography variant="body2">כדי לצפות בשמירות ולבצע שינויים<br />יש להתחבר  </Typography>
                     <GoogleOAuthProvider clientId={clientID.current}>
-                        <LoginButton />
+                        {/*<LoginButton />*/}
+                        <NewLoginButton />
                     </GoogleOAuthProvider>
                 </Box>
             </Container>
         </ThemeProvider>
-    )
-}
-
-function LoginButton() {
-    const { login } = useAuth();
-    const handleLogin = useGoogleLogin({ onSuccess: ({ code }) => login(code), flow: "auth-code" })
-    const darkMode = useDarkModeStore((store) => store.darkMode);
-
-    return (
-        <Button onClick={() => handleLogin()} variant="outlined" sx={{...darkMode ? { color: 'white' } : {}}}>
-            <Google sx={{ mr: 0.5 }} />
-            <Typography variant="link">המשך עם גוגל</Typography>
-        </Button>
     )
 }
