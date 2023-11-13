@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Container, Typography } from "@mui/material"
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Container, Typography } from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import OutpostList from "./outpostList/outpostList";
 import OutpostDialog from "./outpostDialog";
 import BackLink from "../general_comps/backLink";
@@ -17,14 +17,13 @@ const OutpostsPage = () => {
 
   const { isLoading, data: outposts } = useQuery({
     queryFn: () => getOutpostsByCampId(campId),
-    queryKey: ['outposts', campId],
+    queryKey: ["outposts", campId],
     // staleTime: Infinity
   });
 
   return (
     <div className="outPosts-page">
-      <Container fixed >
-
+      <Container fixed>
         {/* btn-add Outpost */}
         <AddOutpostBtn setOpenDialog={setOpenDialog} />
 
@@ -32,22 +31,28 @@ const OutpostsPage = () => {
           רשימת עמדות {params["name"]}
         </Typography>
 
-        {isLoading ?
+        {isLoading ? (
           <LoadingComp />
-          : outposts.length === 0 || !outposts ?
-            <Typography variant="h5" component="h2" my={2}>אין עמדות עדיין</Typography>
-            : <OutpostList outposts={outposts} />}
+        ) : outposts.length === 0 || !outposts ? (
+          <Typography variant="h5" component="h2" my={2}>
+            אין עמדות עדיין
+          </Typography>
+        ) : (
+          <OutpostList outposts={outposts} />
+        )}
 
-
-        <OutpostDialog openDialog={openDialog}
+        <OutpostDialog
+          openDialog={openDialog}
           setOpenDialog={setOpenDialog}
           method="POST"
         />
 
-        <BackLink place="end" icon={<ArrowBackIosIcon />}>חזרה לרשימת הבסיסים</BackLink>
+        <BackLink place="end" icon={<ArrowBackIosIcon />}>
+          חזרה לרשימת הבסיסים
+        </BackLink>
       </Container>
     </div>
-  )
-}
+  );
+};
 
-export default OutpostsPage
+export default OutpostsPage;
