@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { Container, Typography } from "@mui/material"
+import { Container, Typography } from "@mui/material";
 import CampDialog from "./campDialog";
 import CampList from "./campList/campList";
 import AddCampBtn from "./addCampBtn/addCampBtn";
@@ -14,14 +14,12 @@ const CampsPage = () => {
 
   const { isLoading, data: camps } = useQuery({
     queryFn: getCamps,
-    queryKey: ['camps'],
-    // staleTime: Infinity
+    queryKey: ["camps"],
   });
 
   return (
     <div className="camps-page">
       <Container fixed>
-
         {/* btn-add camp */}
         <AddCampBtn setOpenDialog={setOpenDialog} />
 
@@ -29,22 +27,20 @@ const CampsPage = () => {
           רשימת בסיסים
         </Typography>
 
-        {isLoading ?
+        {isLoading ? (
           <LoadingComp />
-          :
-          (camps?.length === 0 ?
-            <Typography variant="h5" component="h2" my={2}>אין בסיסים עדיין</Typography>
-            : <CampList camps={camps} />)}
+        ) : camps?.length === 0 ? (
+          <Typography variant="h5" component="h2" my={2}>
+            אין בסיסים עדיין
+          </Typography>
+        ) : (
+          <CampList camps={camps} />
+        )}
 
-
-        <CampDialog openDialog={openDialog}
-          setOpenDialog={setOpenDialog}
-          method="POST"
-        />
-
+        <CampDialog openDialog={openDialog} setOpenDialog={setOpenDialog} method="POST" />
       </Container>
     </div>
-  )
-}
+  );
+};
 
-export default CampsPage
+export default CampsPage;
