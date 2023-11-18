@@ -8,7 +8,7 @@ const ROUTES = {
   LIMITS: "/limits",
   LOGIN: "/login",
   PRIVACY: '/privacy',
-  SERVICETERMS: '/serviceterms',
+  TERMS: '/terms',
   CAMP: '/camp',
   LANDING: '/landing',
 };

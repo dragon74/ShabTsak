@@ -6,6 +6,7 @@ import image from "/images/landing.jpeg";
 import { useEffect, useState } from "react";
 import { AnimatedWords } from "components/general_comps/animatedWords";
 import { riseWithFade } from "@/utils/motionVariants.js";
+import ROUTES from "@/constants/routeConstants.js";
 
 export default function Landing() {
     const [hydrated, setHydrated] = useState(false);
@@ -38,7 +39,7 @@ export default function Landing() {
                 <Box sx={{ textAlign: "center" }}>
                     <Typography variant="h6" sx={{ fontWeight: 700, fontSize: 14, mb: 1 }}>כבר יש לכם בסיס?</Typography>
                     <Typography variant="body2" sx={{ fontSize: 14, mb: 1 }}>התחברו כדי להתחיל להשתמש במערכת</Typography>
-                    <Button variant="outlined" color="primary" to="/login" component={Link} sx={{ fontWeight: 700 }}>
+                    <Button variant="outlined" color="primary" to={ROUTES.LOGIN} component={Link} sx={{ fontWeight: 700 }}>
                         להתחברות<ArrowLeft/>
                     </Button>
                 </Box>
@@ -94,10 +95,10 @@ export default function Landing() {
                             textUnderlineOffset: "3px !important",
                             transition: "0.3s",
                             "&:hover": { textDecorationColor: "rgba(53, 94, 59, 0.5)" }
-                        }} fontWeight={500} component={Link} to="/privacy">תנאי השימוש</MuiLink> שלנו.</p>
+                        }} fontWeight={500} component={Link} to={ROUTES.TERMS}>תנאי השימוש</MuiLink> שלנו.</p>
                     </Typography>
                     <br/>
-                    <Button variant="outlined" to="/login" component={Link} sx={{ fontWeight: 700, fontSize: 16 }}>נשמע טוב, בואו נתחיל !</Button>
+                    <Button variant="outlined" to={ROUTES.LOGIN} component={Link} sx={{ fontWeight: 700, fontSize: 16 }}>נשמע טוב, בואו נתחיל !</Button>
                 </Stack>
             </Container>
         </Box>

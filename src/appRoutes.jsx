@@ -12,7 +12,7 @@ import GuardProfile from "components/GuardList/GuardProfile";
 import ROUTES from "@/constants/routeConstants";
 import OutpostsPage from "components/outposts/outpostsPage";
 import PrivacyPage from "components/privacy/privacyPage";
-import ServiceTermsPage from "components/service_terms/serviceTermsPage";
+import TermsPage from "components/terms/termsPage";
 import ShiftsPage from "components/shifts/shiftsPage";
 import LimitsPage from "components/limits/limitsPage";
 import { useAuth } from "@/hooks/useAuth.jsx";
@@ -33,7 +33,7 @@ export default function AppRoutes() {
           <Route path={ROUTES.GUARDS + "/:id"} element={<PrivateRoute><GuardProfile /></PrivateRoute>} />
           <Route path={ROUTES.GUARDS} element={<PrivateRoute><GuardsPage /></PrivateRoute>} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
-          <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
+          <Route path={ROUTES.TERMS} element={<TermsPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.LANDING} element={<Landing />} />
