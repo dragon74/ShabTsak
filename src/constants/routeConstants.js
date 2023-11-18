@@ -9,7 +9,8 @@ const ROUTES = {
   LOGIN: "/login",
   PRIVACY: '/privacy',
   SERVICETERMS: '/serviceterms',
-  CAMP: '/camp'
+  CAMP: '/camp',
+  LANDING: '/landing',
 };
 
 export default ROUTES;
