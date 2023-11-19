@@ -2,7 +2,6 @@ import { doApiMethod, doApiGet } from "@/services/apiService.js";
 import { GUARD_OUTPOST_URL } from "@/constants/apiConstants.js";
 
 export const getGuardOutpostLimitByGuardId = async (guardId, campId) => {
-  console.log("im getGuardOutpostLimitByGuardId", guardId, campId);
   try {
     const response = await doApiGet(`${GUARD_OUTPOST_URL}/guard/${guardId}/${campId}`);
     return response.data;
