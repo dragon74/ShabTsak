@@ -8,8 +8,9 @@ const ROUTES = {
   LIMITS: "/limits",
   LOGIN: "/login",
   PRIVACY: '/privacy',
-  SERVICETERMS: '/serviceterms',
-  CAMP: '/camp'
+  TERMS: '/terms',
+  CAMP: '/camp',
+  LANDING: '/landing',
 };
 
 export default ROUTES;

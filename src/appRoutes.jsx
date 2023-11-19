@@ -7,17 +7,18 @@ import Layout from "@/layout/layout";
 import NotFound from "components/general_comps/notFound";
 import CampsPage from "components/camps/campsPage";
 import ShiftSchedule from "components/ShiftSchedule/ShiftSchedule";
-import Login from "components/Login/Login.jsx";
+import Login from "components/login/login.jsx";
 import GuardProfile from "components/GuardList/GuardProfile";
 import ROUTES from "@/constants/routeConstants";
 import OutpostsPage from "components/outposts/outpostsPage";
 import PrivacyPage from "components/privacy/privacyPage";
-import ServiceTermsPage from "components/service_terms/serviceTermsPage";
+import TermsPage from "components/terms/termsPage";
 import ShiftsPage from "components/shifts/shiftsPage";
 import LimitsPage from "components/limits/limitsPage";
 import { useAuth } from "@/hooks/useAuth.jsx";
 import PropTypes from "prop-types";
 import GuardsPage from "components/guards/guardsPage.jsx";
+import Landing from "components/landing/landing.jsx";
 
 export default function AppRoutes() {
   return (
@@ -81,9 +82,10 @@ export default function AppRoutes() {
             }
           />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
-          <Route path={ROUTES.SERVICETERMS} element={<ServiceTermsPage />} />
+          <Route path={ROUTES.TERMS} element={<TermsPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path={ROUTES.LOGIN} element={<Login />} />
+          <Route path={ROUTES.LANDING} element={<Landing />} />
         </Route>
       </Routes>
       <ToastContainer position="bottom-right" theme="colored" rtl />
@@ -105,7 +107,7 @@ function PrivateRoute({ children }) {
   }
 
   if (!user) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={"/landing"} />;
   }
 
   return children;

@@ -3,10 +3,10 @@ import Header from './header/header';
 import Footer from './footer/footer';
 import React, { useMemo } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import { theme, cacheRtl} from '@/theme/theme';
+import { theme, cacheRtl } from '@/theme/theme';
 import { Box, CssBaseline } from '@mui/material';
 import { CacheProvider } from '@emotion/react';
-import {useDarkModeStore} from "@/theme/useDarkModeStore.jsx";
+import { useDarkModeStore } from "@/theme/useDarkModeStore.jsx";
 import dayjs from "dayjs";
 import weekday from 'dayjs/plugin/weekday';
 import localeData from 'dayjs/plugin/localeData'
@@ -41,16 +41,16 @@ export default function Layout() {
     return (
         <CacheProvider value={cacheRtl}>
             <ThemeProvider theme={theme}>
-                <CssBaseline />
+                <CssBaseline/>
                 <Box style={{
                     background: modeBackground, color: modeColorText,
                     display: 'flex',
                     // Use flex-direction to make the children stack vertically
                     flexDirection: 'column', minHeight: '100vh',
                 }}>
-                    <Header /> 
-                    <Outlet />
-                    <Footer />
+                    <Header/>
+                    <Outlet/>
+                    <Footer/>
                 </Box>
             </ThemeProvider>
         </CacheProvider>

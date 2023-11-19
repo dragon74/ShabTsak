@@ -1,7 +1,7 @@
 import { SHIFT_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService";
 import { toast } from "react-toastify";
-import { getDayOfWeekHebrew } from "@/lib/utils/dateUtils"
+import { getDayOfWeekHebrew } from "@/utils/dateUtils"
 
 export async function getShiftsByOutpostId(outpostId) {
     let url = SHIFT_URL + "/outpost/" + outpostId;
