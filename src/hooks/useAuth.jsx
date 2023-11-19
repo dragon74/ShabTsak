@@ -1,7 +1,7 @@
 import { useUser } from "./useUser";
 import { useLocalStorage } from "./useLocalStorage";
 import { TOKEN_NAME } from "../services/apiService";
-import { normalizeUserData } from "../lib/utils/normalizeUserData";
+import { normalizeUserData } from "../utils/normalizeUserData";
 import UserService from "../services/userService.js";
 import React from "react";
 
