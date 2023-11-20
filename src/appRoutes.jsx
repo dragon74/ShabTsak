@@ -18,7 +18,7 @@ import LimitsPage from "components/limits/limitsPage";
 import { useAuth } from "@/hooks/useAuth.jsx";
 import PropTypes from "prop-types";
 import GuardsPage from "components/guards/guardsPage.jsx";
-import Landing from "components/landing/landing.jsx";
+import Landing from "components/landing/landing.tsx";
 
 export default function AppRoutes() {
   return (
