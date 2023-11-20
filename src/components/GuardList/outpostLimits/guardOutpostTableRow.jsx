@@ -7,7 +7,6 @@ const GuardOutpostTableRow = ({ outpostLimit, outposts, handleDelete }) => {
   return (
     <TableRow>
       <TableCell>{outpost ? outpost.name : "Unknown"}</TableCell>
-      <TableCell>{outpostLimit.outpostId}</TableCell>
       <TableCell>
         <Tooltip title="Delete">
           <IconButton onClick={() => handleDelete(outpostLimit.id)}>
