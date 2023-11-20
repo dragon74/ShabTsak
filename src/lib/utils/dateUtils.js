@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 
-export const hourArr = Array.from({ length: 24 }, (_, index) => {
-    const hour = (index + 1).toString();
+export const hourArr = Array.from({ length: 25 }, (_, index) => {
+    const hour = (index).toString();
     return hour;
 });
 
@@ -56,4 +56,15 @@ export const getHourNumber = (hour) => {
         [hourNum] = hour.split(":").map(Number);
     }
     return hourNum;
+}
+
+export const formatDate = (date, formatStr) => {
+    return format(date, formatStr);
+}
+
+export const getDateAndTime = (date, time) => {
+    let theDate = new Date(date);
+    let theTime = getHourNumber(time);
+    theDate.setHours(theTime);
+    return theDate;
 }
