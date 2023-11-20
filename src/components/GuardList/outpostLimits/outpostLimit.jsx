@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Button, Dialog, Autocomplete, TextField, CircularProgress, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
 import { getOutpostsByCampId } from "@/services/OutpostService";
-import { createGuardOutpostLimit, deleteOutpostLimit, getGuardOutpostLimitByGuardId } from "../../../services/OutpostLimitService";
+import { createGuardOutpostLimit, deleteOutpostLimit, getGuardOutpostLimitByGuardId } from "@/services/OutpostLimitService";
 import GuardOutpostLimitList from "./guardOutpostLimitList";
 import { toast } from "react-toastify";
 

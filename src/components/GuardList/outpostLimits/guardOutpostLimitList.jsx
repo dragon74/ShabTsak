@@ -1,6 +1,5 @@
-import React from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-import GuardOutpostTableRow from "./GuardOutpostTableRow";
+import GuardOutpostTableRow from "./guardOutpostTableRow";
 
 const GuardOutpostLimitList = ({ outposts, outpostLimits, handleDelete }) => {
   if (!outpostLimits || outpostLimits.length === 0) {
