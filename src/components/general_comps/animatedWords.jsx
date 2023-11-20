@@ -1,5 +1,5 @@
 export { AnimatedWords }
-import { staggerChildren, wordAnimation } from "@/utils/motionVariants.js";
+import { staggerChildren, wordAnimation } from "@/utils/motionVariants.ts";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 
