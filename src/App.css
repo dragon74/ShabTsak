@@ -58,21 +58,6 @@ body::-webkit-scrollbar {
   }
 }
 
-
-.md-lunch-break-class.mbsc-schedule-invalid {
-  text-align: center;
-  align-items: center;
-  font-weight: bold;
-  background: repeating-linear-gradient(-45deg, #f3f3f3, #f3f3f3 11px, #e5e5e5 11px, #e5e5e5 22px);
-}
-
-.md-lunch-break-class.mbsc-schedule-invalid {
-  text-align: center;
-  align-items: center;
-  font-weight: bold;
-  background: repeating-linear-gradient(-45deg, #f3f3f3, #f3f3f3 11px, #e5e5e5 11px, #e5e5e5 22px);
-}
-
 .md-stripes-bg {
   background: repeating-linear-gradient(-45deg, #fcfffc, #fcfffc 10px, #eefbec 10px, #eefbec 20px);
 }

@@ -3,3 +3,4 @@ export const CAMP_URL = `${API_URL}/camp`;
 export const OUTPOST_URL = `${API_URL}/outpost`;
 export const GUARD_URL = `${API_URL}/guard`;
 export const SHIFT_URL = `${API_URL}/shift`;
+export const SHIBUTS_URL = `${API_URL}/shibuts`;
