@@ -1,6 +1,6 @@
 import type { Variants } from "framer-motion";
 
-export const delayedVariant = (variant: Variants, delayMs: number): Variants => {
+export const delayedVariant = (variant: VariantType, delayMs: number): Variants => {
     return {
         ...variant,
         animate: {
@@ -12,8 +12,8 @@ export const delayedVariant = (variant: Variants, delayMs: number): Variants => 
         }
     }
 }
-
-export const riseWithFade: Variants = {
+type VariantType = typeof riseWithFade | typeof staggerChildren | typeof wordAnimation;
+export const riseWithFade = {
     initial: {
         y: 100,
         opacity: 0,
@@ -26,17 +26,17 @@ export const riseWithFade: Variants = {
             duration: 0.7
         },
     }
-};
-export const staggerChildren: Variants = {
+} as const;
+export const staggerChildren = {
     animate: {
         transition: {
             delayChildren: 0.4,
             staggerChildren: 0.1,
         },
     },
-};
+} as const;
 
-export const wordAnimation: Variants = {
+export const wordAnimation = {
     initial: {
         y: 100,
     },
@@ -47,4 +47,4 @@ export const wordAnimation: Variants = {
             duration: 1,
         },
     },
-};
+} as const;
