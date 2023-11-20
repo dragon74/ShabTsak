@@ -9,7 +9,7 @@ const GuardOutpostTableRow = ({ outpostLimit, outposts, handleDelete }) => {
       <TableCell>{outpost ? outpost.name : "Unknown"}</TableCell>
       <TableCell>
         <Tooltip title="Delete">
-          <IconButton onClick={() => handleDelete(outpostLimit.id)}>
+          <IconButton aria-label="delete" color="error" onClick={() => handleDelete(outpostLimit.id)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

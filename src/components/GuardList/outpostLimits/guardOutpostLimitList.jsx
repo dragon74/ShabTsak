@@ -1,9 +1,10 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, CircularProgress } from "@mui/material";
+import React from "react";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import GuardOutpostTableRow from "./GuardOutpostTableRow";
 
 const GuardOutpostLimitList = ({ outposts, outpostLimits, handleDelete }) => {
-  if (!outpostLimits) {
-    return <div>Loading...</div>;
+  if (!outpostLimits || outpostLimits.length === 0) {
+    return <div>לא קיימות מגבלות לפי עמדה.</div>;
   }
 
   return (

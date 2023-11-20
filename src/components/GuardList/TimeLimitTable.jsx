@@ -1,5 +1,6 @@
 import { getDayName } from "./utils";
-import { Table, TableBody, TableHead, TableRow, TableCell, Button } from "@mui/material";
+import { Table, TableBody, TableHead, TableRow, TableCell, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const TimeLimitTable = ({ timeLimits, handleDelete }) => {
   return (
@@ -19,7 +20,9 @@ const TimeLimitTable = ({ timeLimits, handleDelete }) => {
             <TableCell>{limit.fromHour}:00</TableCell>
             <TableCell>{limit.toHour}:00</TableCell>
             <TableCell>
-              <Button onClick={() => handleDelete(limit.id)}>Delete</Button>
+              <IconButton aria-label="delete" color="error" onClick={() => handleDelete(limit.id)}>
+                <DeleteIcon />
+              </IconButton>
             </TableCell>
           </TableRow>
         ))}

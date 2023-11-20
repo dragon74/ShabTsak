@@ -47,9 +47,14 @@ const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
-        Add Time Limit
-      </Button>
+      <Typography variant="h3" component="h2" mb={2} mt={2}>
+        מגבלות לפי שעה:
+      </Typography>
+      <Box style={{ marginTop: "20px" }}>
+        <Button type="button" color="primary" variant="contained" onClick={handleOpen}>
+          הוספה
+        </Button>
+      </Box>
 
       <Dialog open={open} onClose={handleClose}>
         <Box mt={4}>
