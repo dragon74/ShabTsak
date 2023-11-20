@@ -9,7 +9,7 @@ export default function Footer() {
               <Box component="nav">
                   <Button component={RouterLink} variant="link" to={ROUTES.HOME}>עמוד הבית</Button>
                   <Button component={RouterLink} variant="link" to={ROUTES.PRIVACY}>פרטיות</Button>
-                  <Button component={RouterLink} variant="link" to={ROUTES.SERVICETERMS}>תנאי שירות</Button>
+                  <Button component={RouterLink} variant="link" to={ROUTES.TERMS}>תנאי שימוש</Button>
               </Box>
               <Box textAlign="center">
                   <Typography variant="body2" gutterBottom={false}>2023 Chaya & Dan & Hadas & Niv & Ofir  ©</Typography>

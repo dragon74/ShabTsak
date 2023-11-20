@@ -21,7 +21,7 @@ import {
   createOrUpdateShift,
   getShiftsByOutpostId,
 } from "@/services/ShiftService";
-import { daysOfWeekHebrew, hourArr } from "@/lib/utils/dateUtils";
+import { daysOfWeekHebrew, hourArr } from "@/utils/dateUtils";
 import dayjs from "dayjs";
 
 function ShiftDialog({ openDialog, setOpenDialog, method, item }) {

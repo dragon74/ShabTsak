@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { doApiMethod } from "@/services/apiService";
 import { API_URL } from "@/constants/apiConstants";
-import { getDayOfWeekHebrew } from "@/lib/utils/dateUtils"
+import { getDayOfWeekHebrew } from "@/utils/dateUtils"
 
 DialogDelete.propTypes = {
     openDialog: PropTypes.bool.isRequired,

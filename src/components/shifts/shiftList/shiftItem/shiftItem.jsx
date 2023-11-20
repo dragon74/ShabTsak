@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { TableCell, TableRow } from "@mui/material";
 import ShiftItemActions from "./shiftItemActions/shiftItemActions";
-import { getDayOfWeekHebrew } from "@/lib/utils/dateUtils";
+import { getDayOfWeekHebrew } from "@/utils/dateUtils";
 import { useMemo } from "react";
 
 ShiftItem.propTypes = {
