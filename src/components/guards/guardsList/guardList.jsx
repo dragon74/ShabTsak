@@ -12,7 +12,6 @@ const GuardList = ({ campId, handleEdit, handleDelete }) => {
     enabled: !!campId,
     queryFn: () => GuardService.getGuardsByCampId(campId),
     queryKey: ["guards", campId],
-    staleTime: Infinity,
   });
 
   if (isLoading) {
@@ -25,17 +24,10 @@ const GuardList = ({ campId, handleEdit, handleDelete }) => {
   }
 
   return (
-    <Table
-      sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}
-    >
+    <Table sx={{ marginBottom: "15px", boxShadow: "0 3px 5px rgba(0,0,0,0.2)" }}>
       <TableBody>
         {guards.map((guard) => (
-          <GuardItem
-            key={guard.id}
-            guard={guard}
-            onEdit={() => handleEdit(guard)}
-            onDelete={() => handleDelete(guard)}
-          />
+          <GuardItem key={guard.id} guard={guard} campId={campId} onEdit={() => handleEdit(guard)} onDelete={() => handleDelete(guard)} />
         ))}
       </TableBody>
     </Table>

@@ -30,7 +30,6 @@ export default function ShiftsPage() {
   const { isLoading, data: shifts } = useQuery({
     queryFn: () => sortedArrayShifts(),
     queryKey: ["shifts", outpostId],
-    // staleTime: Infinity
   });
 
   return (
@@ -53,11 +52,7 @@ export default function ShiftsPage() {
           <ShiftList shifts={shifts} />
         )}
 
-        <DialogShift
-          openDialog={openDialog}
-          setOpenDialog={setOpenDialog}
-          method="POST"
-        />
+        <DialogShift openDialog={openDialog} setOpenDialog={setOpenDialog} method="POST" />
         <BackLink place="end" icon={<ArrowBackIosIcon />}>
           חזרה לרשימת העמדות
         </BackLink>
