@@ -1,40 +1,20 @@
-import React, { useState, useMemo, useCallback } from "react";
+import {useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from '@mobiscroll/react';
-import { useQuery } from "react-query";
-import SelectCamp from "components/general_comps/selectCamp.jsx";
+import {Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe} from '@mobiscroll/react';
 import GuardService from "@/services/GuardService.js";
+import { getOutpostsAndShiftsForCampId } from "@/services/OutpostService";
+import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts, getAutoShibutsimOfCurrentWeekByCampId } from "@/services/ShibutsService";
+import { useQuery, useQueryClient } from "react-query";
+import SelectCamp from "components/general_comps/selectCamp.jsx";
+import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
+import { toast } from "react-toastify";
+import LoadingComp from "../general_comps/loadingComp";
 
 setOptions({
     locale: localeHe,
     theme: 'ios',
     themeVariant: 'light'
 });
-
-const defaultShifts = [{
-    start: '2023-10-25T07:00',
-    end: '2023-10-25T13:00',
-    guardName: 'אריה',
-    position: 2,
-    resource:1,
-    color:"green"
-}];
-
-/*
-const initGuards = [{
-    value: 1,
-    text: 'בושי',
-    color:"red",
-}, {
-    value: 2,
-    text: 'אריה',
-    color:"green",
-}, {
-    value: 3,
-    text: 'דוד',
-    color:"yellow",
-}];
-*/
 
 const responsivePopup = {
     medium: {
@@ -47,172 +27,275 @@ const responsivePopup = {
 };
 
 function ShiftSchedule() {
-    const [shifts, setShifts] = useState(defaultShifts);
+    const queryClient = useQueryClient();
     const [headerText, setHeader] = useState('');
     const [isEdit, setEdit] = useState(false);
-    const [tempShift, setTempShift] = useState(null);
-    const [shiftDate, setDate] = useState([]);
-    const [isOpen, setOpen] = useState(false);
-    const [guardName, setGuardName] = useState(null);
-    const [campId, setCampId] = useState();
+    const [tempShibuts, setTempShibuts] = useState(null);
+    const [isPopupOpen, setPopupOpen] = useState(false);
+    const [campId, setCampId] = useState(null);
+    const [isAutoShibutsim, setIsAutoShibutsim] = useState(false);
 
-    const colors = [
-        'red', 'green', 'blue', 'yellow', 'orange', 'purple', 'navy', 'maroon', 'olive', 'silver'
-      ];
+    const colors = useMemo(() => {
+        return [
+            'red', 'green', 'blue', 'yellow', 'orange', 'purple', 'navy', 'maroon', 'olive', 'silver'
+          ];
+    }, []);
 
-    const { data: guards } = useQuery({
-        queryKey: ["guardsByCampId", campId],
-        queryFn: getGuards,
-        enabled: !!campId
-    });
-
-    function getGuards() {
-        return GuardService.getGuardsByCampId(campId)
-                .then((res) => {
-                    return res.map((g) => ({
-                        value: g.id,
-                        text: g.name,
-                        color: colors[g.id%10]
-                      }));
-                })
-    }
+    const shiftsCssClasses = useMemo(() => {
+        return [
+            'md-stripes-bg', 'md-rect-bg', 'md-dots-bg'
+          ];
+    }, []);
 
     const view = useMemo(() => {
         return {
              timeline: {
                 type: 'day',
-                startDay: 1,
+                startDay: 0,
                 endDay: 7
             }
         };
     }, []);
-    
-    const myPositions = useMemo(() => {
-        return [{
-            id: 1,
-            name: 'ש"ג'
-        }, {
-            id: 2,
-            name: 'סיור'
-        }, {
-            id: 3,
-            name: 'דרומית'
-        }, {
-            id: 4,
-            name: 'חצר/גנים'
-        }];
-    }, []);
 
-    const loadPopupForm = useCallback((shift) => {
-        setGuardName([shift.guardName])
-        setDate([shift.start, shift.end]);
-    }, []);
+    const { isLoading: guardsLoading, data: guards } = useQuery({
+        queryKey: ["guardsAndLimits", campId],
+        queryFn: () => GuardService.getGuardsAndLimitsForCampId(campId),
+        enabled: !!campId,
+        select: (data) => {
+            let mappedGuards = data;
+            if(data.length > 0){
+                mappedGuards = data.map((g) => ({
+                                    value: g.guard.id, 
+                                    text: g.guard.name, 
+                                    color: colors[g.guard.id%10],
+                                    outpostLimits: g.outpostLimits,
+                                    timeLimits: g.timeLimits
+                            }));
+            }
+            console.log("guards", mappedGuards);
+            return mappedGuards;
+        }
+    });
+
+    const { isLoading: outpostsLoading, data: outposts } = useQuery({
+        queryKey: ["outpostsAndShifts", campId],
+        queryFn: () => getOutpostsAndShiftsForCampId(campId),
+        enabled: !!campId,
+        select: (data) => {
+            console.log("outpostsAndShifts - outpost" ,data.map((o) => o.outpost));
+            return data.map((o) => o.outpost);
+        }
+    });
+
+    const { isLoading: shiftsLoading, data: shifts } = useQuery({
+        queryKey: ["outpostsAndShifts", campId],
+        enabled: false,
+        select: (data) => {
+            const allMappendShifts = [];
+            if(data.length > 0){
+                data.forEach(({shifts}) =>{
+                    if(shifts.length > 0){
+                        const mappedShifts = shifts.map((s, index) => ({
+                            id: s.id,
+                            start: getTimeStr(s.fromHour),
+                            end: getTimeStr(s.toHour),
+                            resource: s.outpostId,
+                            recurring: {
+                                repeat: 'weekly',
+                                weekDays: getDayStr(s.dayId)
+                            },
+                            cssClass: shiftsCssClasses[index % 3]
+                        }))
+                        allMappendShifts.push(...mappedShifts);
+                    }
+                })
+            }
+            console.log("shifts", allMappendShifts);
+            return allMappendShifts;
+        }
+    });
+
+    const { isLoading: shibutsimLoading, data: shibutsim } = useQuery({
+        queryKey: ["shibutsim", campId, isAutoShibutsim],
+        queryFn: () => isAutoShibutsim ? getAutoShibutsimOfCurrentWeekByCampId(campId) : getShibutsimOfCurrentWeekByCampId(campId),
+        enabled: !!campId && !!outposts && !!guards && !!shifts,
+        select: (data) => {
+            let mappedShibutsim = [];
+            if(data.length > 0){
+                mappedShibutsim = data.map(s => {
+                        const { id, ...copiedShibuts } = s;   
+                        const updatedShibuts = {
+                            ...copiedShibuts,
+                            shibutsId: id,
+                            start: getDateAndTime(s.theDate, shifts.find(sh=>sh.id==s.shiftId).start),
+                            end: getDateAndTime(s.theDate, shifts.find(sh=>sh.id==s.shiftId).end),
+                            guardName: guards.find(g=>g.value==s.guardId).text,
+                            resource: s.outpostId,
+                            color: guards.find(g=>g.value==s.guardId).color
+                        };
+                      
+                        return updatedShibuts;
+                    });
+            }
+            console.log("shibutsim", mappedShibutsim);
+            return mappedShibutsim;
+        }
+    });
+
+    const findClosestShift = useCallback((outpost, start) => {
+        let shift = shifts.filter(s => s.resource == outpost && 
+            getDayNumber(s.recurring.weekDays) == start.getDay() &&
+            getHourNumber(s.start) <= new Date(start).getHours() &&
+            getHourNumber(s.end) >= new Date(start).getHours());
+        if(shift.length > 1){
+            return shift.reduce((prev, current) => (prev && getHourNumber(prev.start) > getHourNumber(current.start)) ? prev : current);
+        }
+        return shift[0];
+    },[shifts]);
+
+    const checkTimeLimit = useCallback((guard, shibuts) => {
+        let hasTimeLimit = false;
+        const shibutsStart = shibuts.start.getHours();
+        const shibutsEnd = shibuts.end.getHours();
+        if(guard.timeLimits.length > 0){
+            const limits = guard.timeLimits.filter( t => 
+                            t.dayId == shibuts.start.getDay() &&
+                            ((t.fromHour <= shibutsStart && shibutsStart < t.toHour) ||
+                             (t.fromHour < shibutsEnd && shibutsEnd <= t.toHour)))
+            if( limits.length > 0 ){
+                hasTimeLimit = true;
+            }
+        }
+        return hasTimeLimit;
+    },[]);
+
+    const checkOutpostLimit = useCallback((guard, shibuts) => {
+        let hasOutpostLimit = false;
+        if(guard.outpostLimits.length > 0){
+            const limits = guard.outpostLimits.filter( o => o.outpostId == shibuts.resource).length;
+            if( limits.length > 0 ){
+                hasOutpostLimit = true;
+            }
+        }       
+        return hasOutpostLimit;
+    },[]);
+
+    const checkGuardHasLimits = useCallback((guard, shibuts) => {
+        const hasTimeLimit = checkTimeLimit(guard, shibuts);
+        const hasOutpostLimit = checkOutpostLimit(guard, shibuts);
+        if(hasTimeLimit){
+            toast.error("שומר " + guard.text + " אינו יכול לשמור בשעות " + shibuts.start.getHours() + ":00 - " + shibuts.end.getHours() + ":00");
+            return true;
+        }
+        if(hasOutpostLimit){
+            const outpostName = outposts.find((o) => { return o.id === shibuts.outpostId });
+            toast.error("שומר " + guard.text + " לא יכול לשמור בעמדה " + outpostName);
+            return true;
+        }
+        return false;
+    },[checkOutpostLimit, checkTimeLimit, outposts])
+
+    const checkExistinShibuts = useCallback( (shibuts) => {
+        const outpostName = outposts.find(o=>o.id==shibuts.outpostId).name;
+        const existShibuts = shibutsim.filter(s=>s.guardId == shibuts.guardId &&
+                                s.shiftId == shibuts.shiftId &&
+                                s.outpostId == shibuts.outpostId);
+        if(existShibuts.length > 0){
+            toast.error(`כבר קיים שיבוץ ל ${existShibuts[0].guardName} בעמדה ${outpostName} בשעה ${getTimeStr(existShibuts[0].end.getHours())}`);
+            return true;
+        }
+        return false;
+    },[shibutsim, outposts]);
 
     const onClose = useCallback(() => {
-        if (!isEdit) {
-            // refresh the list, if add popup was canceled, to remove the temporary shift
-            setShifts([...shifts]);
-        }
-        setOpen(false);
-    }, [isEdit, shifts]);
-
-    const myDefaultShift = useCallback((args) => {
-        let startsDate = args.start;
-        let endDate = new Date(startsDate.getFullYear(), startsDate.getMonth(), startsDate.getDate(), startsDate.getHours()+1);
-        return {
-            start: startsDate,
-            end: endDate,
-            guardName: '',
-            position: args.resource,
-            color: '#ff0000'
-        };
+        setPopupOpen(false);
     }, []);
 
-    const deleteShift = useCallback((shift) => {
-        setShifts(shifts.filter(item => item.id !== shift.id));
-        setTimeout(() => {
-            snackbar({
-                button: {
-                    action: () => {
-                        setShifts(prevShifts => [...prevShifts, shift]);
-                    },
-                    text: 'Undo'
-                },
-                message: 'Shift deleted'
-            });
-        });
-    }, [shifts]);
-
-    const onShiftClick = useCallback((args) => {
-        const shift = args.event;
-        const position = myPositions.find((p) => { return p.id === shift.position });
-        //drop down with all existing guards
-        setHeader('<div>שינוי שומר  ' + shift.guardName + ' בעמדה ' + position.name +'</div><div class="employee-shifts-day">' +
-                formatDate('HH:mm', new Date(shift.start)) + ' עד ' + formatDate('HH:mm', new Date(shift.end)) + '</div>');
-        setEdit(true);
-        setTempShift({ ...shift });
-        setGuardName(shift.guardName);
-        // fill popup form with shift data
-        loadPopupForm(shift);
-        setOpen(true);
-    }, [loadPopupForm]);
-
-    const onDeleteClick = React.useCallback(() => {
-        deleteShift(tempShift);
-        setOpen(false);
-    }, [deleteShift, tempShift]);
-
-    const onShiftCreated = useCallback((args) => {
-        const shift = args.event;
-        const position = myPositions.find((p) => { return p.id === shift.position });
-        //drop down with all existing guards
-        setHeader('<div>משמרת חדשה בעמדה ' + position.name + '</div><div class="employee-shifts-day">' +
-            formatDate('HH:mm', new Date(shift.start)) + ' עד ' + formatDate('HH:mm', new Date(shift.end)) + '</div>');
-        setEdit(false);
-        setTempShift(shift);
-        // fill popup form with shift data
-        loadPopupForm(shift);
-        setOpen(true);
-    }, [loadPopupForm]);
-
-    const onShiftDeleted = useCallback((args) => {
-        deleteShift(args.event)
-    }, [deleteShift]);
-
-    const saveShift = useCallback(() => {
-        const start = new Date(shiftDate[0]);
-        const end = new Date(shiftDate[1]);
-        const color = guards.find(g => g.text === tempShift.guardName).color;
-        const newShift = {
-            id: tempShift.id,
-            start: start,
-            end: end,
-            guardName: tempShift.guardName,
-            position: tempShift.position,
-            resource: tempShift.resource,
-            color: color
-        };
-        if (isEdit) {
-            // update the shift in the list
-            const index = shifts.findIndex(x => x.id === tempShift.id);
-            const newShiftList = [...shifts];
-
-            newShiftList.splice(index, 1, newShift);
-            setShifts(newShiftList);
-        } else {
-            // add the new shift to the list
-            setShifts([...shifts, newShift]);
+    const myDefaultShibuts = useCallback((args) => {
+        const shift = findClosestShift(args.resource,args.start);
+        if(shift != undefined){
+            const start = new Date(args.start.setHours(getHourNumber(shift.start)));
+            const end = new Date(args.start.setHours(getHourNumber(shift.end)));
+            return {
+                start: start,
+                end: end,
+                guardName: '',
+                guardId: '',
+                shiftId: shift.id,
+                outpostId: args.resource,
+                resource: args.resource,
+                color: '#ff0000'
+            };
         }
-        // close the popup
-        setOpen(false);
-    }, [isEdit, shifts, tempShift, shiftDate]);
+    }, [findClosestShift]);
 
-    // popup options
+    const onShibutsClick = useCallback((args) => {
+        const shibuts = args.event;
+        const outpost = outposts.find((o) => { return o.id === shibuts.resource });
+        shibuts.outpostId = shibuts.resource;
+        setHeader('<div>שינוי שומר  ' + shibuts.guardName + ' בעמדה ' + outpost.name +'</div><div class="employee-shifts-day">' +
+                formatDate('HH:mm', new Date(shibuts.start)) + ' עד ' + formatDate('HH:mm', new Date(shibuts.end)) + '</div>');
+        setEdit(true);
+        setTempShibuts({ ...shibuts });
+        setPopupOpen(true);
+    }, [outposts]);
+
+    const onDeleteClick = useCallback(async () => {
+        await deleteShibuts(tempShibuts.shibutsId);
+        queryClient.invalidateQueries(['shibutsim'])
+        setPopupOpen(false);
+    }, [tempShibuts]);
+
+    const onShibutsCreated = useCallback((args) => {
+        const shibuts = args.event;
+        if(shibuts.shiftId == undefined){
+            toast.error("אין משמרות בזמן זה");
+        } else {
+            const outpost = outposts.find((o) => { return o.id === shibuts.resource });
+            shibuts.outpostId = outpost.id;
+            setHeader('<div>משמרת חדשה בעמדה ' + outpost.name + '</div><div class="employee-shifts-day">' +
+                formatDate('HH:mm', shibuts.start) + ' עד ' + formatDate('HH:mm', shibuts.end) + '</div>');
+            setTempShibuts(shibuts);
+            setPopupOpen(true);
+        }
+    }, [outposts]);
+
+    const saveShibuts = useCallback(async (shibutsToSave) => {
+        const outpostName = outposts.find(o=>o.id==shibutsToSave.outpostId).name;
+        const isExistingShibuts = checkExistinShibuts(shibutsToSave);
+        if(shibutsToSave.guardId != 0 && !isExistingShibuts){
+            shibutsToSave.campId = campId;
+            shibutsToSave.theDate = shibutsToSave.start.getTime();
+            shibutsToSave.outpostName = outpostName;
+            shibutsToSave.id = shibutsToSave.shibutsId;
+            await createOrUpdateShibuts(shibutsToSave);
+            queryClient.invalidateQueries(['shibutsim']);
+            setPopupOpen(false);
+        }else{
+            onClose();
+        }
+    }, [outposts, shibutsim, tempShibuts, checkExistinShibuts, campId]);
+
+    const onShibutsMove = useCallback((obj) => {
+        let shibuts = {...obj.event};
+        let shift = findClosestShift(obj.resource, shibuts.start);
+        shibuts.shiftId = shift.id;
+        const guard = guards.find( g => g.value == shibuts.guardId);
+        const guardHasLimits = checkGuardHasLimits(guard, shibuts);
+        if(shift != undefined && !guardHasLimits){
+            shibuts.start.setHours(getHourNumber(shift.start),0,0);
+            shibuts.end.setHours(getHourNumber(shift.end),0,0);
+            shibuts.outpostId = shibuts.resource;
+        }
+        setTempShibuts(shibuts);
+        saveShibuts(shibuts);
+    },[findClosestShift, checkGuardHasLimits, guards, outposts, shibutsim]);
+
     const popupButtons = useMemo(() => {
         if (isEdit) {
             return ['cancel', {
                 handler: () => {
-                    saveShift();
+                    saveShibuts(tempShibuts);
                 },
                 keyCode: 'enter',
                 text: 'שמירה',
@@ -221,72 +304,88 @@ function ShiftSchedule() {
         } else {
             return ['cancel', {
                 handler: () => {
-                    saveShift();
+                    saveShibuts(tempShibuts);
                 },
                 keyCode: 'enter',
                 text: 'הוספה',
                 cssClass: 'mbsc-popup-button-primary'
             }];
         }
-    }, [isEdit, saveShift]);
+    }, [tempShibuts]);
 
-    const myCustomShift = useCallback((args) => {
+    const myCustomShibuts = useCallback((args) => {
         return <div>
                    <div className="md-timetable-event-title">{args.original.guardName}</div>
                </div>;
     }, []);
     
-    const guardNameChange = (ev) => { 
-        setTempShift({
-            ...tempShift,
-            guardName: ev.valueText
-        })
-        setGuardName(ev.valueText); 
-    };
-    
+    const onGuardChange = useCallback((selectedGuard) => { 
+        const guard = guards.find(g=>g.value == selectedGuard.value);        
+        if(!checkGuardHasLimits(guard, tempShibuts)){
+            setTempShibuts({
+                ...tempShibuts,
+                guardName: selectedGuard.valueText,
+                guardId: selectedGuard.value,
+                color: guards.find(g => g.value === selectedGuard.value).color
+            })
+        }
+    },[tempShibuts, guards, checkGuardHasLimits]);
+
+    const onAutoShibutsClick = useCallback(() => {
+        setIsAutoShibutsim(true);
+        queryClient.invalidateQueries("shibutsim");
+    }, []);
 
     return (
         <div>
             <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} title={"לוח משמרות"} title2={"בבסיס:"} />
-            <Eventcalendar
-                className="md-timetable"
-                view={view}
-                data={shifts}
-                resources={myPositions}
-                extendDefaultEvent={myDefaultShift}
-                renderScheduleEventContent={myCustomShift}
-                clickToCreate={true}
-                dragToCreat={true}
-                dragToMove={true}
-                dragToResize={true}
-                dragTimeStep={15}
-                eventDelete={true}
-                onEventClick={onShiftClick}
-                onEventCreated={onShiftCreated}
-                onEventDeleted={onShiftDeleted}
-            />
-            <Popup
-                display="bottom"
-                fullScreen={true}
-                contentPadding={false}
-                headerText={headerText}
-                buttons={popupButtons}
-                isOpen={isOpen}
-                onClose={onClose}
-                responsive={responsivePopup}
-                cssClass="employee-shifts-popup"
-            >
-            <div className="mbsc-form-group">
-                <Select 
-                    value={guardName}
-                    data={guards} 
-                    onChange={guardNameChange}
-                    label="בחירת שומר" />
-            </div>
-                {isEdit && <div className="mbsc-button-group">
-                    <Button className="mbsc-button-block" color="danger" variant="outline" onClick={onDeleteClick}>מחיקת משמרת</Button>
-                </div>}
-            </Popup>
+            <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick}>שיבוץ אוטומטי</Button>
+            {
+            (guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading) ?
+                (<LoadingComp /> )  :   
+        
+            (  <>
+                <Eventcalendar
+                    className="md-timetable"
+                    view={view}
+                    data={shibutsim}
+                    resources={outposts}
+                    extendDefaultEvent={myDefaultShibuts}
+                    renderScheduleEventContent={myCustomShibuts}
+                    onEventDragEnd={onShibutsMove}
+                    clickToCreate={true}
+                    dragToCreat={true}
+                    dragToMove={true}
+                    dragTimeStep={15}
+                    eventDelete={true}
+                    onEventClick={onShibutsClick}
+                    onEventCreated={onShibutsCreated}
+                    colors={shifts}
+                />
+                
+                <Popup
+                    display="bottom"
+                    fullScreen={true}
+                    contentPadding={false}
+                    headerText={headerText}
+                    buttons={popupButtons}
+                    isOpen={isPopupOpen}
+                    onClose={onClose}
+                    responsive={responsivePopup}
+                    cssClass="employee-shifts-popup"
+                >
+                <div className="mbsc-form-group">
+                    <Select 
+                        data={guards} 
+                        onChange={onGuardChange}
+                        label="בחירת שומר" />
+                </div>
+                    {isEdit && <div className="mbsc-button-group">
+                        <Button className="mbsc-button-block" color="danger" variant="outline" onClick={onDeleteClick}>מחיקת משמרת</Button>
+                    </div>}
+                </Popup>
+                </>
+            )}
         </div>
     ); 
 }
