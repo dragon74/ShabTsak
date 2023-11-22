@@ -6,14 +6,14 @@ const getIdTokenFromLocalStorage = () => {
   const token = JSON.parse(localStorage[TOKEN_NAME]);
   if (!token?.credentials?.token_type || !token?.credentials?.id_token) return;
   return `${token.credentials.token_type} ${token.credentials.id_token}`;
-}
+};
 
 export const doApiGet = async (_url, params = {}) => {
   try {
     return await axios.get(_url, {
       params,
       headers: {
-        "Authorization": getIdTokenFromLocalStorage(),
+        Authorization: getIdTokenFromLocalStorage(),
       },
     });
   } catch (err) {
@@ -39,8 +39,7 @@ export const doApiMethod = async (url, method, body = {}) => {
     const response = await axios(config);
     return response;
   } catch (error) {
-    console.error(`Error during API ${method.toUpperCase()} request:`, error);
+    console.error(`Error during API ${method.toUpperCase()} request:`, error.response || error);
     throw error;
   }
 };
-

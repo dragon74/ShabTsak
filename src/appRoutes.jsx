@@ -25,13 +25,62 @@ export default function AppRoutes() {
     <Router>
       <Routes>
         <Route path={ROUTES.HOME} element={<Layout />}>
-          <Route index element={<PrivateRoute><CampsPage /></PrivateRoute>} />
-          <Route path={ROUTES.SCHEDULE} element={<PrivateRoute><ShiftSchedule /></PrivateRoute>} />
-          <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`} element={<PrivateRoute><OutpostsPage /></PrivateRoute>} />
-          <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`} element={<PrivateRoute><ShiftsPage /></PrivateRoute>} />
-          <Route path={ROUTES.LIMITS} element={<PrivateRoute><LimitsPage /></PrivateRoute>} />
-          <Route path={ROUTES.GUARDS + "/:id"} element={<PrivateRoute><GuardProfile /></PrivateRoute>} />
-          <Route path={ROUTES.GUARDS} element={<PrivateRoute><GuardsPage /></PrivateRoute>} />
+          <Route
+            index
+            element={
+              <PrivateRoute>
+                <CampsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={ROUTES.SCHEDULE}
+            element={
+              <PrivateRoute>
+                <ShiftSchedule />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`}
+            element={
+              <PrivateRoute>
+                <OutpostsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`}
+            element={
+              <PrivateRoute>
+                <ShiftsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={ROUTES.LIMITS}
+            element={
+              <PrivateRoute>
+                <LimitsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={ROUTES.GUARDS + "/:guardId"}
+            element={
+              <PrivateRoute>
+                <GuardProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={ROUTES.GUARDS}
+            element={
+              <PrivateRoute>
+                <GuardsPage />
+              </PrivateRoute>
+            }
+          />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
           <Route path={ROUTES.TERMS} element={<TermsPage />} />
           <Route path="*" element={<NotFound />} />
@@ -44,8 +93,6 @@ export default function AppRoutes() {
   );
 }
 
-
-
 function PrivateRoute({ children }) {
   const { init, user } = useAuth();
 
@@ -53,19 +100,18 @@ function PrivateRoute({ children }) {
     init();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   if (user === undefined) {
     return null;
   }
 
   if (!user) {
-    return <Navigate to={'/landing'} />;
+    return <Navigate to={"/landing"} />;
   }
 
   return children;
 }
 PrivateRoute.propTypes = {
-  children: PropTypes.node.isRequired
-}
-
+  children: PropTypes.node.isRequired,
+};

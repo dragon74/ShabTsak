@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { Card, CardContent, Typography, Avatar } from "@mui/material";
 import { getGravatarUrl } from "./utils";
@@ -10,16 +10,19 @@ import { GUARD_URL, API_URL } from "@/constants/apiConstants";
 import { toast } from "react-toastify";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BackLink from "components/general_comps/backLink.jsx";
+import OutpostLimit from "./outpostLimits/outpostLimit";
 
 const GuardProfile = () => {
-  const { id } = useParams();
+  let { state } = useLocation();
+  const { guardId } = useParams();
+  const campId = state?.campId || ""; // Retrieve campId from state
   const [guard, setGuard] = useState(null);
   const [timeLimits, setTimeLimits] = useState([]);
   const [error, setError] = useState("");
 
   const fetchGuardDetails = async () => {
     try {
-      const response = await axios.get(GUARD_URL + `/${id}`);
+      const response = await axios.get(GUARD_URL + `/${guardId}`);
       setGuard(response.data);
     } catch (err) {
       console.error("Error fetching guard details:", err);
@@ -30,7 +33,7 @@ const GuardProfile = () => {
 
   const fetchTimeLimits = async () => {
     try {
-      const response = await axios.get(API_URL + `/guardtimelimit/guard/${id}`);
+      const response = await axios.get(API_URL + `/guardtimelimit/guard/${guardId}`);
       setTimeLimits(response.data);
     } catch (err) {
       console.error("Error fetching guard time limits:", err);
@@ -42,7 +45,7 @@ const GuardProfile = () => {
   useEffect(() => {
     fetchGuardDetails();
     fetchTimeLimits();
-  }, [id]);
+  }, [guardId]);
 
   const handleDelete = async (timeLimitId) => {
     try {
@@ -87,8 +90,10 @@ const GuardProfile = () => {
           משתתף: {guard.shouldBeAllocated ? "Yes" : "No"}
         </Typography>
 
-        <TimeLimitForm id={id} fetchTimeLimits={fetchTimeLimits} timeLimits={timeLimits} />
+        <TimeLimitForm id={guardId} fetchTimeLimits={fetchTimeLimits} timeLimits={timeLimits} />
         {timeLimits.length > 0 && <TimeLimitTable timeLimits={timeLimits} handleDelete={handleDelete} />}
+
+        <OutpostLimit guardId={Number(guardId)} campId={campId} />
       </CardContent>
       <BackLink place="end" icon={<ArrowBackIosIcon />}>
         חזרה לרשימת השומרים

@@ -18,7 +18,6 @@ const OutpostsPage = () => {
   const { isLoading, data: outposts } = useQuery({
     queryFn: () => getOutpostsByCampId(campId),
     queryKey: ["outposts", campId],
-    // staleTime: Infinity
   });
 
   return (
@@ -41,11 +40,7 @@ const OutpostsPage = () => {
           <OutpostList outposts={outposts} />
         )}
 
-        <OutpostDialog
-          openDialog={openDialog}
-          setOpenDialog={setOpenDialog}
-          method="POST"
-        />
+        <OutpostDialog openDialog={openDialog} setOpenDialog={setOpenDialog} method="POST" />
 
         <BackLink place="end" icon={<ArrowBackIosIcon />}>
           חזרה לרשימת הבסיסים
