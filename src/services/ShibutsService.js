@@ -1,7 +1,7 @@
 import { SHIBUTS_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService";
 import { toast } from "react-toastify";
-import { formatDate, getTimeStr } from "../lib/utils/dateUtils";
+import { formatDate, getTimeStr, getFirstDayAndLastDayOfCurrentWeek } from "../utils/dateUtils";
 
 export async function createOrUpdateShibuts(bodyFormData) {
     try {
@@ -19,12 +19,8 @@ export async function createOrUpdateShibuts(bodyFormData) {
 }
 
 export async function getShibutsimOfCurrentWeekByCampId(campId) {
-    let curr = new Date; // get current date
-    let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-    let last = first + 6; // last day is the first day + 6
-    let firstday = formatDate(new Date(curr.setDate(first)),'ddMMyyyy');
-    let lastday = formatDate(new Date(curr.setDate(last)),'ddMMyyyy');
-    let url = SHIBUTS_URL + "/" + campId + "/" + firstday + "/" + lastday;
+    let firstAndLastDays = getFirstDayAndLastDayOfCurrentWeek();
+    let url = SHIBUTS_URL + "/" + campId + "/" + firstAndLastDays.first + "/" + firstAndLastDays.last;
     try {
         let resp = await doApiGet(url);
         if (resp.status === 200) {
@@ -35,6 +31,23 @@ export async function getShibutsimOfCurrentWeekByCampId(campId) {
     catch (err) {
         console.log(err);
         toast.error("יש בעיה בשליפת בשיבוצים נסה מאוחר יותר");
+    }
+}
+
+export async function getAutoShibutsimOfCurrentWeekByCampId(campId) {
+    let firstAndLastDays = getFirstDayAndLastDayOfCurrentWeek();
+    let currentDay = formatDate(new Date(), 'ddMMyyyy');
+    let url = SHIBUTS_URL + "/create/" + campId + "/" + currentDay + "/" + firstAndLastDays.last;
+    try {
+        let resp = await doApiGet(url);
+        if (resp.status === 200) {
+            return resp.data;
+        }
+        else toast.error(resp.message);
+    }
+    catch (err) {
+        console.log(err);
+        toast.error("יש בעיה בשיבוץ האוטומטי, נסה מאוחר יותר");
     }
 }
 

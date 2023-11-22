@@ -1,12 +1,12 @@
-import {useState, useMemo, useCallback, useEffect } from "react";
+import {useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import {Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe, getJson} from '@mobiscroll/react';
+import {Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe} from '@mobiscroll/react';
 import GuardService from "@/services/GuardService.js";
 import { getOutpostsAndShiftsForCampId } from "@/services/OutpostService";
-import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts } from "@/services/ShibutsService";
+import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts, getAutoShibutsimOfCurrentWeekByCampId } from "@/services/ShibutsService";
 import { useQuery, useQueryClient } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
-import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../lib/utils/dateUtils";
+import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
 import { toast } from "react-toastify";
 
 setOptions({
@@ -32,6 +32,7 @@ function ShiftSchedule() {
     const [tempShibuts, setTempShibuts] = useState(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
     const [campId, setCampId] = useState(null);
+    const [isAutoShibutsim, setIsAutoShibutsim] = useState(false);
 
     const colors = useMemo(() => {
         return [
@@ -55,11 +56,10 @@ function ShiftSchedule() {
         };
     }, []);
 
-    const { data: guards } = useQuery({
+    const { isLoading: guardsLoading, data: guards } = useQuery({
         queryKey: ["guardsAndLimits", campId],
         queryFn: () => GuardService.getGuardsAndLimitsForCampId(campId),
         enabled: !!campId,
-        initialData: [],
         select: (data) => {
             let mappedGuards = data;
             if(data.length > 0){
@@ -76,21 +76,19 @@ function ShiftSchedule() {
         }
     });
 
-    const { data: outposts } = useQuery({
+    const { isLoading: outpostsLoading, data: outposts } = useQuery({
         queryKey: ["outpostsAndShifts", campId],
         queryFn: () => getOutpostsAndShiftsForCampId(campId),
         enabled: !!campId,
-        initialData: [],
         select: (data) => {
             console.log("outpostsAndShifts - outpost" ,data.map((o) => o.outpost));
             return data.map((o) => o.outpost);
         }
     });
 
-    const { data: shifts } = useQuery({
+    const { isLoading: shiftsLoading, data: shifts } = useQuery({
         queryKey: ["outpostsAndShifts", campId],
         enabled: false,
-        initialData: [],
         select: (data) => {
             const allMappendShifts = [];
             if(data.length > 0){
@@ -116,11 +114,10 @@ function ShiftSchedule() {
         }
     });
 
-    const { data: shibutsim } = useQuery({
+    const { isLoading: shibutsimLoading, data: shibutsim } = useQuery({
         queryKey: ["shibutsim", campId],
-        queryFn: () => getShibutsimOfCurrentWeekByCampId(campId),
-        enabled: !!campId && outposts.length > 0 && guards.length > 0 && shifts.length > 0,
-        initialData: [],
+        queryFn: () => isAutoShibutsim ? getAutoShibutsimOfCurrentWeekByCampId(campId) : getShibutsimOfCurrentWeekByCampId(campId),
+        enabled: !!campId && !!outposts && !!guards && !!shifts,
         select: (data) => {
             let mappedShibutsim = [];
             if(data.length > 0){
@@ -333,10 +330,15 @@ function ShiftSchedule() {
         }
     },[tempShibuts, guards, checkGuardHasLimits]);
 
+    const onAutoShibutsClick = useCallback(() => {
+        setIsAutoShibutsim(true);
+        queryClient.invalidateQueries("shibutsim");
+    }, []);
 
     return (
         <div>
             <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} title={"לוח משמרות"} title2={"בבסיס:"} />
+            <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick}>שיבוץ אוטומטי</Button>
             <Eventcalendar
                 className="md-timetable"
                 view={view}
@@ -354,6 +356,7 @@ function ShiftSchedule() {
                 onEventCreated={onShibutsCreated}
                 colors={shifts}
             />
+            
             <Popup
                 display="bottom"
                 fullScreen={true}
