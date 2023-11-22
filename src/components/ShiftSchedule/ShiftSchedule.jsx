@@ -8,6 +8,7 @@ import { useQuery, useQueryClient } from "react-query";
 import SelectCamp from "components/general_comps/selectCamp.jsx";
 import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
 import { toast } from "react-toastify";
+import LoadingComp from "../general_comps/loadingComp";
 
 setOptions({
     locale: localeHe,
@@ -115,7 +116,7 @@ function ShiftSchedule() {
     });
 
     const { isLoading: shibutsimLoading, data: shibutsim } = useQuery({
-        queryKey: ["shibutsim", campId],
+        queryKey: ["shibutsim", campId, isAutoShibutsim],
         queryFn: () => isAutoShibutsim ? getAutoShibutsimOfCurrentWeekByCampId(campId) : getShibutsimOfCurrentWeekByCampId(campId),
         enabled: !!campId && !!outposts && !!guards && !!shifts,
         select: (data) => {
@@ -339,45 +340,52 @@ function ShiftSchedule() {
         <div>
             <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} title={"לוח משמרות"} title2={"בבסיס:"} />
             <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick}>שיבוץ אוטומטי</Button>
-            <Eventcalendar
-                className="md-timetable"
-                view={view}
-                data={shibutsim}
-                resources={outposts}
-                extendDefaultEvent={myDefaultShibuts}
-                renderScheduleEventContent={myCustomShibuts}
-                onEventDragEnd={onShibutsMove}
-                clickToCreate={true}
-                dragToCreat={true}
-                dragToMove={true}
-                dragTimeStep={15}
-                eventDelete={true}
-                onEventClick={onShibutsClick}
-                onEventCreated={onShibutsCreated}
-                colors={shifts}
-            />
-            
-            <Popup
-                display="bottom"
-                fullScreen={true}
-                contentPadding={false}
-                headerText={headerText}
-                buttons={popupButtons}
-                isOpen={isPopupOpen}
-                onClose={onClose}
-                responsive={responsivePopup}
-                cssClass="employee-shifts-popup"
-            >
-            <div className="mbsc-form-group">
-                <Select 
-                    data={guards} 
-                    onChange={onGuardChange}
-                    label="בחירת שומר" />
-            </div>
-                {isEdit && <div className="mbsc-button-group">
-                    <Button className="mbsc-button-block" color="danger" variant="outline" onClick={onDeleteClick}>מחיקת משמרת</Button>
-                </div>}
-            </Popup>
+            {
+            (guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading) ?
+                (<LoadingComp /> )  :   
+        
+            (  <>
+                <Eventcalendar
+                    className="md-timetable"
+                    view={view}
+                    data={shibutsim}
+                    resources={outposts}
+                    extendDefaultEvent={myDefaultShibuts}
+                    renderScheduleEventContent={myCustomShibuts}
+                    onEventDragEnd={onShibutsMove}
+                    clickToCreate={true}
+                    dragToCreat={true}
+                    dragToMove={true}
+                    dragTimeStep={15}
+                    eventDelete={true}
+                    onEventClick={onShibutsClick}
+                    onEventCreated={onShibutsCreated}
+                    colors={shifts}
+                />
+                
+                <Popup
+                    display="bottom"
+                    fullScreen={true}
+                    contentPadding={false}
+                    headerText={headerText}
+                    buttons={popupButtons}
+                    isOpen={isPopupOpen}
+                    onClose={onClose}
+                    responsive={responsivePopup}
+                    cssClass="employee-shifts-popup"
+                >
+                <div className="mbsc-form-group">
+                    <Select 
+                        data={guards} 
+                        onChange={onGuardChange}
+                        label="בחירת שומר" />
+                </div>
+                    {isEdit && <div className="mbsc-button-group">
+                        <Button className="mbsc-button-block" color="danger" variant="outline" onClick={onDeleteClick}>מחיקת משמרת</Button>
+                    </div>}
+                </Popup>
+                </>
+            )}
         </div>
     ); 
 }
