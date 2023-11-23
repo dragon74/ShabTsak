@@ -1,41 +1,40 @@
-import { TableCell, TableRow, IconButton, Button, Avatar, Chip, Stack } from "@mui/material";
+import PropTypes from "prop-types";
+import { TableCell, TableRow, IconButton, Button, Avatar, Stack } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { getGravatarUrl } from "../../GuardList/utils";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const GuardItem = ({ campId, guard, onEdit, onDelete }) => {
+const GuardItem = ({ campId, guard, onEdit, onDelete, index }) => {
   const navigate = useNavigate();
+
   const handleLimitButtonClick = () => {
-    // Pass the campId using state when navigating to the guard profile page
     navigate(`/guards/${guard.id}`, { state: { campId: campId } });
   };
 
   return (
-    <TableRow key={guard.id}>
-      <TableCell>
+    <TableRow>
+      <TableCell align="center">{index + 1}</TableCell>
+      <TableCell align="center">
         <Avatar src={getGravatarUrl(guard.mail)} alt={guard.name} />
       </TableCell>
-      <TableCell>
-        <div style={{ maxWidth: "200px", textOverflow: "ellipsis", overflow: "hidden" }}>{guard.name}</div>
-        <div style={{ whiteSpace: "nowrap" }}>Email: {guard.mail}</div>
+      <TableCell align="center">
+        <div style={{ maxWidth: "200px", overflowWrap: "break-word" }}>{guard.name}</div>
+        <div>Email: {guard.mail}</div>
         <div>Phone: {guard.phone}</div>
       </TableCell>
-      <TableCell>
-        <Chip label={guard?.shouldBeAllocated ? "משתתף" : "לא משתתף"} color={guard?.shouldBeAllocated ? "primary" : "secondary"} />
-      </TableCell>
-      <TableCell>
-        <Stack direction="row" alignItems="center" flexWrap="nowrap">
-          <Button onClick={() => handleLimitButtonClick()} variant="outlined" color="primary" size="small" sx={{ marginRight: "10px" }}>
-            מגבלות
+      <TableCell align="center">{guard.shouldBeAllocated ? <CheckCircleIcon style={{ color: "green" }} /> : <RadioButtonUncheckedIcon style={{ color: "grey" }} />}</TableCell>
+      <TableCell align="center">
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Button onClick={handleLimitButtonClick} variant="outlined" color="primary" size="small">
+            Limits
           </Button>
-
-          <IconButton onClick={() => onEdit(guard)} size="large" color="secondary">
+          <IconButton onClick={onEdit} size="large" color="secondary">
             <EditIcon />
           </IconButton>
-          <IconButton onClick={() => onDelete(guard)} size="large" color="error">
+          <IconButton onClick={onDelete} size="large" color="error">
             <DeleteIcon />
           </IconButton>
         </Stack>
@@ -43,8 +42,8 @@ const GuardItem = ({ campId, guard, onEdit, onDelete }) => {
     </TableRow>
   );
 };
-
 GuardItem.propTypes = {
+  index: PropTypes.number.isRequired,
   guard: PropTypes.object.isRequired,
   campId: PropTypes.number,
   onEdit: PropTypes.func.isRequired,
