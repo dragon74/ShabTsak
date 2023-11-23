@@ -336,9 +336,14 @@ function ShiftSchedule() {
         queryClient.invalidateQueries("shibutsim");
     }, []);
 
+    const onCampChanged = useCallback(() => {
+        setIsAutoShibutsim(false);
+    }, []);
+    
+
     return (
         <div>
-            <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} title={"לוח משמרות"} title2={"בבסיס:"} />
+            <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} onCampChange={onCampChanged} title={"לוח משמרות"} title2={"בבסיס:"} />
             <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick}>שיבוץ אוטומטי</Button>
             {
             (guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading) ?

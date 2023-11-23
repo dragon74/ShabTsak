@@ -5,7 +5,7 @@ import { FormControl, Stack, TextField, Typography } from "@mui/material";
 import { KeyboardArrowDownRounded } from "@mui/icons-material";
 import MenuItem from "@mui/material/MenuItem";
 
-export default function SelectCamp({ selectedCampId, setSelectedCampId, title, title2 }) {
+export default function SelectCamp({ selectedCampId, setSelectedCampId, onCampChange, title, title2 }) {
   const { isLoadingCamps, data } = useQuery({
     queryKey: "camps",
     queryFn: getCamps,
@@ -16,6 +16,11 @@ export default function SelectCamp({ selectedCampId, setSelectedCampId, title, t
       setSelectedCampId(data[0].value);
     }
   }, [data]);
+
+  const onCampSelected = (value) =>{
+    setSelectedCampId(value);
+    onCampChange();
+  }
 
   return (
     <Stack direction="row" gap={0.5} alignItems="center" flexWrap="wrap" paddingX={1.5} paddingTop={1} sx={{ backgroundColor: "#f7f7f7" }}>
@@ -36,7 +41,7 @@ export default function SelectCamp({ selectedCampId, setSelectedCampId, title, t
                 id="camp-select"
                 placeholder="בחר בסיס"
                 value={selectedCampId ? selectedCampId : ""}
-                onChange={(e) => setSelectedCampId(e.target.value)}
+                onChange={(e) => onCampSelected(e.target.value)}
                 InputProps={{
                   disableUnderline: true,
                   sx: {
