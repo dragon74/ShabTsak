@@ -50,10 +50,11 @@ export const getDayNumber = (day) => {
     return DayNum;
 }
 
-export const getHourNumber = (hour) => {
+export const getHourNumber = (hour, endFlag) => {
     let hourNum = "";
     if(hour != undefined){
         [hourNum] = hour.split(":").map(Number);
+        if(hourNum==0 && endFlag) hourNum=24;
     }
     return hourNum;
 }
@@ -62,9 +63,9 @@ export const formatDate = (date, formatStr) => {
     return format(date, formatStr);
 }
 
-export const getDateAndTime = (date, time) => {
+export const getDateAndTime = (date, time, endFlag) => {
     let theDate = new Date(date);
-    let theTime = getHourNumber(time);
+    let theTime = getHourNumber(time, endFlag);
     theDate.setHours(theTime);
     return theDate;
 }
