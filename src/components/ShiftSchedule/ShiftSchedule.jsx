@@ -128,7 +128,7 @@ function ShiftSchedule() {
                             ...copiedShibuts,
                             shibutsId: id,
                             start: getDateAndTime(s.theDate, shifts.find(sh=>sh.id==s.shiftId).start),
-                            end: getDateAndTime(s.theDate, shifts.find(sh=>sh.id==s.shiftId).end),
+                            end: getDateAndTime(s.theDate, shifts.find(sh=>sh.id==s.shiftId).end, true),
                             guardName: guards.find(g=>g.value==s.guardId).text,
                             resource: s.outpostId,
                             color: guards.find(g=>g.value==s.guardId).color
@@ -146,7 +146,7 @@ function ShiftSchedule() {
         let shift = shifts.filter(s => s.resource == outpost && 
             getDayNumber(s.recurring.weekDays) == start.getDay() &&
             getHourNumber(s.start) <= new Date(start).getHours() &&
-            getHourNumber(s.end) >= new Date(start).getHours());
+            getHourNumber(s.end, true) >= new Date(start).getHours());
         if(shift.length > 1){
             return shift.reduce((prev, current) => (prev && getHourNumber(prev.start) > getHourNumber(current.start)) ? prev : current);
         }
@@ -201,6 +201,9 @@ function ShiftSchedule() {
                                 s.shiftId == shibuts.shiftId &&
                                 s.outpostId == shibuts.outpostId);
         if(existShibuts.length > 0){
+            if(shibuts.shibutsId == existShibuts[0].shibutsId){
+                return true
+            }
             toast.error(`כבר קיים שיבוץ ל ${existShibuts[0].guardName} בעמדה ${outpostName} בשעה ${getTimeStr(existShibuts[0].end.getHours())}`);
             return true;
         }
@@ -215,7 +218,7 @@ function ShiftSchedule() {
         const shift = findClosestShift(args.resource,args.start);
         if(shift != undefined){
             const start = new Date(args.start.setHours(getHourNumber(shift.start)));
-            const end = new Date(args.start.setHours(getHourNumber(shift.end)));
+            const end = new Date(args.start.setHours(getHourNumber(shift.end, true)));
             return {
                 start: start,
                 end: end,
@@ -250,6 +253,7 @@ function ShiftSchedule() {
         const shibuts = args.event;
         if(shibuts.shiftId == undefined){
             toast.error("אין משמרות בזמן זה");
+            document.querySelector(`[data-id="${args.event.id}"]`)?.remove();
         } else {
             const outpost = outposts.find((o) => { return o.id === shibuts.resource });
             shibuts.outpostId = outpost.id;
@@ -279,16 +283,26 @@ function ShiftSchedule() {
     const onShibutsMove = useCallback((obj) => {
         let shibuts = {...obj.event};
         let shift = findClosestShift(obj.resource, shibuts.start);
-        shibuts.shiftId = shift.id;
-        const guard = guards.find( g => g.value == shibuts.guardId);
-        const guardHasLimits = checkGuardHasLimits(guard, shibuts);
-        if(shift != undefined && !guardHasLimits){
-            shibuts.start.setHours(getHourNumber(shift.start),0,0);
-            shibuts.end.setHours(getHourNumber(shift.end),0,0);
-            shibuts.outpostId = shibuts.resource;
+        if(shift !== undefined){
+            const guard = guards.find( g => g.value == shibuts.guardId);
+            const guardHasLimits = checkGuardHasLimits(guard, shibuts);
+            if(!guardHasLimits){
+                shibuts.start.setHours(getHourNumber(shift.start),0,0);
+                shibuts.end.setHours(getHourNumber(shift.end),0,0);
+                shibuts.outpostId = shibuts.resource;
+                shibuts.shiftId = shift.id;
+            }
+            setTempShibuts(shibuts);
+            saveShibuts(shibuts);
+        }else{
+            let curShift = shifts.find(s=>s.id==shibuts.shiftId);
+            shibuts.start.setHours(getHourNumber(curShift.start),0,0);
+            shibuts.end.setHours(getHourNumber(curShift.end),0,0);
+            obj.event.resource = obj.event.outpostId;
+            obj.resource = obj.event.outpostId;
+            toast.error("אין משמרות בזמן זה בעמדה זו");
+            onClose();
         }
-        setTempShibuts(shibuts);
-        saveShibuts(shibuts);
     },[findClosestShift, checkGuardHasLimits, guards, outposts, shibutsim]);
 
     const popupButtons = useMemo(() => {
