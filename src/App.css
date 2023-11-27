@@ -58,22 +58,16 @@ body::-webkit-scrollbar {
   }
 }
 
-.md-stripes-bg {
+.md-g-stripes-bg {
   background: repeating-linear-gradient(-45deg, #fcfffc, #fcfffc 10px, #eefbec 10px, #eefbec 20px);
 }
 
-.md-dots-bg {
-  background-image: radial-gradient(#a7a7a7 20%, transparent 20%);
-  background-color: #f9f9f9;
-  background-position: 0 0, 10px 10px;
-  background-size: 20px 20px;
+.md-r-stripes-bg {
+  background: repeating-linear-gradient(-45deg, #fcfffc, #fcfffc 10px, #ffefef 10px, #ffefef 20px);
 }
 
-.md-rect-bg {
-  opacity: 0.8;
-  background-image: repeating-linear-gradient(45deg, #ffd6d6 25%, transparent 25%, transparent 75%, #ffd6d6 75%, #ffd6d6), repeating-linear-gradient(45deg, #ffd6d6 25%, #ffefef 25%, #ffefef 75%, #ffd6d6 75%, #ffd6d6);
-  background-position: 0 0, 10px 10px;
-  background-size: 20px 20px;
+.md-y-stripes-bg {
+  background: repeating-linear-gradient(-45deg, #fcfffc, #fcfffc 10px, #fffcdf 10px, #fffcdf 20px);
 }
 
 .mbsc-timeline-resource-col{
