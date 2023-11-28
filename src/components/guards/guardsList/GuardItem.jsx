@@ -29,7 +29,7 @@ const GuardItem = ({ campId, guard, onEdit, onDelete, index }) => {
       <TableCell align="center">
         <Stack direction="row" alignItems="center" spacing={1}>
           <Button onClick={handleLimitButtonClick} variant="outlined" color="primary" size="small">
-            Limits
+            הגבלות
           </Button>
           <IconButton onClick={onEdit} size="large" color="secondary">
             <EditIcon />
