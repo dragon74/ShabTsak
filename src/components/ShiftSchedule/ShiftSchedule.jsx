@@ -34,13 +34,14 @@ function ShiftSchedule() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [campId, setCampId] = useState(null);
   const [isAutoShibutsim, setIsAutoShibutsim] = useState(false);
+  const [isSavingLoading, setIsSavingLoading] = useState(false);
 
   const colors = useMemo(() => {
     return ["red", "green", "blue", "yellow", "orange", "purple", "navy", "maroon", "olive", "silver"];
   }, []);
 
   const shiftsCssClasses = useMemo(() => {
-    return ["md-stripes-bg", "md-rect-bg", "md-dots-bg"];
+    return ["md-g-stripes-bg", "md-r-stripes-bg", "md-y-stripes-bg"];
   }, []);
 
   const view = useMemo(() => {
@@ -78,10 +79,6 @@ function ShiftSchedule() {
     queryFn: () => getOutpostsAndShiftsForCampId(campId),
     enabled: !!campId,
     select: (data) => {
-      console.log(
-        "outpostsAndShifts - outpost",
-        data.map((o) => o.outpost)
-      );
       return data.map((o) => o.outpost);
     },
   });
@@ -109,7 +106,6 @@ function ShiftSchedule() {
           }
         });
       }
-      console.log("shifts", allMappendShifts);
       return allMappendShifts;
     },
   });
@@ -123,20 +119,20 @@ function ShiftSchedule() {
       if (data.length > 0) {
         mappedShibutsim = data.map((s) => {
           const { id, ...copiedShibuts } = s;
+          const shift = shifts.find((sh) => sh.id == s.shiftId);
+          const guard = guards.find((g) => g.value == s.guardId);
           const updatedShibuts = {
             ...copiedShibuts,
             shibutsId: id,
-            start: getDateAndTime(s.theDate, shifts.find((sh) => sh.id == s.shiftId).start),
-            end: getDateAndTime(s.theDate, shifts.find((sh) => sh.id == s.shiftId).end, true),
-            guardName: guards.find((g) => g.value == s.guardId).text,
+            start: getDateAndTime(s.theDate, shift.start),
+            end: getDateAndTime(s.theDate, shift.end, true),
+            guardName: guard.text,
             resource: s.outpostId,
-            color: guards.find((g) => g.value == s.guardId).color,
+            color: guard.color,
           };
-
           return updatedShibuts;
         });
       }
-      console.log("shibutsim", mappedShibutsim);
       return mappedShibutsim;
     },
   });
@@ -198,12 +194,13 @@ function ShiftSchedule() {
 
   const checkExistinShibuts = useCallback(
     (shibuts) => {
-      const outpostName = outposts.find((o) => o.id == shibuts.outpostId).name;
       const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && s.shiftId == shibuts.shiftId && s.outpostId == shibuts.outpostId);
       if (existShibuts.length > 0) {
+        //same shibuts
         if (shibuts.shibutsId == existShibuts[0].shibutsId) {
           return true;
         }
+        const outpostName = outposts.find((o) => o.id == shibuts.outpostId).name;
         toast.error(`כבר קיים שיבוץ ל ${existShibuts[0].guardName} בעמדה ${outpostName} בשעה ${getTimeStr(existShibuts[0].end.getHours())}`);
         return true;
       }
@@ -286,8 +283,10 @@ function ShiftSchedule() {
         shibutsToSave.theDate = shibutsToSave.start.getTime();
         shibutsToSave.outpostName = outpostName;
         shibutsToSave.id = shibutsToSave.shibutsId;
+        setIsSavingLoading(true);
         await createOrUpdateShibuts(shibutsToSave);
         queryClient.invalidateQueries(["shibutsim"]);
+        setIsSavingLoading(false);
         setPopupOpen(false);
       } else {
         onClose();
@@ -390,7 +389,7 @@ function ShiftSchedule() {
       <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick}>
         שיבוץ אוטומטי
       </Button>
-      {guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading ? (
+      {guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading || isSavingLoading ? (
         <LoadingComp />
       ) : (
         <>
