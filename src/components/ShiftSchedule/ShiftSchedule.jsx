@@ -164,7 +164,7 @@ function ShiftSchedule() {
   const checkOutpostLimit = useCallback((guard, shibuts) => {
     let hasOutpostLimit = false;
     if (guard.outpostLimits.length > 0) {
-      const limits = guard.outpostLimits.filter((o) => o.outpostId == shibuts.resource).length;
+      const limits = guard.outpostLimits.filter((o) => o.outpostId == shibuts.resource);
       if (limits.length > 0) {
         hasOutpostLimit = true;
       }
@@ -174,20 +174,21 @@ function ShiftSchedule() {
 
   const checkGuardHasLimits = useCallback(
     (guard, shibuts) => {
+      let hasLimits = false;
       const hasTimeLimit = checkTimeLimit(guard, shibuts);
       const hasOutpostLimit = checkOutpostLimit(guard, shibuts);
       if (hasTimeLimit) {
         toast.error("שומר " + guard.text + " אינו יכול לשמור בשעות " + shibuts.start.getHours() + ":00 - " + shibuts.end.getHours() + ":00");
-        return true;
+        hasLimits = true;
       }
       if (hasOutpostLimit) {
-        const outpostName = outposts.find((o) => {
+        const outpost = outposts.find((o) => {
           return o.id === shibuts.outpostId;
         });
-        toast.error("שומר " + guard.text + " לא יכול לשמור בעמדה " + outpostName);
-        return true;
+        toast.error("שומר " + guard.text + " לא יכול לשמור בעמדה " + outpost.name);
+        hasLimits = true;
       }
-      return false;
+      return hasLimits;
     },
     [checkOutpostLimit, checkTimeLimit, outposts]
   );
@@ -287,10 +288,8 @@ function ShiftSchedule() {
         await createOrUpdateShibuts(shibutsToSave);
         queryClient.invalidateQueries(["shibutsim"]);
         setIsSavingLoading(false);
-        setPopupOpen(false);
-      } else {
-        onClose();
       }
+      onClose();
     },
     [outposts, shibutsim, tempShibuts, checkExistinShibuts, campId]
   );
