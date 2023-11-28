@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from "react-query";
-import GuardService from "@/services/GuardService";
+import { deleteGuard } from "@/services/GuardService";
 import GuardType from "@/types/Guard.type";
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography} from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
 export const GuardDialogDelete = ({ guard, closeDialog, open }) => {
-const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: () => GuardService.deleteGuard(guard.id),
+    mutationFn: () => deleteGuard(guard.id),
     onSuccess: async () => {
       await queryClient.invalidateQueries("guards");
       toast.success("שומר נמחק בהצלחה!");

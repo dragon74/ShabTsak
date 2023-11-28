@@ -1,10 +1,10 @@
 import { useState } from "react";
-import axios from "axios";
 import { Grid, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel, Box, Dialog, DialogActions } from "@mui/material";
-import { API_URL } from "../../constants/apiConstants";
 import { toast } from "react-toastify";
+import { createTimeLimit } from "@/services/TimeLimitService";
+import { useQueryClient } from "react-query";
 
-const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
+const TimeLimitForm = ({ id, timeLimits }) => {
   const initialTimeLimit = {
     dayId: 0,
     fromHour: 0,
@@ -16,12 +16,14 @@ const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
 
   const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
+  const queryClient = useQueryClient();
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleSubmit = async () => {
     if (newTimeLimit.fromHour >= newTimeLimit.toHour) {
-      toast.warn("End time should be after start time!");
+      toast.warn("שעת התחלה חייבת להיות פחותה משעת סיום");
       return;
     }
 
@@ -33,16 +35,9 @@ const TimeLimitForm = ({ id, fetchTimeLimits, timeLimits }) => {
       return;
     }
 
-    try {
-      await axios.post(API_URL + "/guardtimelimit", newTimeLimit);
-      fetchTimeLimits();
-      toast.success("Time limit added successfully.");
-      handleClose(); // Close the dialog after successful submission
-      setNewTimeLimit(initialTimeLimit); // Reset the form data
-    } catch (error) {
-      console.error("Error creating new time limit:", error);
-      toast.error("Failed to add new time limit. Please try again.");
-    }
+    await createTimeLimit(newTimeLimit);
+    queryClient.invalidateQueries(["guardTimeLimits"]);
+    setOpen(false);
   };
 
   return (

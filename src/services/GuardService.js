@@ -2,46 +2,62 @@ import { GUARD_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService";
 import { toast } from "react-toastify";
 
-const GuardService = {
-  getGuardsByCampId(campId) {
-    return doApiGet(`${GUARD_URL}/camp/${campId}`)
-      .then((res) => res.data)
-      .catch((error) => {
-        console.error(error);
-        throw new Error("Error fetching guards for the selected camp.");
-      });
-  },
-  getGuardDetails(guardId) {
-    return doApiGet(`${GUARD_URL}/${guardId}`)
-      .then((res) => {
-        console.log(res.data);
-        return res.data;
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Failed to fetch guard details. Please try again.");
-      });
-  },
-  deleteGuard(guardId) {
-    return doApiMethod(`${GUARD_URL}/${guardId}`, "DELETE")
-  },
-  addNewGuard(newGuardDetails){
-        return doApiMethod(GUARD_URL, "POST", newGuardDetails)
-  },
-  updateGuard(guardDetails){
-        return doApiMethod(GUARD_URL, "PUT", guardDetails)
-  },
-  getGuardsAndLimitsForCampId(campId) {
-    return doApiGet(GUARD_URL + "/all/full/" + campId)
-            .then((res) => {
-              console.log(res.data);
-              return res.data;
-            })
-            .catch((error) => {
-              console.log(error);
-              toast.error("Failed to fetch guard details. Please try again.");
-            });
-  }
+const handleApiError = (error, errorMessage) => {
+  console.error(error);
+  toast.error(errorMessage);
+  throw new Error(errorMessage);
 };
 
-export default GuardService;
+export async function getGuardsByCampId(campId) {
+  try {
+    const res = await doApiGet(`${GUARD_URL}/camp/${campId}`);
+    return res.data;
+  } catch (error) {
+    handleApiError(error, "Error fetching guards for the selected camp.");
+  }
+}
+
+export async function getGuardDetails(guardId) {
+  try {
+    const res = await doApiGet(`${GUARD_URL}/${guardId}`);
+    return res.data;
+  } catch (error) {
+    handleApiError(error, "Failed to fetch guard details. Please try again.");
+  }
+}
+
+export async function deleteGuard(guardId) {
+  try {
+    return await doApiMethod(`${GUARD_URL}/${guardId}`, "DELETE");
+  } catch (error) {
+    handleApiError(error, "Failed to delete guard. Please try again.");
+  }
+}
+
+export async function addNewGuard(newGuardDetails) {
+  try {
+    return await doApiMethod(GUARD_URL, "POST", newGuardDetails);
+  } catch (error) {
+    handleApiError(error, "Failed to add a new guard. Please try again.");
+  }
+}
+
+export async function updateGuard(guardDetails) {
+  try {
+    return await doApiMethod(GUARD_URL, "PUT", guardDetails);
+  } catch (error) {
+    handleApiError(error, "Failed to update guard. Please try again.");
+  }
+}
+
+export async function getGuardsAndLimitsForCampId(campId) {
+  try {
+    const res = await doApiGet(`${GUARD_URL}/all/full/${campId}`);
+    return res.data;
+  } catch (error) {
+    handleApiError(error, "Failed to fetch guard details and limits. Please try again.");
+  }
+}
+
+// Exporting the handleApiError function for reuse if needed
+export { handleApiError };

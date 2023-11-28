@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import GuardItem from "./GuardItem";
-import GuardService from "@/services/GuardService";
 import { useQuery } from "react-query";
+import { getGuardsByCampId } from "@/services/GuardService";
 
 const GuardList = ({ campId, handleEdit, handleDelete }) => {
   const {
@@ -11,7 +11,7 @@ const GuardList = ({ campId, handleEdit, handleDelete }) => {
     isError,
   } = useQuery({
     enabled: !!campId,
-    queryFn: () => GuardService.getGuardsByCampId(campId),
+    queryFn: () => getGuardsByCampId(campId),
     queryKey: ["guards", campId],
   });
 
