@@ -6,7 +6,7 @@ import.meta.env.VITE_CLIENT_ID = "";
 import.meta.env.VITE_CLIENT_SECRET = "";
 
 const UserService = {
-    refreshIdToken(refresh_token) {
+    refreshToken(refresh_token) {
         return axios.post(`https://oauth2.googleapis.com/token`, {
             grant_type: "refresh_token",
             client_secret,

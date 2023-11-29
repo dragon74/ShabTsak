@@ -63,7 +63,7 @@ const GuardsPage = () => {
           הוסף שומר
         </Button>
       </Box>
-      <GuardList campId={selectedCampId} handleEdit={handleOpenEditDialog} handleDelete={handleOpenDeleteDialog} />
+      <GuardList campId={+selectedCampId} handleEdit={handleOpenEditDialog} handleDelete={handleOpenDeleteDialog} />
       {dialogOpen && <GuardDialog open={dialogOpen} close={handleCloseDialog} guardId={selectedGuardId} campId={selectedCampId} method={dialogMethod} guardDetails={guardDetails} />}
       {deleteDialogOpen && guardToDelete && <GuardDialogDelete guard={guardToDelete} closeDialog={handleCloseDeleteDialog} open={deleteDialogOpen} />}
       <BackLink place="end" icon={<ArrowBackIosIcon />}>

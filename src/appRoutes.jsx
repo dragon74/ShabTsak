@@ -15,7 +15,7 @@ import PrivacyPage from "components/privacy/privacyPage";
 import TermsPage from "components/terms/termsPage";
 import ShiftsPage from "components/shifts/shiftsPage";
 import LimitsPage from "components/limits/limitsPage";
-import { useAuth } from "@/hooks/useAuth.jsx";
+import { useAuth } from "@/hooks/useAuth.tsx";
 import PropTypes from "prop-types";
 import GuardsPage from "components/guards/guardsPage.jsx";
 import Landing from "components/landing/landing.tsx";
@@ -99,7 +99,6 @@ function PrivateRoute({ children }) {
   React.useEffect(() => {
     init();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (user === undefined) {

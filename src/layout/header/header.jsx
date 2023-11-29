@@ -20,9 +20,9 @@ import srcImg from '/images/man.png';
 import { toast } from 'react-toastify';
 import ROUTES from '@/constants/routeConstants';
 import DialogLogOut from 'components/general_comps/dialogs/dialogLogOut';
-import {useDarkModeStore} from "@/theme/useDarkModeStore.jsx";
+import { useDarkModeStore } from "@/theme/useDarkModeStore.jsx";
 import { Link as RouterLink } from 'react-router-dom';
-import { useAuth } from "../../hooks/useAuth.jsx";
+import { useAuth } from "../../hooks/useAuth.tsx";
 
 const Header = () => {
     const { user, logout } = useAuth();
@@ -185,7 +185,7 @@ const Header = () => {
                         <Grid item>
                             <Tooltip title={user?.firstName ? `שלום ${user.firstName}` : "שלום, אנא התחבר"}>
                                 <IconButton onClick={user ? handleOpenUserMenu : undefined} sx={{ p: 0 }}>
-                                    <Avatar alt="Avatar" src={user?.avatar || srcImg} referrerPolicy="no-referrer" />
+                                    <Avatar alt="Avatar" src={user?.avatar || srcImg} referrerPolicy="no-referrer" imgProps={{ referrerPolicy: "no-referrer" }} />
                                 </IconButton>
                             </Tooltip>
                             {user && (

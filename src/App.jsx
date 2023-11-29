@@ -2,7 +2,7 @@ import React from "react";
 import AppRoutes from "./appRoutes";
 import ErrorBoundary from "components/general_comps/errorBoundary";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { useAuth } from "./hooks/useAuth.jsx";
+import { useAuth } from "./hooks/useAuth.tsx";
 import { AuthContext } from "./context/AuthContext";
 import "./App.css";
 

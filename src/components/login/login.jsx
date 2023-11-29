@@ -3,12 +3,17 @@ import { Box, Typography, Container } from "@mui/material";
 import { theme } from "@/theme/theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Navigate } from 'react-router-dom';
-import { useAuth } from "../../hooks/useAuth.jsx";
+import { useAuth } from "@/hooks/useAuth.tsx";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import NewLoginButton from "@/components/general_comps/loginButton";
 export default function Login() {
     const clientID = React.useRef(import.meta.env.VITE_CLIENT_ID || "CLIENT_ID_MISSING");
-    const { user } = useAuth();
+    const { init, user } = useAuth();
+
+    React.useEffect(() => {
+        init();
+
+    }, []);
 
     if (user) {
         return <Navigate to="/" />;

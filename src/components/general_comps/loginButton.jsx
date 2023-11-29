@@ -1,5 +1,5 @@
 import { useGoogleLogin } from "@react-oauth/google";
-import { useAuth } from "@/hooks/useAuth.jsx";
+import { useAuth } from "@/hooks/useAuth.tsx";
 import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useDarkModeStore } from "@/theme/useDarkModeStore.jsx";
