@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 //for toast container you need the container will be in app and his css
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

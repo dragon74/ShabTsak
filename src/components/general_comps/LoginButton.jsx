@@ -1,18 +1,16 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { Box, Button, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { useDarkModeStore } from "@/theme/useDarkModeStore.jsx";
 import { useAuthContext } from "@/context/AuthContext";
 import '@/styles/loginButton.css';
 
 const LoginButton = () => {
     const { login } = useAuthContext();
-    const theme = useTheme();
     const handleLogin = useGoogleLogin({ onSuccess: ({ code }) => login(code), flow: "auth-code" })
     const darkMode = useDarkModeStore((store) => store.darkMode);
 
     return (
-        <Button variant="outlined" color="primary" className="gsi-material-button" onClick={() => handleLogin()} sx={{...darkMode ? { color: theme.palette.secondary.contrastText, borderColor: "#ccecec75", "&:hover": { borderColor: "#ccecec99" }} : {}}}>
+        <Button variant="outlined" color="primary" className="gsi-material-button" onClick={() => handleLogin()} sx={{...darkMode ? { color: "white !important", borderColor: "#ccecec85", "&:hover": { borderColor: "#ccecec" }} : {}}}>
             <div className="gsi-material-button-state"></div>
             <div className="gsi-material-button-content-wrapper">
                 <Box className="gsi-material-button-icon" sx={{ marginInlineEnd: 0.8 }}>

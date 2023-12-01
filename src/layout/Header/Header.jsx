@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
@@ -68,7 +68,7 @@ const Header = () => {
 
     const OnLogOut = () => {
         logout()
-        toast.success("!התנתקת בהצלחה")
+        toast.success("התנתקת בהצלחה!")
         setOpenSureDialog(false);
     }
 

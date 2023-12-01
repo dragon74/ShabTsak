@@ -14,14 +14,13 @@ export const theme = responsiveFontSizes(createTheme({
         fontFamily: 'inherit',
         h1: {
             fontSize: 32,
-            fontWeight: 400
+            fontWeight: 400,
         },
         h2: {
             fontSize: '3rem',
             '@media (min-width:600px)': {
                 fontSize: '4rem'
             },
-            fontWeight: 500
         },
         h3: {
             fontSize: '1.2rem',
@@ -59,7 +58,7 @@ export const theme = responsiveFontSizes(createTheme({
             main: "#FFFFFF"
         },
         darkMode: {
-            main: "#4a4848"
+            main: "#1a1919",
         },
         lightMode: {
             main: "#FFFFFF"
