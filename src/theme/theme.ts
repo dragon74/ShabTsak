@@ -58,7 +58,7 @@ export const theme = responsiveFontSizes(createTheme({
         },
         ...{
             darkMode: {
-                main: "#1a1919",
+                main: "#282a28",
             },
             lightMode: {
                 main: "#FFFFFF"
