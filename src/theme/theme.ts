@@ -38,8 +38,10 @@ export const theme = responsiveFontSizes(createTheme({
         h5: {
             fontSize: '1rem'
         },
-        strong: {
-            fontWeight: 500,
+        ...{
+            strong: {
+                fontWeight: 500,
+            }
         }
     },
     palette: {
@@ -51,33 +53,37 @@ export const theme = responsiveFontSizes(createTheme({
         secondary: {
             main: "#4169e1",
         },
-        danger: {
-            main: "#899934",
-        },
         success: {
             main: "#FFFFFF"
         },
-        darkMode: {
-            main: "#1a1919",
+        ...{
+            darkMode: {
+                main: "#1a1919",
+            },
+            lightMode: {
+                main: "#FFFFFF"
+            },
+            danger: {
+                main: "#899934",
+            },
+            purple: {
+                main: "#800080"
+            },
+            brown: {
+                main: "#964B00"
+            },
+            orange: {
+                main: "#FFA500"
+            }
         },
-        lightMode: {
-            main: "#FFFFFF"
-        },
-        purple: {
-            main: "#800080"
-        },
-        brown:{
-            main:"#964B00"
-        },
-        orange:{
-            main:"#FFA500"
-        }
     },
     direction: "rtl",
-    textField: {
-        smallTextField: {
-            width: '50%', // You can adjust the width to make it smaller
-        },
+    ...{
+        textField: {
+            smallTextField: {
+                width: '50%', // You can adjust the width to make it smaller
+            },
+        }
     },
     components: {
         MuiLink: {
