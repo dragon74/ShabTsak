@@ -16,7 +16,7 @@ const GuardsPage = () => {
   const [guardDetails, setGuardDetails] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [guardToDelete, setGuardToDelete] = useState(null);
-  const [selectedCampId, setSelectedCampId] = useState(state.campId || "");
+  const [selectedCampId, setSelectedCampId] = useState(state?.campId);
 
   const handleOpenAddDialog = () => {
     setSelectedGuardId(null);
@@ -63,7 +63,7 @@ const GuardsPage = () => {
           הוסף שומר
         </Button>
       </Box>
-      <GuardList campId={+selectedCampId} handleEdit={handleOpenEditDialog} handleDelete={handleOpenDeleteDialog} />
+      {selectedCampId && <GuardList campId={+selectedCampId} handleEdit={handleOpenEditDialog} handleDelete={handleOpenDeleteDialog} />}
       {dialogOpen && <GuardDialog open={dialogOpen} close={handleCloseDialog} guardId={selectedGuardId} campId={selectedCampId} method={dialogMethod} guardDetails={guardDetails} />}
       {deleteDialogOpen && guardToDelete && <GuardDialogDelete guard={guardToDelete} closeDialog={handleCloseDeleteDialog} open={deleteDialogOpen} />}
       <BackLink place="end" icon={<ArrowBackIosIcon />}>

@@ -4,6 +4,8 @@ import { getCamps } from "@/services/campService.js";
 import { FormControl, Stack, TextField, Typography } from "@mui/material";
 import { KeyboardArrowDownRounded } from "@mui/icons-material";
 import MenuItem from "@mui/material/MenuItem";
+import { useDarkModeStore } from "@/theme/useDarkModeStore.jsx";
+import { useTheme } from "@mui/material/styles";
 
 function SelectCamp({ selectedCampId, setSelectedCampId, onCampChange, title, title2, sx = { backgroundColor: "#f7f7f7" } }) {
     const { isLoading: isLoadingCamps, data: camps } = useQuery({
@@ -12,7 +14,7 @@ function SelectCamp({ selectedCampId, setSelectedCampId, onCampChange, title, ti
     });
     React.useEffect(() => {
         if (!selectedCampId && Array.isArray(camps) && camps?.length > 0) {
-            setSelectedCampId(camps[0].value);
+            setSelectedCampId(camps[0].id);
         }
     }, [camps]);
 
@@ -20,10 +22,12 @@ function SelectCamp({ selectedCampId, setSelectedCampId, onCampChange, title, ti
         setSelectedCampId(value);
         onCampChange();
     }
+    const theme = useTheme();
+    const darkMode = useDarkModeStore((s) => s.darkMode);
 
     return (
         <Stack direction="row" gap={0.5} alignItems="center" flexWrap="wrap" paddingX={1.5} paddingTop={1} sx={sx}>
-            <Typography variant="h3" component="h2" whiteSpace="nowrap">
+            <Typography variant="h3" component="h2" whiteSpace="nowrap" color={darkMode && theme.palette.text.primary}>
                 {title}
             </Typography>
 
@@ -32,7 +36,7 @@ function SelectCamp({ selectedCampId, setSelectedCampId, onCampChange, title, ti
             ) : (
                 camps?.length !== 0 && (
                     <Stack direction="row" alignItems="center" gap={1}>
-                        {title2 && <Typography variant="h3">{title2}</Typography>}
+                        {title2 && <Typography variant="h3" color={darkMode && theme.palette.text.primary}>{title2}</Typography>}
                         <FormControl>
                             <TextField
                                 select

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ROUTES from '@/constants/routeConstants';
 import { Box, Typography, Container } from "@mui/material";
 import { theme } from "@/theme/theme";

@@ -2,8 +2,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useDarkModeStore } from "@/theme/useDarkModeStore.jsx";
-import '@/styles/loginButton.css';
 import { useAuthContext } from "@/context/AuthContext";
+import '@/styles/loginButton.css';
 
 const LoginButton = () => {
     const { login } = useAuthContext();

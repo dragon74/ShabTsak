@@ -122,6 +122,7 @@ const Header = () => {
                                     component={RouterLink}
                                     to={ROUTES.HOME}
                                     disabled={!user}
+                                    onClick={handleCloseNavMenu}
                                 >
                                     בסיסים
                                 </MenuItem>
@@ -129,6 +130,7 @@ const Header = () => {
                                     component={RouterLink}
                                     to={ROUTES.SCHEDULE}
                                     disabled={!user}
+                                    onClick={handleCloseNavMenu}
                                 >
                                     לוח משמרות
                                 </MenuItem>
@@ -136,6 +138,7 @@ const Header = () => {
                                     component={RouterLink}
                                     to={ROUTES.GUARDS}
                                     disabled={!user}
+                                    onClick={handleCloseNavMenu}
                                 >
                                     סד"כ
                                 </MenuItem>
@@ -190,7 +193,7 @@ const Header = () => {
                             </Tooltip>
                             {user && (
                                 <Menu
-                                    sx={{ mt: 3 }}
+                                    sx={{ mt: 5 }}
                                     id="menu-appbar"
                                     anchorEl={anchorElUser}
                                     anchorOrigin={{
@@ -207,13 +210,15 @@ const Header = () => {
                                 >
                                     <MenuItem
                                         sx={{
-                                            display: { xs: 'block', md: 'none', textAlign: "center", px: 3, alignItems: 'center' },
+                                            display: { xs: 'flex', justifyContent: "space-between", md: 'none', textAlign: "center", px: 3, alignItems: 'center' },
+                                        }}
+                                        onClick={() => {
+                                            toggleDarkMode();
+                                            handleCloseUserMenu();
                                         }}
                                     >
                                         {darkMode === false ? "אור" : 'חושך'}
-                                        <IconButton onClick={toggleDarkMode} color="inherit">
-                                            {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
-                                        </IconButton>
+                                        {darkMode === true ? <Brightness7Icon /> : <Brightness4Icon />}
                                     </MenuItem>
                                     <MenuItem onClick={ClickGoodLuck}>בהצלחה</MenuItem>
                                     <MenuItem onClick={ClickLogOut}>התנתקות</MenuItem>

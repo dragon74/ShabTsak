@@ -10,7 +10,7 @@ import { getCamps } from "@/services/campService.js";
 const CampsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
-  // const { isLoading, data: camps } = useQuery('camps', getCamps)
+  // const { isLoading, data: CampsPage } = useQuery('CampsPage', getCamps)
 
   const { isLoading, data: camps } = useQuery({
     queryFn: getCamps,
