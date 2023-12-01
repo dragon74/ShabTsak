@@ -5,11 +5,11 @@ import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import TimeLimitForm from "./TimeLimitForm";
 import TimeLimitTable from "./TimeLimitTable";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import BackLink from "components/general_comps/backLink.jsx";
+import BackLink from "components/general_comps/BackLink.jsx";
 import OutpostLimit from "./outpostLimits/outpostLimit";
-import { getGuardDetails } from "@/services/GuardService";
+import { getGuardDetails } from "@/services/guardService.js";
 import { useQuery, useQueryClient } from "react-query";
-import { deleteTimeLimit, getGuardTimeLimits } from "@/services/TimeLimitService";
+import { deleteTimeLimit, getGuardTimeLimits } from "@/services/timeLimitService.js";
 
 const GuardProfile = () => {
   const { state } = useLocation();

@@ -6,9 +6,9 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AddShiftBtn from "./addShiftBtn/addShiftBtn";
 import DialogShift from "./shiftDialog";
 import ShiftList from "./shiftList/shiftList";
-import BackLink from "../general_comps/backLink";
-import LoadingComp from "../general_comps/loadingComp";
-import { getShiftsByOutpostId } from "@/services/ShiftService";
+import BackLink from "../general_comps/BackLink.jsx";
+import LoadingComp from "../general_comps/LoadingComp.jsx";
+import { getShiftsByOutpostId } from "@/services/shiftService.js";
 
 export default function ShiftsPage() {
   const params = useParams();

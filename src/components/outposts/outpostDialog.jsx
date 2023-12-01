@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
-import { createOrUpdateOutpost } from "@/services/OutpostService";
+import { createOrUpdateOutpost } from "@/services/outpostService.js";
 
 OutpostDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,

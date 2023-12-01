@@ -4,8 +4,8 @@ import { Container, Typography } from "@mui/material";
 import CampDialog from "./campDialog";
 import CampList from "./campList/campList";
 import AddCampBtn from "./addCampBtn/addCampBtn";
-import LoadingComp from "../general_comps/loadingComp";
-import { getCamps } from "@/services/CampService";
+import LoadingComp from "../general_comps/LoadingComp.jsx";
+import { getCamps } from "@/services/campService.js";
 
 const CampsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);

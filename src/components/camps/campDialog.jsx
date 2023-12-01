@@ -4,7 +4,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, F
 import { useQueryClient } from "react-query";
 import { theme } from "@/theme/theme";
 import { useMemo } from "react";
-import { createOrUpdateCamp } from "@/services/CampService";
+import { createOrUpdateCamp } from "@/services/campService.js";
 
 CampDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
