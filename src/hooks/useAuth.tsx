@@ -35,7 +35,8 @@ export const useAuth = () => {
             });
 
         } catch (err) {
-            console.log(err);
+            removeUser(); // fixes bug where stale token is used
+            import.meta.env.DEV && console.log("refreshToken failed: ", err);
         }
     }
     const init = async () => {
