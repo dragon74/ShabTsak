@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ROUTES from "@/constants/routeConstants";
-import Layout from "@/layout/Layout.jsx";
+const Layout = React.lazy(() => import("components/Layout/Layout"));
 const NotFound = React.lazy(() => import("components/general_comps/NotFound"));
 const CampsPage = React.lazy(() => import("components/CampsPage/CampsPage"));
 const ShiftSchedule = React.lazy(() => import("components/ShiftSchedule/ShiftSchedule") as any);
@@ -22,7 +22,7 @@ export default function AppRoutes() {
     return (
         <Router>
             <Routes>
-                <Route path={ROUTES.HOME} element={<Layout/>}>
+                <Route path={ROUTES.HOME} element={<Suspense><Layout/></Suspense>}>
                     <Route index element={<PrivateRoute><Suspense><CampsPage/></Suspense></PrivateRoute>}/>
                     <Route path={ROUTES.SCHEDULE} element={<PrivateRoute><Suspense><ShiftSchedule/></Suspense></PrivateRoute>}/>
                     <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`}

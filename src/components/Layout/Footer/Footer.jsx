@@ -1,5 +1,5 @@
 import { Box, Stack, Button, Typography, Container } from "@mui/material";
-import ROUTES from "../../constants/routeConstants.js";
+import ROUTES from "../../../constants/routeConstants.js";
 import { Link as RouterLink } from 'react-router-dom';
 
 export default function Footer() {
