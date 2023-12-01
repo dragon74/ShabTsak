@@ -74,6 +74,9 @@ export const theme = responsiveFontSizes(createTheme({
             },
             orange: {
                 main: "#FFA500"
+            },
+            gray: {
+                main: "#484A48"
             }
         },
     },

@@ -18,7 +18,7 @@ export default function Layout() {
     const modeColorText = useMemo(() => {
         if (darkMode)
             return (theme.palette as any).lightMode.main
-        return (theme.palette as any).darkMode.main
+        return (theme.palette as any).gray.main
     }, [darkMode]);
 
     const modeBackground = useMemo(() => {

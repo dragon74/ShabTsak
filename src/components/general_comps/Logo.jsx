@@ -7,7 +7,7 @@ export default function Logo() {
   return (
     <Link component={RouterLink} className="logo-comp" to="/" title="חזור לדף הבית" color="#fff" underline="none">
       <img src={imgSoldier} alt="imgSoldier" width={35} />
-      <Typography variant="h1" sx={{ py: 1.2 }}>שבצ"ק</Typography>
+      <Typography variant="h1" sx={{ py: 1.2, color: "#fff" }}>שבצ"ק</Typography>
     </Link>
   )
 }
