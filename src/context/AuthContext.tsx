@@ -1,28 +1,30 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import UserService, { UserInfo } from "@/services/userService";
 
-const AuthContext = createContext<{
+type AuthContextType = {
     user: UserInfo | undefined | null;
     login: (authCode: string) => void;
     logout: () => void;
     init: () => void;
-}>({
+}
+
+const AuthContext = createContext<AuthContextType>({
     user: undefined,
     login: () => {},
     logout: () => {},
     init: () => {},
 });
 
-export const refreshTokenInterval = 1000 * 60 * 15; // 15 minute
+export const refreshTokenInterval = 1000 * 60; // 15 minutes
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<UserInfo | null | undefined>();
     const refreshTokenTimeout = useRef<ReturnType<typeof setTimeout>>();
-    const refreshToken = async () => {
+    const _refreshToken = async () => {
         const userInfo = await UserService.refreshToken();
         if (userInfo) {
             setUser(userInfo);
             clearTimeout(refreshTokenTimeout.current);
-            refreshTokenTimeout.current = setTimeout(refreshToken, refreshTokenInterval);
+            refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
         } else {
             setUser(null);
         }
@@ -33,7 +35,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         if (userInfo) {
             setUser(userInfo);
             clearTimeout(refreshTokenTimeout.current);
-            refreshTokenTimeout.current = setTimeout(refreshToken, refreshTokenInterval);
+            refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
         } else {
             setUser(null);
         }
@@ -43,7 +45,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         const userInfo = await UserService.login(authCode);
         setUser(userInfo);
         clearTimeout(refreshTokenTimeout.current);
-        refreshTokenTimeout.current = setTimeout(refreshToken, refreshTokenInterval);
+        refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
     }
 
     async function logout() {

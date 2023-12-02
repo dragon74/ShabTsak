@@ -41,7 +41,52 @@ async function login(authCode: string) {
     const userInfo = await _getUserInfo(token.access_token);
     const lastLogin = new Date().getTime();
     localStorageService.set<LoginReturnType>(TOKEN_NAME, { token, userInfo, lastLogin });
-    return normalizeUserInfo(userInfo);
+    return _normalizeUserInfo(userInfo);
+}
+
+async function logout() {
+    localStorageService.remove(TOKEN_NAME);
+}
+
+async function refreshToken(): Promise<UserInfo | null> {
+    try {
+        const refreshToken = localStorageService.get<LoginReturnType>(TOKEN_NAME)?.token.refresh_token;
+        if (!refreshToken) {
+            return null;
+        }
+        const newToken = await _refreshToken(refreshToken);
+        newToken.refresh_token = refreshToken;
+        const userInfo = await _getUserInfo(newToken.access_token);
+        const lastLogin = new Date().getTime();
+        localStorageService.set<LoginReturnType>(TOKEN_NAME, { token: newToken, userInfo, lastLogin });
+        return _normalizeUserInfo(userInfo);
+    } catch (error) {
+        console.error(error);
+        if (navigator.onLine) {
+            localStorageService.remove(TOKEN_NAME);
+        }
+        return null;
+    }
+}
+
+async function getUser(): Promise<UserInfo | null> {
+    try {
+        const loginInfo = localStorageService.get<LoginReturnType>(TOKEN_NAME);
+        if (!loginInfo) {
+            return null;
+        }
+        const { token, userInfo, lastLogin } = loginInfo;
+        const now = new Date().getTime();
+        const diff = now - lastLogin;
+        if (diff > refreshTokenInterval) {
+            const newToken = await _refreshToken(token.refresh_token);
+            localStorageService.set<LoginReturnType>(TOKEN_NAME, { token: newToken, userInfo, lastLogin: now });
+        }
+        return _normalizeUserInfo(userInfo);
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
 }
 
 async function _getAccessToken(authCode: string): Promise<TokenType> {
@@ -64,30 +109,6 @@ async function _getUserInfo(accessToken: string): Promise<UserInfoType> {
     return response.data;
 }
 
-async function logout() {
-    localStorageService.remove(TOKEN_NAME);
-}
-
-async function getUser(): Promise<UserInfo | null> {
-    try {
-        const loginInfo = localStorageService.get<LoginReturnType>(TOKEN_NAME);
-        if (!loginInfo) {
-            return null;
-        }
-        const { token, userInfo, lastLogin } = loginInfo;
-        const now = new Date().getTime();
-        const diff = now - lastLogin;
-        if (diff > refreshTokenInterval) {
-            const newToken = await _refreshToken(token.refresh_token);
-            localStorageService.set<LoginReturnType>(TOKEN_NAME, { token: newToken, userInfo, lastLogin: now });
-        }
-        return normalizeUserInfo(userInfo);
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
-
 async function _refreshToken(refreshToken: string) {
     const response = await axios.post("https://oauth2.googleapis.com/token", {
         client_id: import.meta.env.VITE_CLIENT_ID,
@@ -98,28 +119,7 @@ async function _refreshToken(refreshToken: string) {
     return response.data;
 }
 
-async function refreshToken(): Promise<UserInfo | null> {
-    try {
-        const refreshToken = localStorageService.get<LoginReturnType>(TOKEN_NAME)?.token.refresh_token;
-        if (!refreshToken) {
-            return null;
-        }
-        const newToken = await _refreshToken(refreshToken);
-        newToken.refresh_token = refreshToken;
-        const userInfo = await _getUserInfo(newToken.access_token);
-        const lastLogin = new Date().getTime();
-        localStorageService.set<LoginReturnType>(TOKEN_NAME, { token: newToken, userInfo, lastLogin });
-        return normalizeUserInfo(userInfo);
-    } catch (error) {
-        console.error(error);
-        if (navigator.onLine) {
-            localStorageService.remove(TOKEN_NAME);
-        }
-        return null;
-    }
-}
-
-function normalizeUserInfo(userInfo: UserInfoType) {
+function _normalizeUserInfo(userInfo: UserInfoType) {
     return {
         id: userInfo.sub,
         name: userInfo.given_name,
@@ -127,6 +127,7 @@ function normalizeUserInfo(userInfo: UserInfoType) {
         picture: userInfo.picture,
     }
 }
+
 
 const UserService = {
     login,

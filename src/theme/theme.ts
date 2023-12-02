@@ -47,7 +47,7 @@ export const theme = responsiveFontSizes(createTheme({
     palette: {
         //green
         primary: {
-            main: "#355E3B",
+            main: "#4d8555",
         },
         //blue
         secondary: {

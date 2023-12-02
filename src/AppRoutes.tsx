@@ -51,7 +51,7 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
     }
 
     if (user === null) {
-        return <Navigate to={ROUTES.LOGIN}/>
+        return <Navigate to={ROUTES.LANDING}/>
     }
 
     return children;

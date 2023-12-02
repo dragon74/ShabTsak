@@ -2,7 +2,8 @@ class LocalStorageService {
   static localStorageService = new LocalStorageService();
 
   get<T>(key: string): T | null {
-    return JSON.parse(localStorage.getItem(key) || "null")
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
   }
 
   set<T>(key: string, value: T): void {
