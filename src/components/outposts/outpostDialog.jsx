@@ -73,7 +73,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                             {...register('minGuards', {
                                 required:
                                     { value: true, message: 'חובה למלא כמה שומרים בעמדה' },
-                                min: { value: 2, message: "מנימום 2 שומרים בעמדה" },
+                                min: { value: 1, message: "מנימום שומר 1 בעמדה" },
                                 max: { value: 10, message: "מקסימום 10 שומרים בעמדה" }
                             })}
                             color="primary"
