@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import UserService, { UserInfo } from "@/services/userService";
 import {toast} from "react-toastify";
+import {useQueryClient} from "react-query";
 
 type AuthContextType = {
     user: UserInfo | undefined | null;
@@ -20,6 +21,7 @@ export const refreshTokenInterval = 1000 * 60; // 15 minutes
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<UserInfo | null | undefined>();
     const refreshTokenTimeout = useRef<ReturnType<typeof setTimeout>>();
+    const queryClient = useQueryClient();
     const _refreshToken = async () => {
         try {
             await UserService.refreshToken();
@@ -40,12 +42,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     async function init() {
         try {
             const userInfo = await UserService.getUser();
+            setUser(userInfo);
             if (userInfo) {
-                setUser(userInfo);
                 clearTimeout(refreshTokenTimeout.current);
                 refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
-            } else {
-                setUser(null);
             }
         } catch(err) {
             if (!navigator.onLine) {
@@ -53,8 +53,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 toast.warning("לא נמצא חיבור לרשת", { onClick: () => setTimeout(init, 500) })
             } else {
                 console.error("Auth init: client init failed")
-                toast.warning("אירעה שגיאה בהתחברות, נסה שוב מאוחר יותר", { onClick: () => setTimeout(init, 500) })
+
+                toast.warning("אירעה שגיאה בהתחברות", { onClick: () => setTimeout(init, 500) })
             }
+            setUser(null);
         }
     }
 
@@ -66,12 +68,15 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     async function logout() {
-        await UserService.logout();
         setUser(null);
+        await UserService.logout();
+        queryClient.invalidateQueries();
     }
 
     useEffect(() => {
-        init();
+        if (user === undefined) {
+            init();
+        }
 
         return () => {
             clearTimeout(refreshTokenTimeout.current);
