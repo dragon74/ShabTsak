@@ -32,7 +32,7 @@ const OutpostsPage = () => {
 
         {isLoading ? (
           <LoadingComp />
-        ) : outposts.length === 0 || !outposts ? (
+        ) : outposts?.length === 0 || !outposts ? (
           <Typography variant="h5" component="h2" my={2}>
             אין עמדות עדיין
           </Typography>
