@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Button, Dialog, Autocomplete, TextField, CircularProgress, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  Autocomplete,
+  TextField,
+  CircularProgress,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+  Stack, IconButton
+} from "@mui/material";
 import { getOutpostsByCampId } from "@/services/outpostService.js";
 import { createGuardOutpostLimit, deleteOutpostLimit, getGuardOutpostLimitByGuardId } from "@/services/outpostLimitService.js";
-import GuardOutpostLimitList from "./guardOutpostLimitList";
+import GuardProfileOutpostLimitTable from "./GuardProfileOutpostLimitTable/GuardProfileOutpostLimitTable.jsx";
 import { toast } from "react-toastify";
+import { AddBox } from "@mui/icons-material";
 
-const OutpostLimit = ({ guardId, campId }) => {
+const GuardProfileOutpostLimit = ({ guardId, campId }) => {
   const queryClient = useQueryClient();
 
   const { data: outposts, isLoading: isLoadingOutposts } = useQuery({
@@ -70,46 +82,48 @@ const OutpostLimit = ({ guardId, campId }) => {
     }
   };
 
+  if (isLoadingOutpostLimits || isLoadingOutposts) {
+    return <Typography align="center">טוען מידע...</Typography>;
+  }
+
   return (
     <>
-      <div>
-        <Typography variant="h3" component="h2" mb={2} mt={5}>
-          מגבלות לפי עמדה:
+      <Stack direction="row" alignItems="center">
+        <Typography variant="h5" width={80}>
+          לפי עמדה:
         </Typography>
-
-        <Button variant="outlined" color="primary" onClick={handleOpenDialog}>
-          הוספה
-        </Button>
-      </div>
+        <IconButton type="button" size="small" color="primary" variant="outlined" onClick={handleOpenDialog}>
+          <AddBox />
+        </IconButton>
+      </Stack>
 
       <Dialog
         PaperProps={{
           style: {
             minWidth: "300px", // Set your minimum width here
             maxWidth: "90vw", // Set a maximum width (e.g., 90% of viewport width)
-            padding: "30px",
           },
         }}
         open={openDialog}
         onClose={handleCloseDialog}
       >
-        <DialogTitle>בחר עמדה</DialogTitle>
+        <DialogTitle>הוספת מגבלת עמדה</DialogTitle>
         <DialogContent>
-          <Autocomplete options={outposts || []} getOptionLabel={(option) => option.name} loading={isLoadingOutposts} onChange={(event, newValue) => setSelectedOutpost(newValue)} renderInput={(params) => <TextField {...params} label="בחר עמדה" />} key={(option) => option.id} />
+          <Autocomplete sx={{ paddingTop: 1 }} options={outposts || []} getOptionLabel={(option) => option.name} loading={isLoadingOutposts} onChange={(event, newValue) => setSelectedOutpost(newValue)} renderInput={(params) => <TextField {...params} label="בחר עמדה" />} key={(option) => option.id} />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ marginInlineEnd: 2, marginBlockEnd: 1 }}>
           <Button onClick={handleCloseDialog} color="primary">
             ביטול
           </Button>
-          <Button onClick={handleAdd} color="primary" disabled={!selectedOutpost}>
+          <Button variant="contained" onClick={handleAdd} color="primary">
             {createGuardOutpostLimitMutation.isLoading ? <CircularProgress size={24} /> : "הוספה"}
           </Button>
         </DialogActions>
       </Dialog>
 
-      <GuardOutpostLimitList guardId={guardId} campId={campId} outposts={outposts} outpostLimits={outpostLimits} handleDelete={deleteGuardOutpostLimitMutation.mutate} />
+      <GuardProfileOutpostLimitTable guardId={guardId} campId={campId} outposts={outposts} outpostLimits={outpostLimits} handleDelete={deleteGuardOutpostLimitMutation.mutate} />
     </>
   );
 };
 
-export default OutpostLimit;
+export default GuardProfileOutpostLimit;

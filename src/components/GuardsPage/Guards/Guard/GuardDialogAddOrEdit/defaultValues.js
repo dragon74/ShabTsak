@@ -1,4 +1,4 @@
-export const guardDialogDefaults = {
+export const defaultValues = {
     name: "",
     mail: "",
     phone: "",

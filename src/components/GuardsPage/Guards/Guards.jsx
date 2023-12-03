@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import GuardItem from "./GuardItem";
+import Guard from "components/GuardsPage/Guards/Guard/Guard.jsx";
 import { useQuery } from "react-query";
 import { getGuardsByCampId } from "@/services/guardService.js";
 
-const GuardList = ({ campId, handleEdit, handleDelete }) => {
+const Guards = ({ campId, handleEdit, handleDelete }) => {
   const {
     data: guards,
     isLoading,
@@ -41,7 +41,7 @@ const GuardList = ({ campId, handleEdit, handleDelete }) => {
               </TableHead>
               <TableBody>
                 {guards.map((guard, index) => (
-                  <GuardItem key={guard.id} index={index} guard={guard} campId={campId} onEdit={() => handleEdit(guard)} onDelete={() => handleDelete(guard)} />
+                  <Guard key={guard.id} index={index} guard={guard} campId={campId} onEdit={() => handleEdit(guard)} onDelete={() => handleDelete(guard)} />
                 ))}
               </TableBody>
             </Table>
@@ -52,10 +52,10 @@ const GuardList = ({ campId, handleEdit, handleDelete }) => {
   );
 };
 
-GuardList.propTypes = {
+Guards.propTypes = {
   campId: PropTypes.number,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
 };
 
-export default GuardList;
+export default Guards;

@@ -9,7 +9,7 @@ const NotFound = React.lazy(() => import("components/general_comps/NotFound"));
 const CampsPage = React.lazy(() => import("components/CampsPage/CampsPage"));
 const ShiftSchedule = React.lazy(() => import("components/ShiftSchedule/ShiftSchedule") as any);
 const LoginPage = React.lazy(() => import("components/LoginPage/LoginPage"));
-const GuardProfile = React.lazy(() => import("components/GuardList/GuardProfile") as any);
+const GuardProfile = React.lazy(() => import("components/GuardProfile/GuardProfile") as any);
 const OutpostsPage = React.lazy(() => import("components/outposts/outpostsPage") as any);
 const PrivacyPage = React.lazy(() => import("components/PrivacyPage/PrivacyPage") as any);
 const TermsPage = React.lazy(() => import("components/terms/termsPage") as any);

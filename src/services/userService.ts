@@ -48,6 +48,7 @@ async function logout() {
     localStorageService.remove(TOKEN_NAME);
 }
 
+let tries = 0;
 async function refreshToken(): Promise<UserInfo | null> {
     try {
         const refreshToken = localStorageService.get<LoginReturnType>(TOKEN_NAME)?.token.refresh_token;
@@ -61,11 +62,18 @@ async function refreshToken(): Promise<UserInfo | null> {
         localStorageService.set<LoginReturnType>(TOKEN_NAME, { token: newToken, userInfo, lastLogin });
         return _normalizeUserInfo(userInfo);
     } catch (error) {
-        console.error(error);
         if (navigator.onLine) {
+            console.log(error);
             localStorageService.remove(TOKEN_NAME);
+            return null;
+        } else {
+            if (tries > 5) {
+                tries = 0;
+                return null;
+            }
+            tries++;
+            return await refreshToken();
         }
-        return null;
     }
 }
 
@@ -76,10 +84,15 @@ async function getUser(): Promise<UserInfo | null> {
             return null;
         }
         const { token, userInfo, lastLogin } = loginInfo;
+        if (!token?.refresh_token) {
+            console.error("No refresh token");
+            return null;
+        }
         const now = new Date().getTime();
         const diff = now - lastLogin;
         if (diff > refreshTokenInterval) {
             const newToken = await _refreshToken(token.refresh_token);
+            newToken.refresh_token = token.refresh_token;
             localStorageService.set<LoginReturnType>(TOKEN_NAME, { token: newToken, userInfo, lastLogin: now });
         }
         return _normalizeUserInfo(userInfo);
