@@ -42,7 +42,8 @@ export const theme = responsiveFontSizes(createTheme({
             strong: {
                 fontWeight: 500,
             }
-        }
+        },
+        htmlFontSize: 16,
     },
     palette: {
         //green

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import UserService, { UserInfo } from "@/services/userService";
+import {toast} from "react-toastify";
 
 type AuthContextType = {
     user: UserInfo | undefined | null;
@@ -20,24 +21,40 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [user, setUser] = useState<UserInfo | null | undefined>();
     const refreshTokenTimeout = useRef<ReturnType<typeof setTimeout>>();
     const _refreshToken = async () => {
-        const userInfo = await UserService.refreshToken();
-        if (userInfo) {
-            setUser(userInfo);
+        try {
+            await UserService.refreshToken();
             clearTimeout(refreshTokenTimeout.current);
             refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
-        } else {
-            setUser(null);
+
+        } catch (e) {
+            if (!navigator.onLine) {
+                toast.error("אין חיבור לאינטרנט");
+            } else {
+                toast.error("אירעה שגיאה בעדכון המידע, נסה שוב מאוחר יותר");
+            }
+            clearTimeout(refreshTokenTimeout.current);
+            refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
         }
     }
 
     async function init() {
-        const userInfo = await UserService.getUser();
-        if (userInfo) {
-            setUser(userInfo);
-            clearTimeout(refreshTokenTimeout.current);
-            refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
-        } else {
-            setUser(null);
+        try {
+            const userInfo = await UserService.getUser();
+            if (userInfo) {
+                setUser(userInfo);
+                clearTimeout(refreshTokenTimeout.current);
+                refreshTokenTimeout.current = setTimeout(_refreshToken, refreshTokenInterval);
+            } else {
+                setUser(null);
+            }
+        } catch(err) {
+            if (!navigator.onLine) {
+                console.error("Auth init: client is offline");
+                toast.warning("לא נמצא חיבור לרשת", { onClick: () => setTimeout(init, 500) })
+            } else {
+                console.error("Auth init: client init failed")
+                toast.warning("אירעה שגיאה בהתחברות, נסה שוב מאוחר יותר", { onClick: () => setTimeout(init, 500) })
+            }
         }
     }
 
