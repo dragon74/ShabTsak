@@ -2,14 +2,14 @@ import axios from "axios";
 
 import localStorageService from "@/services/localStorageService.js";
 import { LoginReturnType } from "@/services/userService";
-export const TOKEN_NAME = "FOODS_TOKEN_V2";
+export const TOKEN_NAME = "FOODS_TOKEN";
 
 const getIdTokenFromLocalStorage = (): `${string} ${string}` => {
-    const token = localStorageService.get<LoginReturnType>(TOKEN_NAME);
-    if (!token) {
-        throw new Error("No token found in local storage");
+    const login = localStorageService.get<LoginReturnType>(TOKEN_NAME);
+    if (!login) {
+          throw new Error("No token found in local storage");
     }
-    return `${token.token.token_type} ${token.token.id_token}`;
+    return `${login.token.token_type} ${login.token.id_token}`;
 }
 
 export const doApiGet = async (_url: string, params = {}) => {
