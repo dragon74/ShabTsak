@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "react-query";
 import { deleteGuard } from "@/services/guardService.js";
-import GuardType from "@/types/Guard.type";
+import GuardType from "@/types/Guard.type.js";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";

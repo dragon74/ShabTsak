@@ -4,10 +4,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { getGravatarUrl } from "../../GuardList/utils";
+import { getGravatarUrl } from "../../../GuardProfile/GuardProfileLimits/utils.js";
 import { useNavigate } from "react-router-dom";
 
-const GuardItem = ({ campId, guard, onEdit, onDelete, index }) => {
+const Guard = ({ campId, guard, onEdit, onDelete, index }) => {
   const navigate = useNavigate();
 
   const handleLimitButtonClick = () => {
@@ -42,7 +42,7 @@ const GuardItem = ({ campId, guard, onEdit, onDelete, index }) => {
     </TableRow>
   );
 };
-GuardItem.propTypes = {
+Guard.propTypes = {
   index: PropTypes.number.isRequired,
   guard: PropTypes.object.isRequired,
   campId: PropTypes.number,
@@ -50,4 +50,4 @@ GuardItem.propTypes = {
   onDelete: PropTypes.func.isRequired,
 };
 
-export default GuardItem;
+export default Guard;

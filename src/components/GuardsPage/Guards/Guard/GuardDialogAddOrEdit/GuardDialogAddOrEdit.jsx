@@ -1,20 +1,20 @@
 import PropTypes from "prop-types";
 import { Controller, useForm } from "react-hook-form";
-import { guardDialogDefaults } from "components/GuardsPage/guardDialog/guardDialogDefaults.js";
+import { defaultValues } from "components/GuardsPage/Guards/Guard/GuardDialogAddOrEdit/defaultValues.js";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { guardDialogSchema } from "components/GuardsPage/guardDialog/guardDialogSchema.js";
+import { schema } from "components/GuardsPage/Guards/Guard/GuardDialogAddOrEdit/schema.js";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Checkbox, FormControlLabel, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 import { useQueryClient } from "react-query";
 import { addNewGuard, updateGuard } from "@/services/guardService.js";
 
-export default function GuardDialog({ guardDetails, campId, method, open, close }) {
+export default function GuardDialogAddOrEdit({ guardDetails, campId, method, open, close }) {
   const queryClient = useQueryClient();
   const isEditing = method === "PUT";
 
   const { handleSubmit, register, control, reset, formState } = useForm({
-    defaultValues: { ...(isEditing ? guardDetails : guardDialogDefaults), campId },
-    resolver: yupResolver(guardDialogSchema),
+    defaultValues: { ...(isEditing ? guardDetails : defaultValues), campId },
+    resolver: yupResolver(schema),
   });
 
   const submit = async (formData) => {
@@ -95,7 +95,7 @@ FormError.propTypes = {
   error: PropTypes.string,
 };
 
-GuardDialog.propTypes = {
+GuardDialogAddOrEdit.propTypes = {
   campId: PropTypes.number.isRequired,
   method: PropTypes.oneOf(["PUT", "POST", "DELETE"]).isRequired,
   open: PropTypes.bool.isRequired,

@@ -1,8 +1,8 @@
-import { getDayName } from "./utils";
+import { getDayName } from "../../utils.js";
 import { Table, TableBody, TableHead, TableRow, TableCell, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const TimeLimitTable = ({ timeLimits, handleDelete }) => {
+const GuardProfileTimeLimitTable = ({ timeLimits, handleDelete }) => {
   return (
     <Table size="small">
       <TableHead>
@@ -31,4 +31,4 @@ const TimeLimitTable = ({ timeLimits, handleDelete }) => {
   );
 };
 
-export default TimeLimitTable;
+export default GuardProfileTimeLimitTable;

@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Typography, Container, Button, Box } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import SelectCamp from "components/general_comps/SelectCamp.jsx";
-import GuardDialog from "components/GuardsPage/guardDialog/guardDialog";
-import GuardList from "./guardsList/guardList";
-import { GuardDialogDelete } from "./guardDialog/guardDialogDelete/guardDialogDelete";
+import GuardDialogAddOrEdit from "components/GuardsPage/Guards/Guard/GuardDialogAddOrEdit/GuardDialogAddOrEdit.jsx";
+import Guards from "components/GuardsPage/Guards/Guards.jsx";
+import { GuardDialogDelete } from "components/GuardsPage/Guards/Guard/GuardDialogDelete/GuardDialogDelete.jsx";
 import BackLink from "../general_comps/BackLink.jsx";
 import { useLocation } from "react-router-dom";
 
@@ -63,8 +63,8 @@ const GuardsPage = () => {
           הוסף שומר
         </Button>
       </Box>
-      {selectedCampId && <GuardList campId={+selectedCampId} handleEdit={handleOpenEditDialog} handleDelete={handleOpenDeleteDialog} />}
-      {dialogOpen && <GuardDialog open={dialogOpen} close={handleCloseDialog} guardId={selectedGuardId} campId={selectedCampId} method={dialogMethod} guardDetails={guardDetails} />}
+      {selectedCampId && <Guards campId={+selectedCampId} handleEdit={handleOpenEditDialog} handleDelete={handleOpenDeleteDialog} />}
+      {dialogOpen && <GuardDialogAddOrEdit open={dialogOpen} close={handleCloseDialog} guardId={selectedGuardId} campId={selectedCampId} method={dialogMethod} guardDetails={guardDetails} />}
       {deleteDialogOpen && guardToDelete && <GuardDialogDelete guard={guardToDelete} closeDialog={handleCloseDeleteDialog} open={deleteDialogOpen} />}
       <BackLink place="end" icon={<ArrowBackIosIcon />}>
         חזרה לרשימת הבסיסים

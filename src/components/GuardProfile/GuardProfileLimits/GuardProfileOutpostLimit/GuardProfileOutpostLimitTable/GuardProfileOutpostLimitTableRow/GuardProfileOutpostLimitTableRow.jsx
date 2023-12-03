@@ -1,7 +1,7 @@
 import { TableRow, TableCell, IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const GuardOutpostTableRow = ({ outpostLimit, outposts, handleDelete }) => {
+const GuardProfileOutpostLimitTableRow = ({ outpostLimit, outposts, handleDelete }) => {
   const outpost = outposts?.find((o) => o.id === outpostLimit.outpostId);
 
   return (
@@ -18,4 +18,4 @@ const GuardOutpostTableRow = ({ outpostLimit, outposts, handleDelete }) => {
   );
 };
 
-export default GuardOutpostTableRow;
+export default GuardProfileOutpostLimitTableRow;

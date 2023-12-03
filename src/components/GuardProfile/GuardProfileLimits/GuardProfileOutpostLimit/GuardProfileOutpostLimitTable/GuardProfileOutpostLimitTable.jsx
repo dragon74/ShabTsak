@@ -1,15 +1,15 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-import GuardOutpostTableRow from "./guardOutpostTableRow";
+import GuardProfileOutpostLimitTableRow from "./GuardProfileOutpostLimitTableRow/GuardProfileOutpostLimitTableRow.jsx";
 
-const GuardOutpostLimitList = ({ outposts, outpostLimits, handleDelete }) => {
+const GuardProfileOutpostLimitTable = ({ outposts, outpostLimits, handleDelete }) => {
   if (!outpostLimits || outpostLimits.length === 0) {
     return <div>לא קיימות מגבלות לפי עמדה.</div>;
   }
 
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table>
+
+      <TableContainer>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>שם עמדה</TableCell>
@@ -18,13 +18,12 @@ const GuardOutpostLimitList = ({ outposts, outpostLimits, handleDelete }) => {
           </TableHead>
           <TableBody>
             {outpostLimits.map((outpostLimit) => (
-              <GuardOutpostTableRow key={outpostLimit.id} outpostLimit={outpostLimit} outposts={outposts} handleDelete={handleDelete} />
+              <GuardProfileOutpostLimitTableRow key={outpostLimit.id} outpostLimit={outpostLimit} outposts={outposts} handleDelete={handleDelete} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
   );
 };
 
-export default GuardOutpostLimitList;
+export default GuardProfileOutpostLimitTable;

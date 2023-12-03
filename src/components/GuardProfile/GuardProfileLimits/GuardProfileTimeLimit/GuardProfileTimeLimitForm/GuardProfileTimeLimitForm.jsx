@@ -8,13 +8,14 @@ import {
     Box,
     Dialog,
     DialogActions,
-    Stack, DialogContent, DialogTitle
+    Stack, DialogContent, DialogTitle, IconButton
 } from "@mui/material";
 import {toast} from "react-toastify";
 import {createTimeLimit} from "@/services/timeLimitService.js";
 import {useQueryClient} from "react-query";
+import {AddBox} from "@mui/icons-material";
 
-const TimeLimitForm = ({id, timeLimits}) => {
+const GuardProfileTimeLimitForm = ({id, timeLimits}) => {
     const initialTimeLimit = {
         dayId: 0,
         fromHour: 0,
@@ -52,14 +53,14 @@ const TimeLimitForm = ({id, timeLimits}) => {
 
     return (
         <div>
-            <Typography variant="h3" component="h2" mb={2} mt={2}>
-                מגבלות לפי שעה:
-            </Typography>
-            <Box style={{marginTop: "20px"}}>
-                <Button type="button" color="primary" variant="contained" onClick={handleOpen}>
-                    הוספה
-                </Button>
-            </Box>
+            <Stack direction="row" alignItems="center">
+                <Typography variant="h5" width={80}>
+                    לפי שעות:
+                </Typography>
+                <IconButton type="button" size="small" color="primary" variant="outlined" onClick={handleOpen}>
+                    <AddBox />
+                </IconButton>
+            </Stack>
 
             <Dialog open={open} onClose={handleClose} PaperProps={{
                 style: {
@@ -135,4 +136,4 @@ const TimeLimitForm = ({id, timeLimits}) => {
     );
 };
 
-export default TimeLimitForm;
+export default GuardProfileTimeLimitForm;

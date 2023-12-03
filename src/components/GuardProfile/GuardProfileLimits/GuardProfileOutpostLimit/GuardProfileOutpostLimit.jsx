@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Button, Dialog, Autocomplete, TextField, CircularProgress, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  Autocomplete,
+  TextField,
+  CircularProgress,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+  Stack, IconButton
+} from "@mui/material";
 import { getOutpostsByCampId } from "@/services/outpostService.js";
 import { createGuardOutpostLimit, deleteOutpostLimit, getGuardOutpostLimitByGuardId } from "@/services/outpostLimitService.js";
-import GuardOutpostLimitList from "./guardOutpostLimitList";
+import GuardProfileOutpostLimitTable from "./GuardProfileOutpostLimitTable/GuardProfileOutpostLimitTable.jsx";
 import { toast } from "react-toastify";
+import {AddBox, HdrPlus, PlusOneRounded} from "@mui/icons-material";
 
-const OutpostLimit = ({ guardId, campId }) => {
+const GuardProfileOutpostLimit = ({ guardId, campId }) => {
   const queryClient = useQueryClient();
 
   const { data: outposts, isLoading: isLoadingOutposts } = useQuery({
@@ -76,15 +88,14 @@ const OutpostLimit = ({ guardId, campId }) => {
 
   return (
     <>
-      <div>
-        <Typography variant="h3" component="h2" mb={2} mt={5}>
-          מגבלות לפי עמדה:
+      <Stack direction="row" alignItems="center">
+        <Typography variant="h5" width={80}>
+          לפי עמדה:
         </Typography>
-
-        <Button variant="outlined" color="primary" onClick={handleOpenDialog}>
-          הוספה
-        </Button>
-      </div>
+        <IconButton type="button" size="small" color="primary" variant="outlined" onClick={handleOpenDialog}>
+          <AddBox />
+        </IconButton>
+      </Stack>
 
       <Dialog
         PaperProps={{
@@ -110,9 +121,9 @@ const OutpostLimit = ({ guardId, campId }) => {
         </DialogActions>
       </Dialog>
 
-      <GuardOutpostLimitList guardId={guardId} campId={campId} outposts={outposts} outpostLimits={outpostLimits} handleDelete={deleteGuardOutpostLimitMutation.mutate} />
+      <GuardProfileOutpostLimitTable guardId={guardId} campId={campId} outposts={outposts} outpostLimits={outpostLimits} handleDelete={deleteGuardOutpostLimitMutation.mutate} />
     </>
   );
 };
 
-export default OutpostLimit;
+export default GuardProfileOutpostLimit;
