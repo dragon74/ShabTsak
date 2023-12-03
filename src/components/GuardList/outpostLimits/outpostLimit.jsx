@@ -70,6 +70,10 @@ const OutpostLimit = ({ guardId, campId }) => {
     }
   };
 
+  if (isLoadingOutpostLimits || isLoadingOutposts) {
+    return <Typography align="center">טוען מידע...</Typography>;
+  }
+
   return (
     <>
       <div>
@@ -87,7 +91,6 @@ const OutpostLimit = ({ guardId, campId }) => {
           style: {
             minWidth: "300px", // Set your minimum width here
             maxWidth: "90vw", // Set a maximum width (e.g., 90% of viewport width)
-            padding: "30px",
           },
         }}
         open={openDialog}
@@ -95,13 +98,13 @@ const OutpostLimit = ({ guardId, campId }) => {
       >
         <DialogTitle>בחר עמדה</DialogTitle>
         <DialogContent>
-          <Autocomplete options={outposts || []} getOptionLabel={(option) => option.name} loading={isLoadingOutposts} onChange={(event, newValue) => setSelectedOutpost(newValue)} renderInput={(params) => <TextField {...params} label="בחר עמדה" />} key={(option) => option.id} />
+          <Autocomplete sx={{ paddingTop: 1 }} options={outposts || []} getOptionLabel={(option) => option.name} loading={isLoadingOutposts} onChange={(event, newValue) => setSelectedOutpost(newValue)} renderInput={(params) => <TextField {...params} label="בחר עמדה" />} key={(option) => option.id} />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ marginInlineEnd: 2, marginBlockEnd: 1 }}>
           <Button onClick={handleCloseDialog} color="primary">
             ביטול
           </Button>
-          <Button onClick={handleAdd} color="primary" disabled={!selectedOutpost}>
+          <Button variant="contained" onClick={handleAdd} color="primary">
             {createGuardOutpostLimitMutation.isLoading ? <CircularProgress size={24} /> : "הוספה"}
           </Button>
         </DialogActions>
