@@ -16,7 +16,7 @@ import { getOutpostsByCampId } from "@/services/outpostService.js";
 import { createGuardOutpostLimit, deleteOutpostLimit, getGuardOutpostLimitByGuardId } from "@/services/outpostLimitService.js";
 import GuardProfileOutpostLimitTable from "./GuardProfileOutpostLimitTable/GuardProfileOutpostLimitTable.jsx";
 import { toast } from "react-toastify";
-import {AddBox, HdrPlus, PlusOneRounded} from "@mui/icons-material";
+import { AddBox } from "@mui/icons-material";
 
 const GuardProfileOutpostLimit = ({ guardId, campId }) => {
   const queryClient = useQueryClient();
@@ -107,7 +107,7 @@ const GuardProfileOutpostLimit = ({ guardId, campId }) => {
         open={openDialog}
         onClose={handleCloseDialog}
       >
-        <DialogTitle>בחר עמדה</DialogTitle>
+        <DialogTitle>הוספת מגבלת עמדה</DialogTitle>
         <DialogContent>
           <Autocomplete sx={{ paddingTop: 1 }} options={outposts || []} getOptionLabel={(option) => option.name} loading={isLoadingOutposts} onChange={(event, newValue) => setSelectedOutpost(newValue)} renderInput={(params) => <TextField {...params} label="בחר עמדה" />} key={(option) => option.id} />
         </DialogContent>
