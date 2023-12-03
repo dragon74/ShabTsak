@@ -1,244 +1,228 @@
 import PropTypes from "prop-types";
-import { useForm } from "react-hook-form";
-import { useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import {useForm} from "react-hook-form";
+import {useQuery, useQueryClient} from "react-query";
+import {useParams} from "react-router-dom";
 import {
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  FormHelperText,
-  ThemeProvider,
-  Select,
-  MenuItem,
-  Dialog,
-  InputLabel,
-  Grid,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    FormHelperText,
+    ThemeProvider,
+    TextField,
+    MenuItem,
+    Dialog,
+    Stack,
 } from "@mui/material";
-import { theme } from "@/theme/theme";
-import { toast } from "react-toastify";
+import {theme} from "@/theme/theme";
+import {toast} from "react-toastify";
 import {
-  createOrUpdateShift,
-  getShiftsByOutpostId,
+    createOrUpdateShift,
+    getShiftsByOutpostId,
 } from "@/services/shiftService.js";
-import { daysOfWeekHebrew, hourArr } from "@/utils/dateUtils";
+import {daysOfWeekHebrew, hourArr} from "@/utils/dateUtils";
 import dayjs from "dayjs";
 
-function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
-  const queryClient = useQueryClient();
-  const params = useParams();
-  const outpostId = Number(params["id"]);
-  const actionHebrew = method === "POST" ? "הוסף" : "ערוך";
+function ShiftDialog({openDialog, setOpenDialog, method, item}) {
+    const queryClient = useQueryClient();
+    const params = useParams();
+    const outpostId = Number(params["id"]);
+    const actionHebrew = method === "POST" ? "הוסף" : "ערוך";
 
-  const { data: shifts } = useQuery({
-    queryFn: () => getShiftsByOutpostId(outpostId),
-    queryKey: ["shifts", outpostId],
-  });
+    const {data: shifts} = useQuery({
+        queryFn: () => getShiftsByOutpostId(outpostId),
+        queryKey: ["shifts", outpostId],
+    });
 
-  const defaultDayId = method === "PUT" ? Number(item.dayId) : 1; // Set a default day value when not in "PUT" mode
-  const defaultFromHour = method === "PUT" ? Number(item.fromHour) : 8; // Set a default "fromHour" value
-  const defaultToHour = method === "PUT" ? Number(item.toHour) : 11; // Set a default "toHour" value
+    const defaultDayId = method === "PUT" ? Number(item.dayId) : 1; // Set a default day value when not in "PUT" mode
+    const defaultFromHour = method === "PUT" ? Number(item.fromHour) : 8; // Set a default "fromHour" value
+    const defaultToHour = method === "PUT" ? Number(item.toHour) : 11; // Set a default "toHour" value
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isDirty },
-  } = useForm({
-    defaultValues: {
-      dayId: defaultDayId,
-      fromHour: defaultFromHour,
-      toHour: defaultToHour,
-      outpostId,
-      ...(method === "PUT" && { id: item.id }),
-    },
-    resolver: (data) => {
-      const validationErrors = {};
-      if (!isFromHourValid(data.fromHour, data.toHour)) {
-        validationErrors.fromHour = {
-          type: "manual",
-          message: "שעת התחלה חייבת להיות פחותה משעת סיום",
-        };
-      }
-      if (Object.keys(validationErrors).length > 0) {
-        return {
-          values: data,
-          errors: validationErrors,
-        };
-      }
-      return {
-        values: data,
-        errors: {},
-      };
-    },
-  });
-  const onSubForm = async ({ fromHour, toHour, outpostId, dayId }) => {
-    if (method === "PUT" && !isDirty) {
-      // Form data has not changed, show a toast error
-      toast.info("הטופס לא השתנה, נא שנה את אחד הפרמטרים");
-      return;
-    }
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: {errors, isDirty},
+    } = useForm({
+        defaultValues: {
+            dayId: defaultDayId,
+            fromHour: defaultFromHour,
+            toHour: defaultToHour,
+            outpostId,
+            ...(method === "PUT" && {id: item.id}),
+        },
+        resolver: (data) => {
+            const validationErrors = {};
+            if (!isFromHourValid(data.fromHour, data.toHour)) {
+                validationErrors.fromHour = {
+                    type: "manual",
+                    message: "שעת התחלה חייבת להיות פחותה משעת סיום",
+                };
+            }
+            if (Object.keys(validationErrors).length > 0) {
+                return {
+                    values: data,
+                    errors: validationErrors,
+                };
+            }
+            return {
+                values: data,
+                errors: {},
+            };
+        },
+    });
+    const onSubForm = async ({fromHour, toHour, outpostId, dayId}) => {
+        if (method === "PUT" && !isDirty) {
+            // Form data has not changed, show a toast error
+            toast.info("הטופס לא השתנה, נא שנה את אחד הפרמטרים");
+            return;
+        }
 
-    const isDuplicate =
-      shifts &&
-      shifts.some((shift) => {
-        return (
-          outpostId === shift.outpostId &&
-          dayId === shift.dayId &&
-          // fromHour obj inside the shift time range
-          ((fromHour >= shift.fromHour && fromHour < shift.toHour) ||
-            //toHour obj inside the shift time range
-            (toHour > shift.fromHour && toHour <= shift.toHour) ||
-            //all obj outside the shift time range
-            (fromHour <= shift.fromHour && toHour >= shift.toHour) ||
-            //all obj inside the shift time range
-            (fromHour >= shift.fromHour && toHour <= shift.toHour))
-        );
-      });
-    if (isDuplicate) {
-      // Show an error message or handle the duplicate case here
-      toast.error("המשמרת בשעות הללו כבר קיימת ברשימת המשמרות");
-      return;
-    }
-    // If it's not a duplicate do create or update
-    await createOrUpdateShift({ fromHour, toHour, outpostId, dayId }, method, item);
+        const isDuplicate =
+            shifts &&
+            shifts.some((shift) => {
+                return (
+                    outpostId === shift.outpostId &&
+                    dayId === shift.dayId &&
+                    // fromHour obj inside the shift time range
+                    ((fromHour >= shift.fromHour && fromHour < shift.toHour) ||
+                        //toHour obj inside the shift time range
+                        (toHour > shift.fromHour && toHour <= shift.toHour) ||
+                        //all obj outside the shift time range
+                        (fromHour <= shift.fromHour && toHour >= shift.toHour) ||
+                        //all obj inside the shift time range
+                        (fromHour >= shift.fromHour && toHour <= shift.toHour))
+                );
+            });
+        if (isDuplicate) {
+            // Show an error message or handle the duplicate case here
+            toast.error("המשמרת בשעות הללו כבר קיימת ברשימת המשמרות");
+            return;
+        }
+        // If it's not a duplicate do create or update
+        await createOrUpdateShift({fromHour, toHour, outpostId, dayId}, method, item);
 
-    //  clear the shifts query
-    if (method === "POST") reset();
-    queryClient.invalidateQueries(["shifts"]);
-    setOpenDialog(false);
-  };
+        //  clear the shifts query
+        if (method === "POST") reset();
+        queryClient.invalidateQueries(["shifts"]);
+        setOpenDialog(false);
+    };
 
-  const isFromHourValid = (fromHour, toHour) => {
-    return Number(fromHour) < Number(toHour);
-  };
+    const isFromHourValid = (fromHour, toHour) => {
+        return Number(fromHour) < Number(toHour);
+    };
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Dialog
-        onClose={() => setOpenDialog(false)}
-        open={openDialog}
-        PaperProps={{
-          style: {
-            minWidth: "300px", // Set your minimum width here
-            maxWidth: "90vw", // Set a maximum width (e.g., 90% of viewport width)
-            padding: "20px",
-          },
-        }}
-      >
-        <DialogTitle>
-          {actionHebrew} משמרת {item?.id && `יום ${dayjs().weekday(item?.dayId).format("dddd")}`}
-        </DialogTitle>
-        <form onSubmit={handleSubmit(onSubForm)}>
-          <DialogContent style={{ padding: "10px 20px" }}>
-            <InputLabel id="select-label-days">יום בשבוע</InputLabel>
-            <Select
-              fullWidth
-              labelId="select-label-days"
-              id="demo-simple-select"
-              {...register("dayId", {
-                required: { value: true, message: "חובה למלא יום בשבוע" },
-                min: { value: 1, message: "מנימום יום ראשון" },
-                max: { value: 7, message: "מנימום יום שבת" },
-              })}
-              defaultValue={defaultDayId} // Set this value to the default hour you want
-              label="יום בשבוע"
+    return (
+        <ThemeProvider theme={theme}>
+            <Dialog
+                onClose={() => setOpenDialog(false)}
+                open={openDialog}
+                PaperProps={{
+                    style: {
+                        minWidth: "300px", // Set your minimum width here
+                        maxWidth: "90vw", // Set a maximum width (e.g., 90% of viewport width)
+                    },
+                }}
             >
-              {daysOfWeekHebrew.map((day, index) => (
-                <MenuItem
-                  sx={{ textAlign: "center" }}
-                  key={index + 1}
-                  value={index + 1}
-                >
-                  {day}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText error={!!errors.dayId}>
-              {errors.dayId && errors?.dayId?.message}
-            </FormHelperText>
+                <DialogTitle>
+                    {actionHebrew} משמרת {item?.id && `יום ${dayjs().weekday(item?.dayId).format("dddd")}`}
+                </DialogTitle>
+                <form onSubmit={handleSubmit(onSubForm)}>
+                    <DialogContent>
+                            <TextField
+                                select
+                                fullWidth
+                                {...register("dayId", {
+                                    required: {value: true, message: "חובה למלא יום בשבוע"},
+                                    min: {value: 1, message: "מנימום יום ראשון"},
+                                    max: {value: 7, message: "מנימום יום שבת"},
+                                })}
+                                defaultValue={defaultDayId} // Set this value to the default hour you want
+                                label="יום בשבוע"
+                                sx={{ marginBottom: 1.5 }}
+                            >
+                                {daysOfWeekHebrew.map((day, index) => (
+                                    <MenuItem
+                                        sx={{textAlign: "center"}}
+                                        key={index + 1}
+                                        value={index + 1}
+                                    >
+                                        {day}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <FormHelperText error={!!errors.dayId}>
+                                {errors.dayId && errors?.dayId?.message}
+                            </FormHelperText>
+                        <Stack direction="row" gap={2}>
+                        <TextField
+                            sx={{textAlign: "center"}}
+                            {...register("fromHour", {
+                                required: {value: true, message: "חובה למלא שעה"},
+                                min: {value: 1, message: "מנימום שעה 1:00"},
+                                max: {value: 24, message: "מקסימום שעה 24:00"},
+                            })}
+                            label="משעה"
+                            defaultValue={defaultFromHour}
+                        >
+                            {hourArr.map((hour, index) => (
+                                <MenuItem
+                                    sx={{textAlign: "center"}}
+                                    key={index}
+                                    value={hour}
+                                >
+                                    {hour}:00
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            sx={{textAlign: "center"}}
+                            {...register("toHour", {
+                                required: {value: true, message: "חובה למלא שעה"},
+                            })}
+                            label="עד שעה"
+                            defaultValue={defaultToHour}
+                        >
+                            {hourArr.map((hour, index) => (
+                                <MenuItem
+                                    sx={{textAlign: "center"}}
+                                    key={index}
+                                    value={hour}
+                                >
+                                    {hour}:00
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        </Stack>
+                        <FormHelperText error={!!errors.toHour}>
+                            {errors.toHour && errors?.toHour?.message}
+                        </FormHelperText>
 
-            <Grid container spacing={2}>
-              <Grid item>
-                <InputLabel id="select-label-fromHour">משעה</InputLabel>
-                <Select
-                  labelId="select-label-fromHour"
-                  id="demo-simple-select"
-                  sx={{ textAlign: "center" }}
-                  {...register("fromHour", {
-                    required: { value: true, message: "חובה למלא שעה" },
-                    min: { value: 1, message: "מנימום שעה 1:00" },
-                    max: { value: 24, message: "מקסימום שעה 24:00" },
-                  })}
-                  label="משעה"
-                  defaultValue={defaultFromHour}
-                >
-                  {hourArr.map((hour, index) => (
-                    <MenuItem
-                      sx={{ textAlign: "center" }}
-                      key={index}
-                      value={hour}
-                    >
-                      {hour}:00
-                    </MenuItem>
-                  ))}
-                </Select>
-              </Grid>
-              <Grid item>
-                <InputLabel id="select-label-toHour">עד שעה</InputLabel>
-                <Select
-                  labelId="select-label-toHour"
-                  id="demo-simple-select"
-                  sx={{ textAlign: "center" }}
-                  {...register("toHour", {
-                    required: { value: true, message: "חובה למלא שעה" },
-                  })}
-                  label="עד שעה"
-                  defaultValue={defaultToHour}
-                >
-                  {hourArr.map((hour, index) => (
-                    <MenuItem
-                      sx={{ textAlign: "center" }}
-                      key={index}
-                      value={hour}
-                    >
-                      {hour}:00
-                    </MenuItem>
-                  ))}
-                </Select>
+                        {/* error message fromHour */}
+                        <FormHelperText error={!!errors.fromHour}>
+                            {errors.fromHour && errors?.fromHour?.message}
+                        </FormHelperText>
+                    </DialogContent>
 
-                <FormHelperText error={!!errors.toHour}>
-                  {errors.toHour && errors?.toHour?.message}
-                </FormHelperText>
-              </Grid>
-            </Grid>
-
-            {/* error message fromHour */}
-            <FormHelperText error={!!errors.fromHour}>
-              {errors.fromHour && errors?.fromHour?.message}
-            </FormHelperText>
-          </DialogContent>
-
-          <DialogActions>
-            <Button
-              type="button"
-              onClick={() => setOpenDialog(false)}
-              style={{ marginLeft: "8px" }}
-            >
-              ביטול
-            </Button>
-            <Button type="submit">{actionHebrew}</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </ThemeProvider>
-  );
+                    <DialogActions sx={{ marginInlineEnd: 2, marginBlockEnd: 1 }}>
+                        <Button
+                            type="button"
+                            onClick={() => setOpenDialog(false)}
+                        >
+                            ביטול
+                        </Button>
+                        <Button type="submit" variant="contained">{actionHebrew}</Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
+        </ThemeProvider>
+    );
 }
 
 ShiftDialog.propTypes = {
-  openDialog: PropTypes.bool.isRequired,
-  setOpenDialog: PropTypes.func.isRequired,
-  method: PropTypes.oneOf(["PUT", "POST"]).isRequired,
-  item: PropTypes.object,
+    openDialog: PropTypes.bool.isRequired,
+    setOpenDialog: PropTypes.func.isRequired,
+    method: PropTypes.oneOf(["PUT", "POST"]).isRequired,
+    item: PropTypes.object,
 };
 export default ShiftDialog;
