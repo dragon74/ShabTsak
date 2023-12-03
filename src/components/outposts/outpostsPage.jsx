@@ -5,10 +5,10 @@ import { Container, Typography } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import OutpostList from "./outpostList/outpostList";
 import OutpostDialog from "./outpostDialog";
-import BackLink from "../general_comps/backLink";
-import LoadingComp from "../general_comps/loadingComp";
+import BackLink from "../general_comps/BackLink.jsx";
+import LoadingComp from "../general_comps/LoadingComp.jsx";
 import AddOutpostBtn from "./addOutpostBtn/addOutpostBtn.jsx";
-import { getOutpostsByCampId } from "@/services/OutpostService";
+import { getOutpostsByCampId } from "@/services/outpostService.js";
 
 const OutpostsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);

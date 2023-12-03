@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Grid, Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel, Box, Dialog, DialogActions } from "@mui/material";
 import { toast } from "react-toastify";
-import { createTimeLimit } from "@/services/TimeLimitService";
+import { createTimeLimit } from "@/services/timeLimitService.js";
 import { useQueryClient } from "react-query";
 
 const TimeLimitForm = ({ id, timeLimits }) => {

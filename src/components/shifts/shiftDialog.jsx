@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import {
   createOrUpdateShift,
   getShiftsByOutpostId,
-} from "@/services/ShiftService";
+} from "@/services/shiftService.js";
 import { daysOfWeekHebrew, hourArr } from "@/utils/dateUtils";
 import dayjs from "dayjs";
 

@@ -1,14 +1,14 @@
 import { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from "@mobiscroll/react";
-import { getOutpostsAndShiftsForCampId } from "@/services/OutpostService";
-import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts, getAutoShibutsimOfCurrentWeekByCampId } from "@/services/ShibutsService";
+import { getOutpostsAndShiftsForCampId } from "@/services/outpostService.js";
+import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts, getAutoShibutsimOfCurrentWeekByCampId } from "@/services/shibutsService.js";
 import { useQuery, useQueryClient } from "react-query";
-import SelectCamp from "components/general_comps/selectCamp.jsx";
+import SelectCamp from "components/general_comps/SelectCamp.jsx";
 import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
 import { toast } from "react-toastify";
-import LoadingComp from "../general_comps/loadingComp";
-import { getGuardsAndLimitsForCampId } from "@/services/GuardService";
+import LoadingComp from "../general_comps/LoadingComp.jsx";
+import { getGuardsAndLimitsForCampId } from "@/services/guardService.js";
 
 setOptions({
   locale: localeHe,
@@ -69,7 +69,7 @@ function ShiftSchedule() {
           timeLimits: g.timeLimits,
         }));
       }
-      console.log("guards", mappedGuards);
+      console.log("GuardsPage", mappedGuards);
       return mappedGuards;
     },
   });
@@ -386,7 +386,7 @@ function ShiftSchedule() {
   return (
     <div>
       <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} onCampChange={onCampChanged} title={"לוח משמרות"} title2={"בבסיס:"} />
-      <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick}>
+      <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick} style={{ margin: 0, borderRadius: 0 }}>
         שיבוץ אוטומטי
       </Button>
       {guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading || isSavingLoading ? (
