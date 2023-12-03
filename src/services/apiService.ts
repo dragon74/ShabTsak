@@ -2,7 +2,7 @@ import axios from "axios";
 
 import localStorageService from "@/services/localStorageService.js";
 import { LoginReturnType } from "@/services/userService";
-export const TOKEN_NAME = "FOODS_TOKEN";
+export const TOKEN_NAME = "FOODS_TOKEN_V2";
 
 const getIdTokenFromLocalStorage = (): `${string} ${string}` => {
     const token = localStorageService.get<LoginReturnType>(TOKEN_NAME);
@@ -40,8 +40,7 @@ export const doApiMethod = async (url: string, method: 'DELETE' | 'PUT' | 'POST'
       (config as any).data = body;
     }
 
-    const response = await axios(config);
-    return response;
+    return await axios(config);
   } catch (error: any) {
     console.error(`Error during API ${method.toUpperCase()} request:`, error.response || error);
     throw error;
