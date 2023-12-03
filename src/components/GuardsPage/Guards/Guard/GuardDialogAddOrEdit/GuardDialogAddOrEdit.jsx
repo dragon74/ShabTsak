@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "components/GuardsPage/Guards/Guard/GuardDialogAddOrEdit/schema.js";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Checkbox, FormControlLabel, Typography } from "@mui/material";
 import { toast } from "react-toastify";
-import { useQueryClient } from "react-query";
+import {useMutation, useQueryClient} from "react-query";
 import { addNewGuard, updateGuard } from "@/services/guardService.js";
 
 export default function GuardDialogAddOrEdit({ guardDetails, campId, method, open, close }) {
@@ -17,27 +17,49 @@ export default function GuardDialogAddOrEdit({ guardDetails, campId, method, ope
     resolver: yupResolver(schema),
   });
 
-  const submit = async (formData) => {
-    try {
-      if (isEditing) {
-        // Call updateGuard if it's an edit operation
-        await updateGuard(formData);
-        toast.success("שומר נערך בהצלחה!");
-      } else {
-        // Call addNewGuard if it's an add operation
-        await addNewGuard(formData);
-        toast.success("שומר נוסף בהצלחה!");
-      }
-
-      // Invalidate and refetch guard-related queries to update the UI
-      await queryClient.invalidateQueries(["GuardsPage", campId]);
-      handleCloseDialog();
-    } catch (error) {
-      // Handle the error
-      toast.error("Failed to process the guard data!");
-      console.error("Error processing guard data:", error);
+  const { mutate: submit } = useMutation("guardAddOrEdit", (formData) => {
+    if (isEditing) {
+      // Call updateGuard if it's an edit operation
+      return updateGuard(formData);
+    } else {
+      // Call addNewGuard if it's an add operation
+      return addNewGuard(formData);
     }
-  };
+  }, {
+    onSuccess: async ({ data }) => {
+      await queryClient.invalidateQueries(["GuardsPage", campId]);
+      if (data.id) {
+        await queryClient.setQueryData(["guard", data?.id], data);
+      }
+      toast.success("שומר נערך בהצלחה!");
+      handleCloseDialog();
+    },
+    onError: () => toast.error("Failed to delete"),
+  });
+
+  // const submit = async (formData) => {
+  //   try {
+  //     console.log("formData", formData);
+  //
+  //     if (isEditing) {
+  //       // Call updateGuard if it's an edit operation
+  //       await updateGuard(formData);
+  //       toast.success("שומר נערך בהצלחה!");
+  //     } else {
+  //       // Call addNewGuard if it's an add operation
+  //       await addNewGuard(formData);
+  //       toast.success("שומר נוסף בהצלחה!");
+  //     }
+  //
+  //     // Invalidate and refetch guard-related queries to update the UI
+  //     await queryClient.invalidateQueries(["GuardsPage", campId]);
+  //     handleCloseDialog();
+  //   } catch (error) {
+  //     // Handle the error
+  //     toast.error("Failed to process the guard data!");
+  //     console.error("Error processing guard data:", error);
+  //   }
+  // };
 
   // Function to handle closing the dialog.
   function handleCloseDialog() {

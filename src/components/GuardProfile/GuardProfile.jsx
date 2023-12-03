@@ -1,5 +1,5 @@
 import {Link, useLocation, useParams} from "react-router-dom";
-import {Card, CardContent, Typography, Avatar, IconButton, Stack} from "@mui/material";
+import {Card, CardContent, Typography, Avatar, IconButton, Stack, TableCell} from "@mui/material";
 import { getGravatarUrl } from "./GuardProfileLimits/utils.js";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import GuardProfileTimeLimitForm from "components/GuardProfile/GuardProfileLimits/GuardProfileTimeLimit/GuardProfileTimeLimitForm/GuardProfileTimeLimitForm.jsx";
@@ -10,9 +10,10 @@ import GuardProfileOutpostLimit from "components/GuardProfile/GuardProfileLimits
 import { getGuardDetails } from "@/services/guardService.js";
 import { useQuery, useQueryClient } from "react-query";
 import { deleteTimeLimit, getGuardTimeLimits } from "@/services/timeLimitService.js";
-import {EmailRounded} from "@mui/icons-material";
 import GuardProfileContact from "components/GuardProfile/GuardProfileContact/GuardProfileContact.jsx";
-import {Box} from "@mui/system";
+import { Box } from "@mui/system";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle.js";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked.js";
 
 const GuardProfile = () => {
   const { state } = useLocation();
@@ -20,8 +21,8 @@ const GuardProfile = () => {
   const campId = state?.campId || "";
   const queryClient = useQueryClient();
 
-  const { data: guard, error, isLoading } = useQuery(["guard", guardId], () => getGuardDetails(guardId));
-  const { data: timeLimits } = useQuery(["guardTimeLimits", guardId], () => getGuardTimeLimits(guardId));
+  const { data: guard, error, isLoading } = useQuery(["guard", +guardId], () => getGuardDetails(guardId));
+  const { data: timeLimits } = useQuery(["guardTimeLimits", +guardId], () => getGuardTimeLimits(guardId));
 
   const handleDelete = async (timeLimitId) => {
     try {
@@ -46,7 +47,7 @@ const GuardProfile = () => {
         <Avatar
           src={getGravatarUrl(guard.mail)}
           alt={guard.name}
-          style={{ width: "80px", height: "80px", margin: "0 auto 1em" }}
+          style={{ width: "80px", height: "80px", margin: "0 auto 0.5em" }}
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = MilitaryTechIcon;
@@ -54,11 +55,12 @@ const GuardProfile = () => {
         >
           {!getGravatarUrl(guard.mail) && <MilitaryTechIcon fontSize="large" />}
         </Avatar>
-        <Typography variant="h3" component="h2" textAlign="center" gutterBottom>
+        <Typography variant="h6" component="h2" textAlign="center" gutterBottom>
           {guard.name}
         </Typography>
         <Stack direction="row" alignItems="center" gap={1} sx={{ marginBottom: '1em' }}>
-          <Box sx={{ borderRadius: "50%", width: "1em", height: "1em", backgroundColor: guard.shouldBeAllocated ? "green" : "red", margin: 1 }} />
+          <Stack direction="row" sx={{ marginInlineStart: 0.5 }}>{guard.shouldBeAllocated ? <CheckCircleIcon style={{ color: "green" }} /> : <RadioButtonUncheckedIcon style={{ color: "grey" }} />}</Stack>
+          {/*<Box sx={{ borderRadius: "50%", width: "1em", height: "1em", backgroundColor: guard.shouldBeAllocated ? "green" : "red", margin: 1 }} />*/}
           סטטוס:
           <Typography variant="body1" fontWeight={500}>
             {guard.shouldBeAllocated ? "משתתף" : "לא משתתף"}

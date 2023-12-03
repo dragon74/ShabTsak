@@ -7,6 +7,7 @@ import Guards from "components/GuardsPage/Guards/Guards.jsx";
 import { GuardDialogDelete } from "components/GuardsPage/Guards/Guard/GuardDialogDelete/GuardDialogDelete.jsx";
 import BackLink from "../general_comps/BackLink.jsx";
 import { useLocation } from "react-router-dom";
+import {useQueryClient} from "react-query";
 
 const GuardsPage = () => {
   const { state } = useLocation();
