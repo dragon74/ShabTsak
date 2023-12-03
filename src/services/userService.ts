@@ -68,8 +68,8 @@ async function getUser(): Promise<UserInfo | null> {
     }
     const { token, userInfo, lastLogin } = loginInfo;
     if (!token?.refresh_token) {
-        console.error("No refresh token");
-        return null;
+        localStorageService.remove(TOKEN_NAME);
+        throw new Error("הזדהות נכשלה, יש להתחבר מחדש");
     }
     const now = new Date().getTime();
     const diff = now - lastLogin;
@@ -102,13 +102,18 @@ async function _getUserInfo(accessToken: string): Promise<UserInfoType> {
 }
 
 async function _refreshToken(refreshToken: string) {
-    const response = await axios.post("https://oauth2.googleapis.com/token", {
-        client_id: import.meta.env.VITE_CLIENT_ID,
-        client_secret: import.meta.env.VITE_CLIENT_SECRET,
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-    });
-    return response.data;
+    try {
+        const response = await axios.post("https://oauth2.googleapis.com/token", {
+            client_id: import.meta.env.VITE_CLIENT_ID,
+            client_secret: import.meta.env.VITE_CLIENT_SECRET,
+            grant_type: "refresh_token",
+            refresh_token: refreshToken,
+        });
+        return response.data;
+    } catch (err) {
+        console.error("Error during refresh token", err);
+        throw "הזדהות נכשלה, יש להתחבר מחדש";
+    }
 }
 
 function _normalizeUserInfo(userInfo: UserInfoType) {
