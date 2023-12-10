@@ -34,7 +34,6 @@ function ShiftSchedule() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [campId, setCampId] = useState(null);
   const [isAutoShibutsim, setIsAutoShibutsim] = useState(false);
-  const [isSavingLoading, setIsSavingLoading] = useState(false);
 
   const colors = useMemo(() => {
     return ["red", "green", "blue", "yellow", "orange", "purple", "navy", "maroon", "olive", "silver"];
@@ -153,7 +152,10 @@ function ShiftSchedule() {
     const shibutsStart = shibuts.start.getHours();
     const shibutsEnd = shibuts.end.getHours();
     if (guard.timeLimits.length > 0) {
-      const limits = guard.timeLimits.filter((t) => t.dayId == shibuts.start.getDay() && ((t.fromHour <= shibutsStart && shibutsStart < t.toHour) || (t.fromHour < shibutsEnd && shibutsEnd <= t.toHour)));
+      const limits = guard.timeLimits.filter((t) => 
+                                        t.dayId == shibuts.start.getDay() && 
+                                        !((t.fromHour <= shibutsStart && t.toHour <= shibutsStart) || 
+                                          (t.fromHour >= shibutsEnd && t.toHour >= shibutsEnd)));
       if (limits.length > 0) {
         hasTimeLimit = true;
       }
@@ -178,7 +180,7 @@ function ShiftSchedule() {
       const hasTimeLimit = checkTimeLimit(guard, shibuts);
       const hasOutpostLimit = checkOutpostLimit(guard, shibuts);
       if (hasTimeLimit) {
-        toast.error("שומר " + guard.text + " אינו יכול לשמור בשעות " + shibuts.start.getHours() + ":00 - " + shibuts.end.getHours() + ":00");
+        toast.error("שומר " + guard.text + " אינו יכול לשמור בשעות אלו");
         hasLimits = true;
       }
       if (hasOutpostLimit) {
@@ -195,7 +197,10 @@ function ShiftSchedule() {
 
   const checkExistinShibuts = useCallback(
     (shibuts) => {
-      const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && s.shiftId == shibuts.shiftId && s.outpostId == shibuts.outpostId);
+      const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && 
+                                                   s.shiftId == shibuts.shiftId && 
+                                                   s.outpostId == shibuts.outpostId &&
+                                                   s.start.getTime() == shibuts.start.getTime());
       if (existShibuts.length > 0) {
         //same shibuts
         if (shibuts.shibutsId == existShibuts[0].shibutsId) {
@@ -214,8 +219,7 @@ function ShiftSchedule() {
     setPopupOpen(false);
   }, []);
 
-  const myDefaultShibuts = useCallback(
-    (args) => {
+  const myDefaultShibuts = useCallback((args) => {
       const shift = findClosestShift(args.resource, args.start);
       if (shift != undefined) {
         const start = new Date(args.start.setHours(getHourNumber(shift.start)));
@@ -232,7 +236,7 @@ function ShiftSchedule() {
         };
       }
     },
-    [findClosestShift]
+    [findClosestShift, shibutsim]
   );
 
   const onShibutsClick = useCallback(
@@ -261,7 +265,7 @@ function ShiftSchedule() {
       const shibuts = args.event;
       if (shibuts.shiftId == undefined) {
         toast.error("אין משמרות בזמן זה");
-        document.querySelector(`[data-id="${args.event.id}"]`)?.remove();
+        //document.querySelector(`[data-id="${args.event.id}"]`)?.remove();
       } else {
         const outpost = outposts.find((o) => {
           return o.id === shibuts.resource;
@@ -272,7 +276,7 @@ function ShiftSchedule() {
         setPopupOpen(true);
       }
     },
-    [outposts]
+    [outposts, shibutsim]
   );
 
   const saveShibuts = useCallback(
@@ -284,10 +288,8 @@ function ShiftSchedule() {
         shibutsToSave.theDate = shibutsToSave.start.getTime();
         shibutsToSave.outpostName = outpostName;
         shibutsToSave.id = shibutsToSave.shibutsId;
-        setIsSavingLoading(true);
         await createOrUpdateShibuts(shibutsToSave);
         queryClient.invalidateQueries(["shibutsim"]);
-        setIsSavingLoading(false);
       }
       onClose();
     },
@@ -297,26 +299,20 @@ function ShiftSchedule() {
   const onShibutsMove = useCallback(
     (obj) => {
       let shibuts = { ...obj.event };
-      let shift = findClosestShift(obj.resource, shibuts.start);
+      let shift = findClosestShift(shibuts.resource, shibuts.start);
       if (shift !== undefined) {
         const guard = guards.find((g) => g.value == shibuts.guardId);
         const guardHasLimits = checkGuardHasLimits(guard, shibuts);
-        if (!guardHasLimits) {
-          shibuts.start.setHours(getHourNumber(shift.start), 0, 0);
-          shibuts.end.setHours(getHourNumber(shift.end), 0, 0);
-          shibuts.outpostId = shibuts.resource;
-          shibuts.shiftId = shift.id;
-        }
+        if (guardHasLimits) return false;
+        shibuts.start.setHours(getHourNumber(shift.start), 0, 0);
+        shibuts.end.setHours(getHourNumber(shift.end), 0, 0);
+        shibuts.outpostId = shibuts.resource;
+        shibuts.shiftId = shift.id;
         setTempShibuts(shibuts);
         saveShibuts(shibuts);
       } else {
-        let curShift = shifts.find((s) => s.id == shibuts.shiftId);
-        shibuts.start.setHours(getHourNumber(curShift.start), 0, 0);
-        shibuts.end.setHours(getHourNumber(curShift.end), 0, 0);
-        obj.event.resource = obj.event.outpostId;
-        obj.resource = obj.event.outpostId;
         toast.error("אין משמרות בזמן זה בעמדה זו");
-        onClose();
+        return false;
       }
     },
     [findClosestShift, checkGuardHasLimits, guards, outposts, shibutsim]
@@ -388,11 +384,27 @@ function ShiftSchedule() {
       <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick} style={{ margin: 0, borderRadius: 0 }}>
         שיבוץ אוטומטי
       </Button>
-      {guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading || isSavingLoading ? (
+      {guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading ? (
         <LoadingComp />
       ) : (
         <>
-          <Eventcalendar className="md-timetable" view={view} data={shibutsim} resources={outposts} extendDefaultEvent={myDefaultShibuts} renderScheduleEventContent={myCustomShibuts} onEventDragEnd={onShibutsMove} clickToCreate={true} dragToCreat={true} dragToMove={true} dragTimeStep={15} eventDelete={true} onEventClick={onShibutsClick} onEventCreated={onShibutsCreated} colors={shifts} />
+          <Eventcalendar 
+            className="md-timetable" 
+            view={view} 
+            data={shibutsim} 
+            resources={outposts} 
+            extendDefaultEvent={myDefaultShibuts} 
+            renderScheduleEventContent={myCustomShibuts} 
+            onEventUpdate={onShibutsMove}
+            clickToCreate={true} 
+            dragToCreat={true} 
+            dragToMove={true} 
+            dragTimeStep={15} 
+            eventDelete={true} 
+            onEventClick={onShibutsClick} 
+            onEventCreated={onShibutsCreated} 
+            colors={shifts} 
+          />
 
           <Popup display="bottom" fullScreen={true} contentPadding={false} headerText={headerText} buttons={popupButtons} isOpen={isPopupOpen} onClose={onClose} responsive={responsivePopup} cssClass="employee-shifts-popup">
             <div className="mbsc-form-group">
