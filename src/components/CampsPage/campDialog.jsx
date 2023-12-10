@@ -1,30 +1,27 @@
+import { useForm } from "react-hook-form";
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormHelperText, ThemeProvider } from "@mui/material";
+import { useQueryClient } from "react-query";
 import { theme } from "@/theme/theme";
 import { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { useParams } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
-import { createOrUpdateOutpost } from "@/services/outpostService.js";
+import { createOrUpdateCamp } from "@/services/campService.js";
 
-OutpostDialog.propTypes = {
+CampDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
     setOpenDialog: PropTypes.func.isRequired,
     method: PropTypes.oneOf(['PUT', 'POST']).isRequired,
     item: PropTypes.object
 }
 
-export default function OutpostDialog({ openDialog, setOpenDialog, method, item = {} }) {
+function CampDialog({ openDialog, setOpenDialog, method, item }) {
+
     // Access the client
     const queryClient = useQueryClient();
 
-    const params = useParams();
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
-            ...(method === "PUT" && { id: item.id }),
-            campId: params["id"],
-            minGuards: item.minGuards || '',
-            name: item.name || ''
+            name: method === "PUT" ? item.name : "",
+            ...(method === "PUT" && { id: item.id })
         }
     });
 
@@ -35,18 +32,18 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
     }, [method]);
 
 
-    const onSubForm = async (formData) => {
-        await createOrUpdateOutpost(formData, method, item);
-        //  clear the outposts query 
-        queryClient.invalidateQueries(['outposts'])
+    const onSubForm = async(formData) => {
+        await createOrUpdateCamp(formData, method,item);
+        //  clear the shifts query 
+        queryClient.invalidateQueries(['camps'])
         setOpenDialog(false);
     }
 
     return (
         <ThemeProvider theme={theme}>
             <Dialog
-                open={openDialog}
                 onClose={() => setOpenDialog(false)}
+                open={openDialog}
                 PaperProps={{
                     style: {
                         minWidth: '300px', // Set your minimum width here
@@ -55,7 +52,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                     }
                 }}
             >
-                <DialogTitle>{actionHebrew} עמדה {item.name}</DialogTitle>
+                <DialogTitle>{actionHebrew} בסיס {item ? item.name : undefined}</DialogTitle>
                 <form onSubmit={handleSubmit(onSubForm)}>
                     <DialogContent style={{ padding: '20px' }}>
                         <TextField
@@ -68,23 +65,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                         <FormHelperText error={!!errors.name}>
                             {errors.name && errors?.name?.message}
                         </FormHelperText>
-
-                        <TextField
-                            {...register('minGuards', {
-                                required:
-                                    { value: true, message: 'חובה למלא כמה שומרים בעמדה' },
-                                min: { value: 1, message: "יש להגדיר לפחות שומר 1 בעמדה" },
-                                max: { value: 10, message: "מקסימום 10 שומרים בעמדה" }
-                            })}
-                            color="primary"
-                            size="small"
-                            autoComplete="off"
-                            label="מינימום שומרים בעמדה"
-                            sx={{ marginTop: "8px" }}
-                        />
-                        <FormHelperText error={!!errors.minGuards}>
-                            {errors.minGuards && errors?.minGuards?.message}
-                        </FormHelperText>
+                        {/* Add more TextFields and form fields here as needed */}
                     </DialogContent>
                     <DialogActions>
                         <Button type="button"
@@ -92,7 +73,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                             style={{ marginLeft: '8px' }}>
                             ביטול
                         </Button>
-                        <Button type="submit" autoFocus>{actionHebrew}</Button>
+                        <Button type="submit">{actionHebrew}</Button>
                     </DialogActions>
                 </form>
             </Dialog>
@@ -100,4 +81,4 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
     );
 }
 
-
+export default CampDialog;

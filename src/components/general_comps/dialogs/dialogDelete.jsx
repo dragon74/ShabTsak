@@ -3,7 +3,7 @@ import { useQueryClient } from 'react-query';
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
-import { doApiMethod } from "@/services/apiService";
+import { doApiMethod } from "@/services/apiService.ts";
 import { API_URL } from "@/constants/apiConstants";
 import { getDayOfWeekHebrew } from "@/utils/dateUtils"
 

@@ -1,5 +1,5 @@
 import { Typography, Box, Container } from "@mui/material";
-import BackLink from "../general_comps/backLink.jsx";
+import BackLink from "../general_comps/BackLink.jsx";
 
 export default function TermsPage() {
     return (
