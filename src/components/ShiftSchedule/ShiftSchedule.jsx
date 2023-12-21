@@ -260,12 +260,12 @@ function ShiftSchedule() {
     setPopupOpen(false);
   }, [tempShibuts]);
 
-  const onShibutsCreated = useCallback(
+  const onShibutsCreate = useCallback(
     (args) => {
       const shibuts = args.event;
       if (shibuts.shiftId == undefined) {
         toast.error("אין משמרות בזמן זה");
-        //document.querySelector(`[data-id="${args.event.id}"]`)?.remove();
+        return false;
       } else {
         const outpost = outposts.find((o) => {
           return o.id === shibuts.resource;
@@ -402,7 +402,7 @@ function ShiftSchedule() {
             dragTimeStep={15} 
             eventDelete={true} 
             onEventClick={onShibutsClick} 
-            onEventCreated={onShibutsCreated} 
+            onEventCreate={onShibutsCreate} 
             colors={shifts} 
           />
 
