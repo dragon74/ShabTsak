@@ -13,6 +13,7 @@ export default function Footer() {
               </Box>
               <Box textAlign="center">
                   <Typography variant="body2" gutterBottom={false}>2023 Chaya & Dan & Hadas & Niv & Ofir  ©</Typography>
+                  <Typography variant="body2" gutterBottom={false}>Powered By <a href="https://mobiscroll.com/">Mobiscroll</a></Typography>
               </Box>
           </Stack>
       </Container>
