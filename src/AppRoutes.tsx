@@ -44,7 +44,7 @@ export default function AppRoutes() {
     );
 }
 
-function PrivateRoute({ children }: { children: React.ReactNode }) {
+function PrivateRoute() {
     const { user } = useAuthContext();
 
     if (user === undefined) {
