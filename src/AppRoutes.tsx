@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from "react-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ROUTES from "@/constants/routeConstants";
+
 const Layout = React.lazy(() => import("components/Layout/Layout"));
 const NotFound = React.lazy(() => import("components/general_comps/NotFound"));
 const CampsPage = React.lazy(() => import("components/CampsPage/CampsPage"));
@@ -23,13 +24,11 @@ export default function AppRoutes() {
         <Router>
             <Routes>
                 <Route path={ROUTES.HOME} element={<Suspense><Layout/></Suspense>}>
-                    <Route path={ROUTES.HOME} element={<PrivateRoute />}>
+                    <Route path={ROUTES.HOME} element={<PrivateRoute/>}>
                         <Route index element={<Suspense><CampsPage/></Suspense>}/>
                         <Route path={ROUTES.SCHEDULE} element={<Suspense><ShiftSchedule/></Suspense>}/>
-                        <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`}
-                               element={<Suspense><OutpostsPage/></Suspense>}/>
-                        <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`}
-                               element={<Suspense><ShiftsPage/></Suspense>}/>
+                        <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name?`} element={<Suspense><OutpostsPage/></Suspense>}/>
+                        <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name?`} element={<Suspense><ShiftsPage/></Suspense>}/>
                         <Route path={ROUTES.GUARD_PROFILE} element={<Suspense><GuardProfile/></Suspense>}/>
                         <Route path={ROUTES.GUARDS} element={<Suspense><GuardsPage/></Suspense>}/>
                     </Route>
@@ -56,5 +55,5 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
         return <Navigate to={ROUTES.LANDING}/>
     }
 
-    return <Outlet />;
+    return <Outlet/>;
 }
