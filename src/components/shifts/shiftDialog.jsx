@@ -27,7 +27,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useState } from "react";
 
-function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
+function ShiftDialog({ onCloseDialog, method, item }) {
     const queryClient = useQueryClient();
     const params = useParams();
     const outpostId = Number(params["id"]);
@@ -44,17 +44,33 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         }
     });
 
+    function isConflictingShift(shift, from, to) {
+        // Checks if updated from hour is within the shift time range
+        return (((from >= shift.fromHour && from < shift.toHour) ||
+            // Checks if updated to hour is within the shift time range
+            (to > shift.fromHour && to <= shift.toHour) ||
+            // Checks if updated to and from are outside the shift time range
+            (from <= shift.fromHour && to >= shift.toHour) ||
+            // Checks if updated to and from are both within the shift time range
+            (from >= shift.fromHour && to <= shift.toHour)));
+    }
+
+    console.log(shifts);
     const schema = yup.object().shape(
             {
                 dayId:
-                    yup.array().min(1, "חובה למלא יום בשבוע").max(7, "מקסימום 7 ימים").required().test("is-unique-shift", `משמרת כבר קיימת`, async function (value) {
-                        const { fromHour, toHour } = this.parent;
-                        const shiftExists = shifts?.filter((shift) => {
-                            return value.includes(shift.dayId) && shift.fromHour <= fromHour && shift.toHour >= toHour;
-                        })
-                        setShiftExistIndexes([...new Set(shiftExists?.map(({ dayId }) => dayId - 1))] || []);
-                        return shiftExists?.length === 0;
-                    }),
+                    yup.array()
+                       .min(1, "חובה למלא יום בשבוע")
+                       .max(7, "מקסימום 7 ימים")
+                       .required()
+                       .test("is-unique-shift", `משמרת כבר קיימת`, async function (value) {
+                           const { fromHour, toHour } = this.parent;
+                           const shiftExists = shifts?.filter((shift) => {
+                               return value.includes(shift.dayId) && isConflictingShift(shift, fromHour, toHour);
+                           });
+                           setShiftExistIndexes([...new Set(shiftExists?.map(({ dayId }) => dayId - 1))] || []);
+                           return shiftExists?.length === 0;
+                       }),
                 fromHour:
                     yup.number().min(0).max(24).required(),
                 toHour:
@@ -71,7 +87,6 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
         register,
         handleSubmit,
         reset,
-        resetField,
         formState: { errors, isDirty },
     } = useForm({
         defaultValues: {
@@ -108,8 +123,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
             return;
         }
         reset();
-        queryClient.invalidateQueries(["shifts"]);
-        setOpenDialog(false);
+        await queryClient.invalidateQueries(["shifts"]);
+        onCloseDialog()
     };
 
     const selectedDays = watch("dayId");
@@ -117,12 +132,8 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
     return (
         <ThemeProvider theme={theme}>
             <Dialog
-                onClose={() => {
-                    setOpenDialog(false);
-                    resetField("dayId");
-                    reset();
-                }}
-                open={openDialog}
+                open={true}
+                onClose={onCloseDialog}
                 PaperProps={{
                     style: {
                         minWidth: "480px", // Set your minimum width here
@@ -222,7 +233,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
                     <DialogActions>
                         <Button
                             type="button"
-                            onClick={() => setOpenDialog(false)}
+                            onClick={onCloseDialog}
                             style={{ marginLeft: "8px" }}
                         >
                             ביטול
@@ -236,8 +247,7 @@ function ShiftDialog({ openDialog, setOpenDialog, method, item }) {
 }
 
 ShiftDialog.propTypes = {
-    openDialog: PropTypes.bool.isRequired,
-    setOpenDialog: PropTypes.func.isRequired,
+    onCloseDialog: PropTypes.func.isRequired,
     method: PropTypes.oneOf(["PUT", "POST"]).isRequired,
     item: PropTypes.object,
 };

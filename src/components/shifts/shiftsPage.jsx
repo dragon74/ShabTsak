@@ -58,10 +58,16 @@ export default function ShiftsPage() {
                     <ShiftList shifts={shifts} onDuplciateShift={onDuplicateShift}/>
                 )}
 
-                <DialogShift openDialog={openDialog} setOpenDialog={() => {
-                    setOpenDialog(false);
-                    setItem(null);
-                }} method="POST" item={item}/>
+                {openDialog && (
+                    <DialogShift
+                        onCloseDialog={() => {
+                            setOpenDialog(false);
+                            setItem(null);
+                        }}
+                        method="POST"
+                        item={item}
+                    />
+                )}
                 <BackLink place="end" icon={<ArrowBackIosIcon/>}>
                     חזרה לרשימת העמדות
                 </BackLink>

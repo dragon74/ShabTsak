@@ -22,12 +22,14 @@ export default function ShiftItemActions({ item, onDuplicateShift }) {
                 <EditIcon/>
             </IconButton>
 
-            {openDialog && <ShiftDialog
-                openDialog={openDialog}
-                setOpenDialog={setOpenDialog}
-                method={"PUT"}
-                item={item}
-            />}
+            {openDialog && (
+                <ShiftDialog
+                    onCloseDialog={() => setOpenDialog(false)}
+                    method={"PUT"}
+                    key={item.id}
+                    item={item}
+                />
+            )}
             <IconButton
                 aria-label="delete"
                 color="error"
