@@ -8,7 +8,7 @@ ShiftItem.propTypes = {
   item: PropTypes.object,
 };
 
-export default function ShiftItem({ item }) {
+export default function ShiftItem({ item, onDuplicateShift }) {
   const dayNumber = item.dayId;
 
   const dayHebrew = useMemo(() => {
@@ -20,7 +20,6 @@ export default function ShiftItem({ item }) {
 
   return (
     <TableRow>
-      <TableCell align="center">{item.dayId}</TableCell>
       <TableCell align="center">{dayHebrew}</TableCell>
       <TableCell align="center" direction="asc">
         {item.fromHour}:00
@@ -35,7 +34,7 @@ export default function ShiftItem({ item }) {
           alignItems: "center",
         }}
       >
-        <ShiftItemActions item={item} />
+        <ShiftItemActions item={item} onDuplicateShift={onDuplicateShift} />
       </TableCell>
     </TableRow>
   );

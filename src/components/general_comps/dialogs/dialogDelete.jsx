@@ -31,8 +31,8 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
-            if (resp.status == 200) {
-                toast.success(`${subjectHebrew}  ${subject === 'shift' ? `יום ${getDayOfWeekHebrew(item.dayId)}` : item.name} נמחק בהצלחה`);
+            if (resp.status === 200) {
+                toast.success(`${subjectHebrew}  ${subject === 'shift' ? `יום ${getDayOfWeekHebrew(item.dayId)}` : item.name} נמחקה בהצלחה`);
                 setOpenDialog(false);
                 // marked as outdated.
                 // The next time this query is requested, 

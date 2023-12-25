@@ -1,7 +1,6 @@
 import { SHIFT_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService.ts";
 import { toast } from "react-toastify";
-import { getDayOfWeekHebrew } from "@/utils/dateUtils"
 
 export async function getShiftsByOutpostId(outpostId) {
     let url = SHIFT_URL + "/outpost/" + outpostId;
@@ -19,18 +18,29 @@ export async function getShiftsByOutpostId(outpostId) {
 }
 
 
-export async function createOrUpdateShift(bodyFormData, method, prevItemForUpdate) {
+export async function deleteShift(shiftId) {
+    let url = SHIFT_URL + "/" + shiftId;
+    try {
+        let resp = await doApiMethod(url, "DELETE");
+        if (resp.status === 200) {
+            return resp.data;
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+export async function createOrUpdateShift(bodyFormData, method = "POST") {
     try {
         let resp = await doApiMethod(SHIFT_URL, method, bodyFormData);
-        if (resp.status === 201 && method === "POST")
-            toast.success(`משמרת יום ${getDayOfWeekHebrew(resp.data.dayId)} נוספה בהצלחה `);
-        else if (resp.status === 200 && method === "PUT")
-            toast.success(`משמרת יום ${getDayOfWeekHebrew(prevItemForUpdate.dayId)} התעדכנה בהצלחה`);
-        else toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
+        if (resp.status >= 200 && resp.status < 300) {
+            return resp.data;
+        } else {
+            toast.error(resp.message);
+        }
 
     } catch (err) {
-        console.error(`An error occurred while ${method} משמרת`, err);
-        toast.error("יש בעיה, בבקשה נסה מאוחר יותר");
         throw err;
     }
 }
