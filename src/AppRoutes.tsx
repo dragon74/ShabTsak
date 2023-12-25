@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from "react-router-dom";
 //for toast container you need the container will be in app and his css
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,14 +23,16 @@ export default function AppRoutes() {
         <Router>
             <Routes>
                 <Route path={ROUTES.HOME} element={<Suspense><Layout/></Suspense>}>
-                    <Route index element={<PrivateRoute><Suspense><CampsPage/></Suspense></PrivateRoute>}/>
-                    <Route path={ROUTES.SCHEDULE} element={<PrivateRoute><Suspense><ShiftSchedule/></Suspense></PrivateRoute>}/>
-                    <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`}
-                           element={<PrivateRoute><Suspense><OutpostsPage/></Suspense></PrivateRoute>}/>
-                    <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`}
-                           element={<PrivateRoute><Suspense><ShiftsPage/></Suspense></PrivateRoute>}/>
-                    <Route path={ROUTES.GUARD_PROFILE} element={<PrivateRoute><Suspense><GuardProfile/></Suspense></PrivateRoute>}/>
-                    <Route path={ROUTES.GUARDS} element={<PrivateRoute><Suspense><GuardsPage/></Suspense></PrivateRoute>}/>
+                    <Route path={ROUTES.HOME} element={<PrivateRoute />}>
+                        <Route index element={<Suspense><CampsPage/></Suspense>}/>
+                        <Route path={ROUTES.SCHEDULE} element={<Suspense><ShiftSchedule/></Suspense>}/>
+                        <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name`}
+                               element={<Suspense><OutpostsPage/></Suspense>}/>
+                        <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name`}
+                               element={<Suspense><ShiftsPage/></Suspense>}/>
+                        <Route path={ROUTES.GUARD_PROFILE} element={<Suspense><GuardProfile/></Suspense>}/>
+                        <Route path={ROUTES.GUARDS} element={<Suspense><GuardsPage/></Suspense>}/>
+                    </Route>
                     <Route path={ROUTES.PRIVACY} element={<Suspense><PrivacyPage/></Suspense>}/>
                     <Route path={ROUTES.TERMS} element={<Suspense><TermsPage/></Suspense>}/>
                     <Route path="*" element={<Suspense><NotFound/></Suspense>}/>
@@ -54,5 +56,5 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
         return <Navigate to={ROUTES.LANDING}/>
     }
 
-    return children;
+    return <Outlet />;
 }
