@@ -25,18 +25,20 @@ export default function AppRoutes() {
             <Routes>
                 <Route path={ROUTES.HOME} element={<Suspense><Layout/></Suspense>}>
                     <Route path={ROUTES.HOME} element={<PrivateRoute/>}>
-                        <Route index element={<Suspense><CampsPage/></Suspense>}/>
-                        <Route path={ROUTES.SCHEDULE} element={<Suspense><ShiftSchedule/></Suspense>}/>
-                        <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name?`} element={<Suspense><OutpostsPage/></Suspense>}/>
-                        <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name?`} element={<Suspense><ShiftsPage/></Suspense>}/>
-                        <Route path={ROUTES.GUARD_PROFILE} element={<Suspense><GuardProfile/></Suspense>}/>
-                        <Route path={ROUTES.GUARDS} element={<Suspense><GuardsPage/></Suspense>}/>
+                        <Route index element={<CampsPage/>}/>
+                        <Route path={ROUTES.SCHEDULE} element={<ShiftSchedule/>}/>
+                        <Route path={`${ROUTES.OUTPOSTS}${ROUTES.CAMP}/:id/:name?`} element={<OutpostsPage/>}/>
+                        <Route path={`${ROUTES.SHIFTS}${ROUTES.OUTPOST}/:id/:name?`} element={<ShiftsPage/>}/>
+                        <Route path={ROUTES.GUARD_PROFILE} element={<GuardProfile/>}/>
+                        <Route path={ROUTES.GUARDS} element={<GuardsPage/>}/>
                     </Route>
-                    <Route path={ROUTES.PRIVACY} element={<Suspense><PrivacyPage/></Suspense>}/>
-                    <Route path={ROUTES.TERMS} element={<Suspense><TermsPage/></Suspense>}/>
-                    <Route path="*" element={<Suspense><NotFound/></Suspense>}/>
-                    <Route path={ROUTES.LOGIN} element={<Suspense><LoginPage/></Suspense>}/>
-                    <Route path={ROUTES.LANDING} element={<Suspense><LandingPage/></Suspense>}/>
+                    <Route element={<Suspense><Outlet /></Suspense>}>
+                        <Route path={ROUTES.PRIVACY} element={<PrivacyPage/>}/>
+                        <Route path={ROUTES.TERMS} element={<TermsPage/>}/>
+                        <Route path={ROUTES.LOGIN} element={<LoginPage/>}/>
+                        <Route path={ROUTES.LANDING} element={<LandingPage/>}/>
+                        <Route path="*" element={<NotFound/>}/>
+                    </Route>
                 </Route>
             </Routes>
             <ToastContainer position="bottom-right" theme="colored" rtl/>
@@ -55,5 +57,5 @@ function PrivateRoute() {
         return <Navigate to={ROUTES.LANDING}/>
     }
 
-    return <Outlet/>;
+    return <Suspense><Outlet/></Suspense>;
 }

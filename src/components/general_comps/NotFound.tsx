@@ -6,13 +6,13 @@ export default function NotFound() {
         <div>
             <CssBaseline />
             <Container fixed>
-                <Box textAlign={"center"} mt={4}>
-                    <Typography variant="h4" component="h2" >
+                <Box mt={4}>
+                    <BackLink>
+                        חזרה לעמוד הקודם
+                    </BackLink>
+                    <Typography sx={{ textAlign: "center" }} variant="h4" component="h2" >
                         עמוד לא נמצא 404!
                     </Typography>
-                    <BackLink>
-                        חזרה לעמוד הבית
-                    </BackLink>
                 </Box>
             </Container>
         </div>
