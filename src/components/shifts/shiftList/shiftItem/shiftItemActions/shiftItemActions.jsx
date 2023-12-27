@@ -5,50 +5,53 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DialogDelete from "../../../../general_comps/dialogs/dialogDelete";
 import EditIcon from "@mui/icons-material/Edit";
 import ShiftDialog from "../../../shiftDialog";
+import { ContentCopy } from "@mui/icons-material";
 
-export default function ShiftItemActions({ item }) {
-  const [openSureDialog, setOpenSureDialog] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
+export default function ShiftItemActions({ item, onDuplicateShift }) {
+    const [openSureDialog, setOpenSureDialog] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
 
-  return (
-    <>
-      <IconButton
-        // style={{ marginRight: "8px" }}
-        color="secondary"
-        onClick={() => {
-          setOpenDialog(true);
-        }}
-      >
-        <EditIcon />
-      </IconButton>
+    return (
+        <>
+            <IconButton
+                color="secondary"
+                onClick={() => {
+                    setOpenDialog(true);
+                }}
+            >
+                <EditIcon/>
+            </IconButton>
 
-      <ShiftDialog
-        openDialog={openDialog}
-        setOpenDialog={setOpenDialog}
-        method={"PUT"}
-        item={item}
-      />
-      {/* Outpost button delete */}
-      <IconButton
-        aria-label="delete"
-        color="error"
-        onClick={() => {
-          setOpenSureDialog(true);
-        }}
-      >
-        <DeleteIcon />
-      </IconButton>
-
-      <DialogDelete
-        openDialog={openSureDialog}
-        setOpenDialog={setOpenSureDialog}
-        subject={"shift"}
-        item={item}
-      />
-    </>
-  );
+            {openDialog && (
+                <ShiftDialog
+                    onCloseDialog={() => setOpenDialog(false)}
+                    method={"PUT"}
+                    key={item.id}
+                    item={item}
+                />
+            )}
+            <IconButton
+                aria-label="delete"
+                color="error"
+                onClick={() => {
+                    setOpenSureDialog(true);
+                }}
+            >
+                <DeleteIcon/>
+            </IconButton>
+            <IconButton size="small" aria-label="שכפל משמרת" onClick={onDuplicateShift}>
+                <ContentCopy/>
+            </IconButton>
+            <DialogDelete
+                openDialog={openSureDialog}
+                setOpenDialog={setOpenSureDialog}
+                subject={"shift"}
+                item={item}
+            />
+        </>
+    );
 }
 
 ShiftItemActions.propTypes = {
-  item: PropTypes.object,
+    item: PropTypes.object,
 };
