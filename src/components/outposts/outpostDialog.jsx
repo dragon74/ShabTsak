@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
-import { createOrUpdateOutpost } from "@/services/OutpostService";
+import { createOrUpdateOutpost } from "@/services/outpostService.js";
 
 OutpostDialog.propTypes = {
     openDialog: PropTypes.bool.isRequired,
@@ -73,7 +73,7 @@ export default function OutpostDialog({ openDialog, setOpenDialog, method, item 
                             {...register('minGuards', {
                                 required:
                                     { value: true, message: 'חובה למלא כמה שומרים בעמדה' },
-                                min: { value: 1, message: "מנימום שומר 1 בעמדה" },
+                                min: { value: 1, message: "יש להגדיר לפחות שומר 1 בעמדה" },
                                 max: { value: 10, message: "מקסימום 10 שומרים בעמדה" }
                             })}
                             color="primary"

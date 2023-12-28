@@ -3,7 +3,7 @@ import { useQueryClient } from 'react-query';
 import { useMemo } from "react";
 import { toast } from "react-toastify";
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
-import { doApiMethod } from "@/services/apiService";
+import { doApiMethod } from "@/services/apiService.ts";
 import { API_URL } from "@/constants/apiConstants";
 import { getDayOfWeekHebrew } from "@/utils/dateUtils"
 
@@ -31,8 +31,8 @@ function DialogDelete({ openDialog, setOpenDialog, subject, item }) {
         let url = `${API_URL}/${subject}/${item.id}`
         try {
             let resp = await doApiMethod(url, "DELETE");
-            if (resp.status == 200) {
-                toast.success(`${subjectHebrew}  ${subject === 'shift' ? `יום ${getDayOfWeekHebrew(item.dayId)}` : item.name} נמחק בהצלחה`);
+            if (resp.status === 200) {
+                toast.success(`${subjectHebrew}  ${subject === 'shift' ? `יום ${getDayOfWeekHebrew(item.dayId)}` : item.name} נמחקה בהצלחה`);
                 setOpenDialog(false);
                 // marked as outdated.
                 // The next time this query is requested, 
