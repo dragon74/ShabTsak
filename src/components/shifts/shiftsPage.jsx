@@ -7,8 +7,8 @@ import AddShiftBtn from "./addShiftBtn/addShiftBtn";
 import DialogShift from "./shiftDialog";
 import ShiftList from "./shiftList/shiftList";
 import BackLink from "../general_comps/BackLink.jsx";
-import LoadingComp from "../general_comps/LoadingComp.jsx";
 import { getShiftsByOutpostId } from "@/services/shiftService.js";
+import LoadingComp from "../general_comps/loadingComp";
 
 export default function ShiftsPage() {
     const params = useParams();
