@@ -8,70 +8,70 @@ import DialogShift from "./shiftDialog";
 import ShiftList from "./shiftList/shiftList";
 import BackLink from "../general_comps/BackLink.jsx";
 import { getShiftsByOutpostId } from "@/services/shiftService.js";
-import LoadingComp from "../general_comps/loadingComp";
+import LoadingComp from "@/components/general_comps/LoadingComp";
 
 export default function ShiftsPage() {
-    const params = useParams();
-    const [openDialog, setOpenDialog] = useState(false);
-    const [item, setItem] = useState(null);
-    const outpostId = params["id"];
+  const params = useParams();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [item, setItem] = useState(null);
+  const outpostId = params["id"];
 
-    const sortedArrayShifts = async () => {
-        const shiftsData = await getShiftsByOutpostId(outpostId);
-        return shiftsData?.slice().sort((a, b) => {
-            // First, compare by dayId
-            if (a.dayId !== b.dayId) {
-                return a.dayId - b.dayId;
-            }
-            // If dayId is the same, compare by fromHour
-            else return a.fromHour - b.fromHour;
-        });
-    };
-
-    const { isLoading, data: shifts } = useQuery({
-        queryFn: () => sortedArrayShifts(),
-        queryKey: ["shifts", outpostId],
+  const sortedArrayShifts = async () => {
+    const shiftsData = await getShiftsByOutpostId(outpostId);
+    return shiftsData?.slice().sort((a, b) => {
+      // First, compare by dayId
+      if (a.dayId !== b.dayId) {
+        return a.dayId - b.dayId;
+      }
+      // If dayId is the same, compare by fromHour
+      else return a.fromHour - b.fromHour;
     });
-    function onDuplicateShift(shift) {
-        const { dayId, id, ...dupedShift } = shift;
-        setItem(dupedShift);
-        setOpenDialog(true);
-    }
+  };
 
-    return (
-        <div className="shifts-page">
-            <Container fixed>
-                {/* btn-add Shift */}
-                <AddShiftBtn setOpenDialog={setOpenDialog}/>
+  const { isLoading, data: shifts } = useQuery({
+    queryFn: () => sortedArrayShifts(),
+    queryKey: ["shifts", outpostId],
+  });
+  function onDuplicateShift(shift) {
+    const { dayId, id, ...dupedShift } = shift;
+    setItem(dupedShift);
+    setOpenDialog(true);
+  }
 
-                <Typography variant="h3" component="h2" mb={2}>
-                    רשימת משמרות {params["name"]}
-                </Typography>
+  return (
+    <div className="shifts-page">
+      <Container fixed>
+        {/* btn-add Shift */}
+        <AddShiftBtn setOpenDialog={setOpenDialog} />
 
-                {isLoading ? (
-                    <LoadingComp/>
-                ) : shifts?.length === 0 ? (
-                    <Typography variant="h5" component="h2" my={2}>
-                        אין משמרות עדיין
-                    </Typography>
-                ) : (
-                    <ShiftList shifts={shifts} onDuplciateShift={onDuplicateShift}/>
-                )}
+        <Typography variant="h3" component="h2" mb={2}>
+          רשימת משמרות {params["name"]}
+        </Typography>
 
-                {openDialog && (
-                    <DialogShift
-                        onCloseDialog={() => {
-                            setOpenDialog(false);
-                            setItem(null);
-                        }}
-                        method="POST"
-                        item={item}
-                    />
-                )}
-                <BackLink place="end" icon={<ArrowBackIosIcon/>}>
-                    חזרה לרשימת העמדות
-                </BackLink>
-            </Container>
-        </div>
-    );
+        {isLoading ? (
+          <LoadingComp />
+        ) : shifts?.length === 0 ? (
+          <Typography variant="h5" component="h2" my={2}>
+            אין משמרות עדיין
+          </Typography>
+        ) : (
+          <ShiftList shifts={shifts} onDuplciateShift={onDuplicateShift} />
+        )}
+
+        {openDialog && (
+          <DialogShift
+            onCloseDialog={() => {
+              setOpenDialog(false);
+              setItem(null);
+            }}
+            method="POST"
+            item={item}
+          />
+        )}
+        <BackLink place="end" icon={<ArrowBackIosIcon />}>
+          חזרה לרשימת העמדות
+        </BackLink>
+      </Container>
+    </div>
+  );
 }

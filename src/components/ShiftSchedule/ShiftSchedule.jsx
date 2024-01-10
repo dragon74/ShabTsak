@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from "react-query";
 import SelectCamp from "components/general_comps/SelectCamp.jsx";
 import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
 import { toast } from "react-toastify";
-import LoadingComp from "../general_comps/LoadingComp.jsx";
+import LoadingComp from "@/components/general_comps/LoadingComp";
 import { getGuardsAndLimitsForCampId } from "@/services/guardService.js";
 
 setOptions({
@@ -152,10 +152,7 @@ function ShiftSchedule() {
     const shibutsStart = shibuts.start.getHours();
     const shibutsEnd = shibuts.end.getHours();
     if (guard.timeLimits.length > 0) {
-      const limits = guard.timeLimits.filter((t) => 
-                                        t.dayId == shibuts.start.getDay() && 
-                                        !((t.fromHour <= shibutsStart && t.toHour <= shibutsStart) || 
-                                          (t.fromHour >= shibutsEnd && t.toHour >= shibutsEnd)));
+      const limits = guard.timeLimits.filter((t) => t.dayId == shibuts.start.getDay() && !((t.fromHour <= shibutsStart && t.toHour <= shibutsStart) || (t.fromHour >= shibutsEnd && t.toHour >= shibutsEnd)));
       if (limits.length > 0) {
         hasTimeLimit = true;
       }
@@ -197,10 +194,7 @@ function ShiftSchedule() {
 
   const checkExistinShibuts = useCallback(
     (shibuts) => {
-      const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && 
-                                                   s.shiftId == shibuts.shiftId && 
-                                                   s.outpostId == shibuts.outpostId &&
-                                                   s.start.getTime() == shibuts.start.getTime());
+      const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && s.shiftId == shibuts.shiftId && s.outpostId == shibuts.outpostId && s.start.getTime() == shibuts.start.getTime());
       if (existShibuts.length > 0) {
         //same shibuts
         if (shibuts.shibutsId == existShibuts[0].shibutsId) {
@@ -219,7 +213,8 @@ function ShiftSchedule() {
     setPopupOpen(false);
   }, []);
 
-  const myDefaultShibuts = useCallback((args) => {
+  const myDefaultShibuts = useCallback(
+    (args) => {
       const shift = findClosestShift(args.resource, args.start);
       if (shift != undefined) {
         const start = new Date(args.start.setHours(getHourNumber(shift.start)));
@@ -388,23 +383,7 @@ function ShiftSchedule() {
         <LoadingComp />
       ) : (
         <>
-          <Eventcalendar 
-            className="md-timetable" 
-            view={view} 
-            data={shibutsim} 
-            resources={outposts} 
-            extendDefaultEvent={myDefaultShibuts} 
-            renderScheduleEventContent={myCustomShibuts} 
-            onEventUpdate={onShibutsMove}
-            clickToCreate={true} 
-            dragToCreat={true} 
-            dragToMove={true} 
-            dragTimeStep={15} 
-            eventDelete={true} 
-            onEventClick={onShibutsClick} 
-            onEventCreate={onShibutsCreate} 
-            colors={shifts} 
-          />
+          <Eventcalendar className="md-timetable" view={view} data={shibutsim} resources={outposts} extendDefaultEvent={myDefaultShibuts} renderScheduleEventContent={myCustomShibuts} onEventUpdate={onShibutsMove} clickToCreate={true} dragToCreat={true} dragToMove={true} dragTimeStep={15} eventDelete={true} onEventClick={onShibutsClick} onEventCreate={onShibutsCreate} colors={shifts} />
 
           <Popup display="bottom" fullScreen={true} contentPadding={false} headerText={headerText} buttons={popupButtons} isOpen={isPopupOpen} onClose={onClose} responsive={responsivePopup} cssClass="employee-shifts-popup">
             <div className="mbsc-form-group">
