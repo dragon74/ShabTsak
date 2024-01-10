@@ -3,10 +3,9 @@ import { useQuery } from "react-query";
 import { Container, Typography } from "@mui/material";
 import CampDialog from "./campDialog";
 import AddCampBtn from "./addCampBtn/addCampBtn";
-import LoadingComp from "../general_comps/loadingComp";
+import LoadingComp from "@/components/general_comps/LoadingComp";
 import CampList from "./campList/campList";
 import { getCamps } from "@/services/campService";
-
 
 const CampsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -40,11 +39,7 @@ const CampsPage = () => {
 
         <CampList camps={camps} />
 
-        <CampDialog
-          openDialog={openDialog}
-          setOpenDialog={setOpenDialog}
-          method="POST"
-        />
+        <CampDialog openDialog={openDialog} setOpenDialog={setOpenDialog} method="POST" />
       </Container>
     </div>
   );
