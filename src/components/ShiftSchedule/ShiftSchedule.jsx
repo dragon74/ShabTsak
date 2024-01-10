@@ -9,6 +9,7 @@ import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } fr
 import { toast } from "react-toastify";
 import LoadingComp from "../general_comps/LoadingComp.jsx";
 import { getGuardsAndLimitsForCampId } from "@/services/guardService.js";
+import AddToCalendar from "./AddToCalendar";
 
 setOptions({
   locale: localeHe,
@@ -63,6 +64,8 @@ function ShiftSchedule() {
         mappedGuards = data.map((g) => ({
           value: g.guard.id,
           text: g.guard.name,
+          guardPhone: g.guard.phone,
+          guardMail: g.guard.mail,
           color: colors[g.guard.id % 10],
           outpostLimits: g.outpostLimits,
           timeLimits: g.timeLimits,
@@ -152,10 +155,7 @@ function ShiftSchedule() {
     const shibutsStart = shibuts.start.getHours();
     const shibutsEnd = shibuts.end.getHours();
     if (guard.timeLimits.length > 0) {
-      const limits = guard.timeLimits.filter((t) => 
-                                        t.dayId == shibuts.start.getDay() && 
-                                        !((t.fromHour <= shibutsStart && t.toHour <= shibutsStart) || 
-                                          (t.fromHour >= shibutsEnd && t.toHour >= shibutsEnd)));
+      const limits = guard.timeLimits.filter((t) => t.dayId == shibuts.start.getDay() && !((t.fromHour <= shibutsStart && t.toHour <= shibutsStart) || (t.fromHour >= shibutsEnd && t.toHour >= shibutsEnd)));
       if (limits.length > 0) {
         hasTimeLimit = true;
       }
@@ -197,10 +197,7 @@ function ShiftSchedule() {
 
   const checkExistinShibuts = useCallback(
     (shibuts) => {
-      const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && 
-                                                   s.shiftId == shibuts.shiftId && 
-                                                   s.outpostId == shibuts.outpostId &&
-                                                   s.start.getTime() == shibuts.start.getTime());
+      const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && s.shiftId == shibuts.shiftId && s.outpostId == shibuts.outpostId && s.start.getTime() == shibuts.start.getTime());
       if (existShibuts.length > 0) {
         //same shibuts
         if (shibuts.shibutsId == existShibuts[0].shibutsId) {
@@ -219,7 +216,8 @@ function ShiftSchedule() {
     setPopupOpen(false);
   }, []);
 
-  const myDefaultShibuts = useCallback((args) => {
+  const myDefaultShibuts = useCallback(
+    (args) => {
       const shift = findClosestShift(args.resource, args.start);
       if (shift != undefined) {
         const start = new Date(args.start.setHours(getHourNumber(shift.start)));
@@ -388,23 +386,7 @@ function ShiftSchedule() {
         <LoadingComp />
       ) : (
         <>
-          <Eventcalendar 
-            className="md-timetable" 
-            view={view} 
-            data={shibutsim} 
-            resources={outposts} 
-            extendDefaultEvent={myDefaultShibuts} 
-            renderScheduleEventContent={myCustomShibuts} 
-            onEventUpdate={onShibutsMove}
-            clickToCreate={true} 
-            dragToCreat={true} 
-            dragToMove={true} 
-            dragTimeStep={15} 
-            eventDelete={true} 
-            onEventClick={onShibutsClick} 
-            onEventCreate={onShibutsCreate} 
-            colors={shifts} 
-          />
+          <Eventcalendar className="md-timetable" view={view} data={shibutsim} resources={outposts} extendDefaultEvent={myDefaultShibuts} renderScheduleEventContent={myCustomShibuts} onEventUpdate={onShibutsMove} clickToCreate={true} dragToCreat={true} dragToMove={true} dragTimeStep={15} eventDelete={true} onEventClick={onShibutsClick} onEventCreate={onShibutsCreate} colors={shifts} />
 
           <Popup display="bottom" fullScreen={true} contentPadding={false} headerText={headerText} buttons={popupButtons} isOpen={isPopupOpen} onClose={onClose} responsive={responsivePopup} cssClass="employee-shifts-popup">
             <div className="mbsc-form-group">
@@ -412,6 +394,7 @@ function ShiftSchedule() {
             </div>
             {isEdit && (
               <div className="mbsc-button-group">
+                <AddToCalendar shibuts={tempShibuts} guards={guards} outposts={outposts} />
                 <Button className="mbsc-button-block" color="danger" variant="outline" onClick={onDeleteClick}>
                   מחיקת משמרת
                 </Button>
