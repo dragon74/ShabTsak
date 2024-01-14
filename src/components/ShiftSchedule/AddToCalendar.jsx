@@ -39,7 +39,7 @@ const AddToCalendar = ({ shibuts, guards, outposts }) => {
   return (
     <Button className="mbsc-button-block" variant="outline" onClick={addToGoogleCalendar}>
       <span className="mbsc-font-icon mbsc-icon-line-calendar" style={{ margin: 5 }} />
-      הוספה ליומן
+      <span>הוספה ליומן</span>
     </Button>
   );
 };

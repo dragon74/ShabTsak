@@ -396,7 +396,8 @@ function ShiftSchedule() {
               <div className="mbsc-button-group">
                 <AddToCalendar shibuts={tempShibuts} guards={guards} outposts={outposts} />
                 <Button className="mbsc-button-block" color="danger" variant="outline" onClick={onDeleteClick}>
-                  מחיקת משמרת
+                  <span className="mbsc-font-icon mbsc-icon-remove" style={{ margin: 5 }} />
+                  <span>מחיקת משמרת</span>
                 </Button>
               </div>
             )}
