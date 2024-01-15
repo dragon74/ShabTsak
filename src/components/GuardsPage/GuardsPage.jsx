@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Typography, Container, Button, Box } from "@mui/material";
+import { Container, Button, Box } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import SelectCamp from "components/general_comps/SelectCamp.jsx";
-import GuardDialogAddOrEdit from "components/GuardsPage/Guards/Guard/GuardDialogAddOrEdit/GuardDialogAddOrEdit.jsx";
-import Guards from "components/GuardsPage/Guards/Guards.jsx";
-import { GuardDialogDelete } from "components/GuardsPage/Guards/Guard/GuardDialogDelete/GuardDialogDelete.jsx";
-import BackLink from "../general_comps/BackLink.jsx";
+import SelectCamp from "@/components/general_comps/SelectCamp";
+import GuardDialogAddOrEdit from "@/components/GuardsPage/Guards/Guard/GuardDialogAddOrEdit/GuardDialogAddOrEdit";
+import Guards from "@/components/GuardsPage/Guards/Guards";
+import { GuardDialogDelete } from "@/components/GuardsPage/Guards/Guard/GuardDialogDelete/GuardDialogDelete";
+import BackLink from "@/components/general_comps/BackLink";
 import { useLocation } from "react-router-dom";
-import {useQueryClient} from "react-query";
+import ROUTES from "@/constants/routeConstants";
 
 const GuardsPage = () => {
   const { state } = useLocation();
@@ -48,10 +48,8 @@ const GuardsPage = () => {
 
   return (
     <Container sx={{ py: 4 }}>
-      <Typography variant="h5" component="h2" align="center" gutterBottom>
-        ניהול סד"כ
-      </Typography>
-      <SelectCamp selectedCampId={selectedCampId} setSelectedCampId={setSelectedCampId} title="בחר מחנה:" title2={" "} sx={{}} />
+      <SelectCamp selectedCampId={selectedCampId} setSelectedCampId={setSelectedCampId} title="לוח שומרים" title2={"בבסיס:"} />
+
       <Box
         sx={{
           display: "flex",
@@ -60,14 +58,16 @@ const GuardsPage = () => {
           marginTop: 2,
         }}
       >
-        <Button variant="contained" onClick={handleOpenAddDialog}>
-          הוסף שומר
-        </Button>
+        {selectedCampId && (
+          <Button variant="contained" onClick={handleOpenAddDialog}>
+            הוסף שומר
+          </Button>
+        )}
       </Box>
       {selectedCampId && <Guards campId={+selectedCampId} handleEdit={handleOpenEditDialog} handleDelete={handleOpenDeleteDialog} />}
       {dialogOpen && <GuardDialogAddOrEdit open={dialogOpen} close={handleCloseDialog} guardId={selectedGuardId} campId={selectedCampId} method={dialogMethod} guardDetails={guardDetails} />}
       {deleteDialogOpen && guardToDelete && <GuardDialogDelete guard={guardToDelete} closeDialog={handleCloseDeleteDialog} open={deleteDialogOpen} />}
-      <BackLink place="end" icon={<ArrowBackIosIcon />}>
+      <BackLink to={ROUTES.HOME} place="end" icon={<ArrowBackIosIcon />}>
         חזרה לרשימת הבסיסים
       </BackLink>
     </Container>

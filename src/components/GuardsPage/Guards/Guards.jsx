@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import { Container, CssBaseline, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import Guard from "components/GuardsPage/Guards/Guard/Guard.jsx";
+import Guard from "@/components/GuardsPage/Guards/Guard/Guard";
 import { useQuery } from "react-query";
-import { getGuardsByCampId } from "@/services/guardService.js";
+import { getGuardsByCampId } from "@/services/guardService";
+import LoadingComp from "@/components/general_comps/LoadingComp";
 
 const Guards = ({ campId, handleEdit, handleDelete }) => {
   const {
@@ -16,11 +17,11 @@ const Guards = ({ campId, handleEdit, handleDelete }) => {
   });
 
   if (isLoading) {
-    return <Typography align="center">Loading...</Typography>;
+    return <LoadingComp />;
   }
 
   if (isError || !Array.isArray(guards) || guards.length === 0) {
-    return <Typography align="center">No guards available</Typography>;
+    return <Typography align="center">לא קיימים שומרים בבסיס זה</Typography>;
   }
 
   return (
