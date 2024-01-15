@@ -222,6 +222,7 @@ function ShiftSchedule() {
       if (shift != undefined) {
         const start = new Date(args.start.setHours(getHourNumber(shift.start)));
         const end = new Date(args.start.setHours(getHourNumber(shift.end, true)));
+        setEdit(false);
         return {
           start: start,
           end: end,
@@ -230,6 +231,7 @@ function ShiftSchedule() {
           shiftId: shift.id,
           outpostId: args.resource,
           resource: args.resource,
+          campId: campId,
           color: "#ff0000",
         };
       }
