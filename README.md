@@ -30,7 +30,7 @@ After running, visit `http://localhost:3000/` in your browser to view the app.
 "guard" ="שומר";
 
 כל יוזר יכול להוסיף בסיס
-לראות לוח שמירות
+לראות שיבוץ שמירות
 
 רק מי שOWNER על הבסיס יכול לערוך או למחוק הכל
 

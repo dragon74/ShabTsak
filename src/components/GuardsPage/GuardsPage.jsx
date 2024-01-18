@@ -48,7 +48,7 @@ const GuardsPage = () => {
 
   return (
     <Container sx={{ py: 4 }}>
-      <SelectCamp selectedCampId={selectedCampId} setSelectedCampId={setSelectedCampId} title="לוח שומרים" title2={"בבסיס:"} />
+      <SelectCamp selectedCampId={selectedCampId} setSelectedCampId={setSelectedCampId} title="שיבוץ שמירות" title2={"בבסיס:"} />
 
       <Box
         sx={{

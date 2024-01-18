@@ -380,7 +380,7 @@ function ShiftSchedule() {
 
   return (
     <div>
-      <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} onCampChange={onCampChanged} title={"לוח משמרות"} title2={"בבסיס:"} />
+      <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} onCampChange={onCampChanged} title={"שיבוץ שמירות"} title2={"בבסיס:"} />
       <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick} style={{ margin: 0, borderRadius: 0 }}>
         שיבוץ אוטומטי
       </Button>

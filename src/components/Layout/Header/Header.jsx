@@ -132,7 +132,7 @@ const Header = () => {
                                     disabled={!user}
                                     onClick={handleCloseNavMenu}
                                 >
-                                    לוח משמרות
+                                    שיבוץ שמירות
                                 </MenuItem>
                                 <MenuItem
                                     component={RouterLink}
@@ -162,7 +162,7 @@ const Header = () => {
                                 to={ROUTES.SCHEDULE}
                                 sx={{ color: "white", px: 3, py: 3, }}
                             >
-                                לוח משמרות
+                                שיבוץ שמירות
                             </Button>
                             <Button
                                 component={RouterLink}
