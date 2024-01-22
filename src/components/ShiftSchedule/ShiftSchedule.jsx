@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from "react-query";
 import SelectCamp from "components/general_comps/SelectCamp.jsx";
 import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
 import { toast } from "react-toastify";
-import LoadingComp from "../general_comps/LoadingComp.jsx";
+import LoadingComp from "@/components/general_comps/LoadingComp";
 import { getGuardsAndLimitsForCampId } from "@/services/guardService.js";
 import AddToCalendar from "./AddToCalendar";
 
