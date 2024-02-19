@@ -1,8 +1,8 @@
 import { useState, useMemo, useCallback } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe } from "@mobiscroll/react";
+import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe, Datepicker } from "@mobiscroll/react";
 import { getOutpostsAndShiftsForCampId } from "@/services/outpostService.js";
-import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts, getAutoShibutsimOfCurrentWeekByCampId } from "@/services/shibutsService.js";
+import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts, getAutoShibutsimOfCurrentWeekByCampId, deleteAutoShibutsim } from "@/services/shibutsService.js";
 import { useQuery, useQueryClient } from "react-query";
 import SelectCamp from "components/general_comps/SelectCamp.jsx";
 import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
@@ -27,6 +27,23 @@ const responsivePopup = {
   },
 };
 
+function useLoading() {
+  const [isLoading, setLoading] = useState(false);
+
+  // Function to wrap around API calls and manage loading state
+  const withLoading = async (apiCall) => {
+    setLoading(true);
+    try {
+      const response = await apiCall();
+      return response; // Return API response
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return [isLoading, withLoading];
+}
+
 function ShiftSchedule() {
   const queryClient = useQueryClient();
   const [headerText, setHeader] = useState("");
@@ -34,7 +51,8 @@ function ShiftSchedule() {
   const [tempShibuts, setTempShibuts] = useState(null);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [campId, setCampId] = useState(null);
-  const [isAutoShibutsim, setIsAutoShibutsim] = useState(false);
+  const [autoShibutsDates, setAutoShibutsDates] = useState(null);
+  const [isLoading, withLoading] = useLoading();
 
   const colors = useMemo(() => {
     return ["red", "green", "blue", "yellow", "orange", "purple", "navy", "maroon", "olive", "silver"];
@@ -113,30 +131,34 @@ function ShiftSchedule() {
   });
 
   const { isLoading: shibutsimLoading, data: shibutsim } = useQuery({
-    queryKey: ["shibutsim", campId, isAutoShibutsim],
-    queryFn: () => (isAutoShibutsim ? getAutoShibutsimOfCurrentWeekByCampId(campId) : getShibutsimOfCurrentWeekByCampId(campId)),
+    queryKey: ["shibutsim", campId],
+    queryFn: () => (getShibutsimOfCurrentWeekByCampId(campId, autoShibutsDates)),
     enabled: !!campId && !!outposts && !!guards && !!shifts,
     select: (data) => {
       let mappedShibutsim = [];
       if (data.length > 0) {
-        mappedShibutsim = data.map((s) => {
-          const { id, ...copiedShibuts } = s;
-          const shift = shifts.find((sh) => sh.id == s.shiftId);
-          const guard = guards.find((g) => g.value == s.guardId);
-          const updatedShibuts = {
-            ...copiedShibuts,
-            shibutsId: id,
-            start: getDateAndTime(s.theDate, shift.start),
-            end: getDateAndTime(s.theDate, shift.end, true),
-            guardName: guard.text,
-            resource: s.outpostId,
-            color: guard.color,
-          };
-          return updatedShibuts;
-        });
+        mappedShibutsim = mapShibutsim(data);
       }
       return mappedShibutsim;
     },
+  });
+
+  const mapShibutsim = useCallback( (shibutsim) => {
+    return shibutsim.map((s) => {
+      const { id, ...copiedShibuts } = s;
+      const shift = shifts.find((sh) => sh.id == s.shiftId);
+      const guard = guards.find((g) => g.value == s.guardId);
+      const updatedShibuts = {
+        ...copiedShibuts,
+        shibutsId: id,
+        start: getDateAndTime(s.theDate, shift.start),
+        end: getDateAndTime(s.theDate, shift.end, true),
+        guardName: guard.text,
+        resource: s.outpostId,
+        color: guard.color,
+      };
+      return updatedShibuts;
+    });
   });
 
   const findClosestShift = useCallback(
@@ -255,7 +277,7 @@ function ShiftSchedule() {
   );
 
   const onDeleteClick = useCallback(async () => {
-    await deleteShibuts(tempShibuts.shibutsId);
+    await withLoading(()=>deleteShibuts(tempShibuts.shibutsId));
     queryClient.invalidateQueries(["shibutsim"]);
     setPopupOpen(false);
   }, [tempShibuts]);
@@ -288,7 +310,7 @@ function ShiftSchedule() {
         shibutsToSave.theDate = shibutsToSave.start.getTime();
         shibutsToSave.outpostName = outpostName;
         shibutsToSave.id = shibutsToSave.shibutsId;
-        await createOrUpdateShibuts(shibutsToSave);
+        await withLoading(()=>createOrUpdateShibuts(shibutsToSave));
         queryClient.invalidateQueries(["shibutsim"]);
       }
       onClose();
@@ -369,22 +391,50 @@ function ShiftSchedule() {
     [tempShibuts, guards, checkGuardHasLimits]
   );
 
-  const onAutoShibutsClick = useCallback(() => {
-    setIsAutoShibutsim(true);
-    queryClient.invalidateQueries("shibutsim");
-  }, []);
+  const onAutoShibutsClick = useCallback( async () => {
+    if(autoShibutsDates){
+      await withLoading(()=>getAutoShibutsimOfCurrentWeekByCampId(campId, autoShibutsDates));
+      queryClient.invalidateQueries("shibutsim");
+    }else{
+      toast.error("נא לבחור תאריכים לשיבוץ אוטומטי")
+    }
+  }, [autoShibutsDates]);
 
-  const onCampChanged = useCallback(() => {
-    setIsAutoShibutsim(false);
-  }, []);
+  const onDeleteAutoShibutsClick = useCallback( async () => {
+    if(autoShibutsDates){
+      await withLoading(()=>deleteAutoShibutsim(campId, autoShibutsDates));
+      queryClient.invalidateQueries("shibutsim");
+    }else{
+      toast.error("נא לבחור תאריכים לשיבוץ אוטומטי למחיקה")
+    }
+    
+  }, [autoShibutsDates, campId]);
+
+  const autoShibutsDatesChange = (ev) => {
+    setAutoShibutsDates(ev.value);
+}
 
   return (
     <div>
-      <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} onCampChange={onCampChanged} title={"שיבוץ שמירות"} title2={"בבסיס:"} />
-      <Button className="mbsc-button-block" color="info" onClick={onAutoShibutsClick} style={{ margin: 0, borderRadius: 0 }}>
+      <SelectCamp setSelectedCampId={setCampId} selectedCampId={campId} title={"שיבוץ שמירות"} title2={"בבסיס:"} />
+      <Datepicker
+          select="range"
+          inputComponent="input"
+          inputProps={{
+              placeholder: 'בחירת תאריכים לשיבוץ',
+              style: {"line-height": "2.5"}
+          }}
+          value={autoShibutsDates}
+          onChange={autoShibutsDatesChange}
+          min={new Date()}
+      />
+      <Button className="mbsc-button " color="info" onClick={onAutoShibutsClick}>
         שיבוץ אוטומטי
       </Button>
-      {guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading ? (
+      <Button className="mbsc-button" color="danger" onClick={onDeleteAutoShibutsClick}>
+        מחיקת שיבוצים
+      </Button>
+      {isLoading || guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading ? (
         <LoadingComp />
       ) : (
         <>

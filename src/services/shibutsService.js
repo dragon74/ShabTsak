@@ -18,9 +18,18 @@ export async function createOrUpdateShibuts(bodyFormData) {
     }
 }
 
-export async function getShibutsimOfCurrentWeekByCampId(campId) {
-    let firstAndLastDays = getFirstDayAndLastDayOfCurrentWeek();
-    let url = SHIBUTS_URL + "/" + campId + "/" + firstAndLastDays.first + "/" + firstAndLastDays.last;
+export async function getShibutsimOfCurrentWeekByCampId(campId, shibutsDates) {
+    let firstDay = null;
+    let lastDay = null;
+    if(shibutsDates){
+        firstDay = formatDate(shibutsDates[0], 'ddMMyyyy');
+        lastDay = formatDate(shibutsDates[1], 'ddMMyyyy');
+    }else{
+        let firstAndLastDays = getFirstDayAndLastDayOfCurrentWeek();
+        firstDay = firstAndLastDays.first;
+        lastDay = firstAndLastDays.last;
+    }
+    let url = SHIBUTS_URL + "/" + campId + "/" + firstDay + "/" + lastDay;
     try {
         let resp = await doApiGet(url);
         if (resp.status === 200) {
@@ -34,10 +43,10 @@ export async function getShibutsimOfCurrentWeekByCampId(campId) {
     }
 }
 
-export async function getAutoShibutsimOfCurrentWeekByCampId(campId) {
-    let firstAndLastDays = getFirstDayAndLastDayOfCurrentWeek();
-    let currentDay = formatDate(new Date(), 'ddMMyyyy');
-    let url = SHIBUTS_URL + "/create/" + campId + "/" + currentDay + "/" + firstAndLastDays.last;
+export async function getAutoShibutsimOfCurrentWeekByCampId(campId, shibutsDates) {
+    let firstDay = formatDate(shibutsDates[0], 'ddMMyyyy');
+    let lastDay = formatDate(shibutsDates[1], 'ddMMyyyy');
+    let url = SHIBUTS_URL + "/create/" + campId + "/" + firstDay + "/" + lastDay;
     try {
         let resp = await doApiGet(url);
         if (resp.status === 200) {
@@ -48,6 +57,23 @@ export async function getAutoShibutsimOfCurrentWeekByCampId(campId) {
     catch (err) {
         console.log(err);
         toast.error("יש בעיה בשיבוץ האוטומטי, נסה מאוחר יותר");
+    }
+}
+
+export async function deleteAutoShibutsim(campId, shibutsDates){
+    let firstDay = formatDate(shibutsDates[0], 'ddMMyyyy');
+    let lastDay = formatDate(shibutsDates[1], 'ddMMyyyy');
+    let url = SHIBUTS_URL + "/del/" + campId + "/" + firstDay + "/" + lastDay;
+    try {
+        let resp = await doApiMethod(url, "DELETE");
+        if (resp.status === 200) {
+            toast.success(`מחיקת שיבוצים בוצעה בהצלחה`);
+        }
+        else toast.error(resp.message);
+    }
+    catch (err) {
+        console.log(err);
+        toast.error("יש בעיה במחיקה נסה מאוחר יותר");
     }
 }
 
