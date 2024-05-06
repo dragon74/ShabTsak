@@ -81,3 +81,15 @@ export const getFirstDayAndLastDayOfCurrentWeek = () =>{
         last: lastday
     }
 }
+
+export const getFirstDayAndLastDayOfCurrentMonth = () =>{
+    let curr = new Date; // get current date
+    let first = new Date(new Date().setDate(1)); // Set the date to the first day of the month
+    let last = new Date(curr.getFullYear(), curr.getMonth() + 2, 0); // Set the date to the last day of the month
+    let firstday = formatDate(first,'ddMMyyyy');
+    let lastday = formatDate(last,'ddMMyyyy');
+    return {
+        first: firstday,
+        last: lastday
+    }
+}

@@ -1,7 +1,7 @@
 import { SHIBUTS_URL } from "../constants/apiConstants";
 import { doApiGet, doApiMethod } from "./apiService.ts";
 import { toast } from "react-toastify";
-import { formatDate, getTimeStr, getFirstDayAndLastDayOfCurrentWeek } from "../utils/dateUtils";
+import { formatDate, getTimeStr, getFirstDayAndLastDayOfCurrentMonth } from "../utils/dateUtils";
 
 export async function createOrUpdateShibuts(bodyFormData) {
     try {
@@ -18,14 +18,14 @@ export async function createOrUpdateShibuts(bodyFormData) {
     }
 }
 
-export async function getShibutsimOfCurrentWeekByCampId(campId, shibutsDates) {
+export async function getShibutsimOfCurrentMonthByCampId(campId, shibutsDates) {
     let firstDay = null;
     let lastDay = null;
     if(shibutsDates){
         firstDay = formatDate(shibutsDates[0], 'ddMMyyyy');
         lastDay = formatDate(shibutsDates[1], 'ddMMyyyy');
     }else{
-        let firstAndLastDays = getFirstDayAndLastDayOfCurrentWeek();
+        let firstAndLastDays = getFirstDayAndLastDayOfCurrentMonth();
         firstDay = firstAndLastDays.first;
         lastDay = firstAndLastDays.last;
     }
@@ -43,19 +43,21 @@ export async function getShibutsimOfCurrentWeekByCampId(campId, shibutsDates) {
     }
 }
 
-export async function getAutoShibutsimOfCurrentWeekByCampId(campId, shibutsDates) {
+export async function getAutoShibutsimByCampIdAndDates(campId, shibutsDates) {
     let firstDay = formatDate(shibutsDates[0], 'ddMMyyyy');
     let lastDay = formatDate(shibutsDates[1], 'ddMMyyyy');
     let url = SHIBUTS_URL + "/create/" + campId + "/" + firstDay + "/" + lastDay;
     try {
         let resp = await doApiGet(url);
         if (resp.status === 200) {
+            toast.success(`שיבוץ אוטומטי בוצע בהצלחה`);
             return resp.data;
         }
         else toast.error(resp.message);
     }
     catch (err) {
         console.log(err);
+        toast.error(err?.response?.data?.message);
         toast.error("יש בעיה בשיבוץ האוטומטי, נסה מאוחר יותר");
     }
 }
