@@ -1,9 +1,9 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import { Eventcalendar, setOptions, Popup, Button, Select, formatDate, localeHe, Datepicker } from "@mobiscroll/react";
 import { getOutpostsAndShiftsForCampId } from "@/services/outpostService.js";
-import { createOrUpdateShibuts, getShibutsimOfCurrentWeekByCampId, deleteShibuts, getAutoShibutsimOfCurrentWeekByCampId, deleteAutoShibutsim } from "@/services/shibutsService.js";
-import { useQuery, useQueryClient } from "react-query";
+import { createOrUpdateShibuts, getShibutsimOfCurrentMonthByCampId, deleteShibuts, getAutoShibutsimByCampIdAndDates, deleteAutoShibutsim } from "@/services/shibutsService.js";
+import { useQuery } from "react-query";
 import SelectCamp from "components/general_comps/SelectCamp.jsx";
 import { getTimeStr, getDayStr, getDayNumber, getHourNumber, getDateAndTime } from "../../utils/dateUtils";
 import { toast } from "react-toastify";
@@ -45,7 +45,6 @@ function useLoading() {
 }
 
 function ShiftSchedule() {
-  const queryClient = useQueryClient();
   const [headerText, setHeader] = useState("");
   const [isEdit, setEdit] = useState(false);
   const [tempShibuts, setTempShibuts] = useState(null);
@@ -53,6 +52,7 @@ function ShiftSchedule() {
   const [campId, setCampId] = useState(null);
   const [autoShibutsDates, setAutoShibutsDates] = useState(null);
   const [isLoading, withLoading] = useLoading();
+  const [shibutsim, setShibutsim] = useState([]);
 
   const colors = useMemo(() => {
     return ["red", "green", "blue", "yellow", "orange", "purple", "navy", "maroon", "olive", "silver"];
@@ -130,32 +130,32 @@ function ShiftSchedule() {
     },
   });
 
-  const { isLoading: shibutsimLoading, data: shibutsim } = useQuery({
-    queryKey: ["shibutsim", campId],
-    queryFn: () => (getShibutsimOfCurrentWeekByCampId(campId, autoShibutsDates)),
-    enabled: !!campId && !!outposts && !!guards && !!shifts,
-    select: (data) => {
-      let mappedShibutsim = [];
-      if (data.length > 0) {
-        mappedShibutsim = mapShibutsim(data);
-      }
-      return mappedShibutsim;
-    },
-  });
+  useEffect(() => {
+    if (campId) {
+      fetchShibutsim();
+    }
+  }, [campId]);
+
+  async function fetchShibutsim() {
+    let shibutsimData = await getShibutsimOfCurrentMonthByCampId(campId, null);
+    if(shibutsimData){
+      setShibutsim(mapShibutsim(shibutsimData));
+    }
+  }
 
   const mapShibutsim = useCallback( (shibutsim) => {
     return shibutsim.map((s) => {
       const { id, ...copiedShibuts } = s;
-      const shift = shifts.find((sh) => sh.id == s.shiftId);
-      const guard = guards.find((g) => g.value == s.guardId);
+      const shift = shifts?.find((sh) => sh.id == s.shiftId);
+      const guard = guards?.find((g) => g.value == s.guardId);
       const updatedShibuts = {
         ...copiedShibuts,
         shibutsId: id,
-        start: getDateAndTime(s.theDate, shift.start),
-        end: getDateAndTime(s.theDate, shift.end, true),
-        guardName: guard.text,
+        start: getDateAndTime(s.theDate, shift?.start),
+        end: getDateAndTime(s.theDate, shift?.end, true),
+        guardName: guard?.text,
         resource: s.outpostId,
-        color: guard.color,
+        color: guard?.color,
       };
       return updatedShibuts;
     });
@@ -222,7 +222,7 @@ function ShiftSchedule() {
       const existShibuts = shibutsim.filter((s) => s.guardId == shibuts.guardId && s.shiftId == shibuts.shiftId && s.outpostId == shibuts.outpostId && s.start.getTime() == shibuts.start.getTime());
       if (existShibuts.length > 0) {
         //same shibuts
-        if (shibuts.shibutsId == existShibuts[0].shibutsId) {
+        if (shibuts.shibutsId != undefined && shibuts.shibutsId == existShibuts[0].shibutsId) {
           return true;
         }
         const outpostName = outposts.find((o) => o.id == shibuts.outpostId).name;
@@ -235,8 +235,12 @@ function ShiftSchedule() {
   );
 
   const onClose = useCallback(() => {
+    if (!isEdit) {
+      // refresh the list, if add popup was canceled, to remove the temporary event
+      setShibutsim([...shibutsim]);
+    }
     setPopupOpen(false);
-  }, []);
+  }, [isEdit, shibutsim]);
 
   const myDefaultShibuts = useCallback(
     (args) => {
@@ -278,7 +282,7 @@ function ShiftSchedule() {
 
   const onDeleteClick = useCallback(async () => {
     await withLoading(()=>deleteShibuts(tempShibuts.shibutsId));
-    queryClient.invalidateQueries(["shibutsim"]);
+    setShibutsim(shibutsim.filter((shibuts) => shibuts.shibutsId !== tempShibuts.shibutsId));
     setPopupOpen(false);
   }, [tempShibuts]);
 
@@ -304,18 +308,36 @@ function ShiftSchedule() {
   const saveShibuts = useCallback(
     async (shibutsToSave) => {
       const outpostName = outposts.find((o) => o.id == shibutsToSave.outpostId).name;
+      shibutsToSave.campId = campId;
+      shibutsToSave.theDate = shibutsToSave.start.getTime();
+      shibutsToSave.outpostName = outpostName;
+      shibutsToSave.id = shibutsToSave.shibutsId;
+      await withLoading(()=>createOrUpdateShibuts(shibutsToSave));
+      if (shibutsToSave.shibutsId != null) {
+        // update the shibuts in the list
+        const index = shibutsim.findIndex((s) => s.shibutsId === shibutsToSave.shibutsId);
+        const newShibutsimList = [...shibutsim];
+        newShibutsimList.splice(index, 1, shibutsToSave);
+        setShibutsim(newShibutsimList);
+      } else {
+        // add the new shibuts to the list
+        setShibutsim([...shibutsim, shibutsToSave]);
+      }
+      setPopupOpen(false);
+    },
+    [outposts, shibutsim, tempShibuts, campId]
+  );
+
+  const checkAnsSaveShibuts = useCallback(
+    (shibutsToSave) => {
       const isExistingShibuts = checkExistinShibuts(shibutsToSave);
       if (shibutsToSave.guardId != 0 && !isExistingShibuts) {
-        shibutsToSave.campId = campId;
-        shibutsToSave.theDate = shibutsToSave.start.getTime();
-        shibutsToSave.outpostName = outpostName;
-        shibutsToSave.id = shibutsToSave.shibutsId;
-        await withLoading(()=>createOrUpdateShibuts(shibutsToSave));
-        queryClient.invalidateQueries(["shibutsim"]);
+        saveShibuts(shibutsToSave);
+      } else {
+        return false;
       }
-      onClose();
     },
-    [outposts, shibutsim, tempShibuts, checkExistinShibuts, campId]
+    [checkExistinShibuts, saveShibuts]
   );
 
   const onShibutsMove = useCallback(
@@ -331,13 +353,13 @@ function ShiftSchedule() {
         shibuts.outpostId = shibuts.resource;
         shibuts.shiftId = shift.id;
         setTempShibuts(shibuts);
-        saveShibuts(shibuts);
+        return checkAnsSaveShibuts(shibuts);
       } else {
         toast.error("אין משמרות בזמן זה בעמדה זו");
         return false;
       }
     },
-    [findClosestShift, checkGuardHasLimits, guards, outposts, shibutsim]
+    [findClosestShift, checkGuardHasLimits, checkAnsSaveShibuts, guards]
   );
 
   const popupButtons = useMemo(() => {
@@ -346,7 +368,7 @@ function ShiftSchedule() {
         "cancel",
         {
           handler: () => {
-            saveShibuts(tempShibuts);
+            checkAnsSaveShibuts(tempShibuts);
           },
           keyCode: "enter",
           text: "שמירה",
@@ -358,7 +380,7 @@ function ShiftSchedule() {
         "cancel",
         {
           handler: () => {
-            saveShibuts(tempShibuts);
+            checkAnsSaveShibuts(tempShibuts);
           },
           keyCode: "enter",
           text: "הוספה",
@@ -393,8 +415,8 @@ function ShiftSchedule() {
 
   const onAutoShibutsClick = useCallback( async () => {
     if(autoShibutsDates){
-      await withLoading(()=>getAutoShibutsimOfCurrentWeekByCampId(campId, autoShibutsDates));
-      queryClient.invalidateQueries("shibutsim");
+      let newShibutsim = await withLoading(()=>getAutoShibutsimByCampIdAndDates(campId, autoShibutsDates));
+      setShibutsim(shibutsim?.concat(mapShibutsim(newShibutsim)));
     }else{
       toast.error("נא לבחור תאריכים לשיבוץ אוטומטי")
     }
@@ -403,7 +425,7 @@ function ShiftSchedule() {
   const onDeleteAutoShibutsClick = useCallback( async () => {
     if(autoShibutsDates){
       await withLoading(()=>deleteAutoShibutsim(campId, autoShibutsDates));
-      queryClient.invalidateQueries("shibutsim");
+      setShibutsim(await getShibutsimOfCurrentMonthByCampId(campId));
     }else{
       toast.error("נא לבחור תאריכים לשיבוץ אוטומטי למחיקה")
     }
@@ -434,7 +456,7 @@ function ShiftSchedule() {
       <Button className="mbsc-button" color="danger" onClick={onDeleteAutoShibutsClick}>
         מחיקת שיבוצים
       </Button>
-      {isLoading || guardsLoading || outpostsLoading || shiftsLoading || shibutsimLoading ? (
+      {isLoading || guardsLoading || outpostsLoading || shiftsLoading ? (
         <LoadingComp />
       ) : (
         <>
