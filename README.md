@@ -1,7 +1,7 @@
 
+# [👋 Live Demo 😊](https://shabtsak.top)
 
-# שבצ"ק React Application
-
+## שבצ"ק React Application
 This is a React + Vite application named 'שבצ"ק'.
 
 ## 🚀 Setup and Running
@@ -9,15 +9,15 @@ This is a React + Vite application named 'שבצ"ק'.
 
 1. **Install the necessary dependencies:**
 
-\```bash
+```bash
 npm install
-\```
+```
 
 3. **Start the application:**
 
-\```bash
+```bash
 npm run dev
-\```
+```
 
 After running, visit `http://localhost:3000/` in your browser to view the app.
 
